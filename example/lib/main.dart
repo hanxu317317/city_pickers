@@ -22,7 +22,7 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  Result _result;
+  String _result;
 
   @override
   void initState() {
@@ -35,6 +35,9 @@ class _MainState extends State<Main> {
       locationCode: '640221',
       height: 400,
     );
+    setState(() {
+      _result = "${temp.toString()}";
+    });
   }
   @override
   Widget build(BuildContext context) {
