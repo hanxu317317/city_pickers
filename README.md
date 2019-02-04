@@ -2,6 +2,9 @@
 
 这是一款适合国内用户使用的三级联动, 地区信息选择器的集合, 现在暂时只支持一款. 后续会持续更新.
 
+# 效果展示
+<image src="https://img.alicdn.com/tfs/TB1_rnrFXzqK1RjSZFCXXbbxVXa-362-751.gif" style="width: 300px" />
+
 # 使用方法
 
 pubspec.yaml
