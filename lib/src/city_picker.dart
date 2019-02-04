@@ -1,21 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import '../modal/result.dart';
 import 'base.dart';
-/// 期望用法
+
+/// ios风格下的地区选择组件, 支持初始化选中地区, 支持配置高度
+/// 用法说明:
+/// ```
 /// await CityPicker.showPicker(
-///   location: '640202',
-///   height,
+///   location: String,
+///   height: double
 /// );
+///
+/// ```
 class CityPickers {
 
-  static Future showCityPicker({
-    BuildContext context,
+  /// 用来弹出地区选择器
+  /// @param context 上下文对象
+  /// @param locationCode 初始化地区选择, 可是以省份, 城市, 乡镇的 id,
+  ///                 如果给定的id是省份, 则初始化会城市id为选择某省份下的城市列表中的第一个, 乡镇同.
+  /// @param height 弹出的选择器. 所占的高度
+  ///
+  /// @param onChangeDat 暂时无用
+  ///
+  /// @return Result 类型的结果 see [Result]
+  ///
+  static Future<Result> showCityPicker({
+    @required BuildContext context,
     String locationCode,
     double height = 400,
     Function onChangeData,
   }) {
-//    print("locationCode in cityPicker: $locationCode");
     return Navigator.of(context, rootNavigator: true).push(
       new _CityPickerRoute(
           theme: Theme.of(context, shadowThemeOnly: true),

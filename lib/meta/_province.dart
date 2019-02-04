@@ -1,8 +1,7 @@
-/// 原始数据
+// 原始数据
 import 'package:lpinyin/lpinyin.dart';
 import 'dart:convert';
 import 'dart:io';
-//import 'package:flutter/material.dart';
 const Map<String, dynamic> citysData  = {
   "110000": {
     "110100": "北京城区"

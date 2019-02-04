@@ -1,11 +1,4 @@
-/**
- * Created with Android Studio.
- * User: 三帆
- * Date: 03/02/2019
- * Time: 22:48
- * email: sanfan.hx@alibaba-inc.com
- * tartget:  xxx
- */
+// A Flutter plugin for china city selections
 
 library city_pickers;
 

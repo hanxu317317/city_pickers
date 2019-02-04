@@ -1,14 +1,16 @@
-///
-/// Created with Android Studio.
-/// User: 三帆
-/// Date: 28/01/2019
-/// Time: 21:38
-/// email: sanfan.hx@alibaba-inc.com
-/// tartget:  xxx
+//
+// Created with Android Studio.
+// User: 三帆
+// Date: 28/01/2019
+// Time: 21:38
+// email: sanfan.hx@alibaba-inc.com
+// tartget:  xxx
+
+/// it's a cache class, aim to reduce calculations;
 class Cache {
   Map<String, dynamic> _cache = {};
 
- //// factory
+  // factory
   factory Cache() {
     return _getInstance();
   }

@@ -8,7 +8,6 @@ import 'package:lpinyin/lpinyin.dart';
 
 /// tree point
 
-
 class CityTree {
   /// 元数据
   Map<String, dynamic> metaInfo;
@@ -35,8 +34,6 @@ class CityTree {
   ///     ]
   ///   }
   /// ]
-  ///
-  ///
   Point tree;
   CityTree({
     this.metaInfo = citysData
