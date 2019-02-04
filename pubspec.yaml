@@ -1,6 +1,6 @@
 name: city_pickers
-description: A new flutter plugin project.
-version: 0.0.1
+description: city picker, 三级联动
+version: 0.0.2
 author: sanfan.hx<sanfan.hx@alibaba-inc.com>
 homepage: https://github.com/hanxu317317/city_pickers
 
