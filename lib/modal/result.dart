@@ -9,22 +9,22 @@
 
 /// CityPicker 返回的 **Result** 结果函数
 class Result {
-  /// 省分id
+  /// provinceId
   final String provinceId;
 
-  /// 城市id
+  /// cityId
   final String cityId;
 
-  /// 地区id
+  /// areaId
   final String areaId;
 
-  /// 省份名称
+  /// provinceName
   final String provinceName;
 
-  /// 城市名称
+  /// cityName
   final String cityName;
 
-  /// 地区名称
+  /// areaName
   final String areaName;
 
   Result(
@@ -35,7 +35,7 @@ class Result {
       this.cityName,
       this.areaName});
 
-  /// 返回String类型的json数据
+  /// string json
   @override
   String toString() {
     //TODO: implement toString

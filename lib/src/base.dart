@@ -31,8 +31,8 @@ class _BaseView extends State<BaseView> {
   FixedExtentScrollController cityController;
   FixedExtentScrollController areaController;
 
-  /// 所有省的列表. 因为性能等综合原因,
-  /// 没有一次性构建整个以国为根的树. 动态的构建以省为根的树, 效率高.
+  // 所有省的列表. 因为性能等综合原因,
+  // 没有一次性构建整个以国为根的树. 动态的构建以省为根的树, 效率高.
   List<Point> provinces = new Provinces(metaInfo: provinceData).provinces;
   CityTree cityTree = new CityTree(metaInfo: citysData);
 
@@ -57,7 +57,7 @@ class _BaseView extends State<BaseView> {
     super.dispose();
   }
 
-  /// 初始化controller, 为了使给定的默认值, 在选框的中心位置
+  // 初始化controller, 为了使给定的默认值, 在选框的中心位置
   void _initController() {
     provinceController = new FixedExtentScrollController(
         initialItem:
@@ -72,9 +72,9 @@ class _BaseView extends State<BaseView> {
             .indexWhere((Point p) => p.code == targetArea.code));
   }
 
-  /// 重置Controller的原因在于, 无法手动去更改initialItem, 也无法通过
-  /// jumpTo or animateTo去更改, 强行更改, 会触发 _onProvinceChange  _onCityChange 与 _onAreacChange
-  /// 只为覆盖初始化化的参数initialItem
+  // 重置Controller的原因在于, 无法手动去更改initialItem, 也无法通过
+  // jumpTo or animateTo去更改, 强行更改, 会触发 _onProvinceChange  _onCityChange 与 _onAreacChange
+  // 只为覆盖初始化化的参数initialItem
   void _resetController() {
     if (_resetControllerOnce) return;
     provinceController = new FixedExtentScrollController(initialItem: 0);
@@ -84,12 +84,10 @@ class _BaseView extends State<BaseView> {
     _resetControllerOnce = true;
   }
 
-  /// initialize tree by locationCode
+  // initialize tree by locationCode
   void _initLocation(String locationCode) {
     int _locationCode;
     if (locationCode != null) {
-//      print("加载初始化地区参数");
-
       try {
         _locationCode = int.parse(locationCode);
       } catch (e) {
@@ -113,7 +111,6 @@ class _BaseView extends State<BaseView> {
         });
       });
     } else {
-//      print("无初始化地区参数");
       targetProvince = cityTree.initTreeByCode(110000);
     }
 
@@ -125,7 +122,7 @@ class _BaseView extends State<BaseView> {
     }
   }
 
-  /// 通过选中的省份, 构建以省份为根节点的树型结构
+  // 通过选中的省份, 构建以省份为根节点的树型结构
   List<String> getCityItemList() {
     List<String> result = [];
     if (targetProvince != null) {
@@ -143,8 +140,8 @@ class _BaseView extends State<BaseView> {
     return result;
   }
 
-  /// province change handle
-  /// 加入延时处理, 减少构建树的消耗
+  // province change handle
+  // 加入延时处理, 减少构建树的消耗
   _onProvinceChange(Point _province) {
     if (_changeTimer != null && _changeTimer.isActive) {
       _changeTimer.cancel();
@@ -201,7 +198,6 @@ class _BaseView extends State<BaseView> {
   }
 
   Widget _bottomBuild() {
-//    return Container();
     return new Container(
         width: double.infinity,
         color: Colors.white,
@@ -279,7 +275,6 @@ class _BaseView extends State<BaseView> {
   }
 
   Widget build(BuildContext context) {
-//    print("widget.height> ${widget.height}");
     return new CustomSingleChildLayout(
       delegate: _WrapLayout(progress: widget.progress, height: widget.height),
       child: new GestureDetector(

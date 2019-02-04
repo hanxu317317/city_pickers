@@ -1,60 +1,58 @@
 # city_pickers
 
-这是一款适合国内用户使用的三级联动, 地区信息选择器的集合, 现在暂时只支持一款. 后续会持续更新.
+this is china area selector.
 
-# 效果展示
+# Demo
 <image src="https://img.alicdn.com/tfs/TB1_rnrFXzqK1RjSZFCXXbbxVXa-362-751.gif" style="width: 300px" />
 
-# 使用方法
+# Getting Started
 
-pubspec.yaml
+
+In your flutter project add the dependency:
+
 ```
-city_pickers:^0.0.1
+dependencies:
+  ...
+    city_pickers:^0.0.1
 ```
 
-main.dart
+For help getting started with Flutter, view the online [documentation](https://flutter.io/).
+
+# Usage example
+Import city_pickers.dart
+
 ```
-import 'package:flutter/material.dart';
 import 'package:city_pickers/city_pickers.dart';
-...
-
-  show(context) async {
-    Result temp  = await CityPickers.showCityPicker(
-      context: context,
-      locationCode: '640221',
-      height: 400,
-    );
-  }
-  @override
-  Widget build(BuildContext context) {
-    ...
-    RaisedButton(
-      onPressed: () {this.show(context);
-      },
-      child: Text("select"),
-    )
-  }
-
 ```
 
-### CityPickers 属性
+Demo code to show selector
 
-|名称|类型|描述|
+```
+Result result = await CityPickers.showCityPicker(
+  context: context,
+);
+```
+
+
+
+### CityPickers attributes
+
+|Name|Type|Desc|
 |:---------------|:--------|:----------|
-|showCityPicker|Function|显示三级联动, 地区选择器|
+|showCityPicker|Function|the handle show selector |
 
 
-### showCityPicker 参数说明
+### showCityPicker params 
 
-|名称|类型|默认值|描述|
+|Name|Type|Default|Desc|
 |:---------------|:--------|:----|:----------|
-|context|BuildContext|null|上下文对象|
-|locationCode|String|110000| 初始化位置信息|
-|height|double|300| 弹出层的容器高度|
+|context|BuildContext|null|context|
+|locationCode|String|110000| initial location|
+|height|double|300| container height|
 
 
-# 数据声明
+# Date Statement
 
-组件数据源来自于:[国家统计局](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
+ The data information come from [National Bureau of Statistics](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
 
 
