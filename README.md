@@ -1,18 +1,54 @@
-# city_picker
+# city_pickers
 
-A new flutter plugin project.
+这是一款适合国内用户使用的三级联动, 地区信息选择器的集合, 现在暂时只支持一款. 后续会持续更新.
 
-## Getting Started
+# 使用方法
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.io/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+pubspec.yaml
+```
+city_pickers:^0.0.1
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.io/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+main.dart
+```
+import 'package:flutter/material.dart';
+import 'package:city_pickers/city_pickers.dart';
+...
 
-## 介绍
+  show(context) async {
+    Result temp  = await CityPickers.showCityPicker(
+      context: context,
+      locationCode: '640221',
+      height: 400,
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
+    ...
+    RaisedButton(
+      onPressed: () {this.show(context);
+      },
+      child: Text("select"),
+    )
+  }
 
-这是一个适用于中国的城市三级联动的选择器.
+```
+
+### CityPickers 属性
+
+|名称|类型|描述|
+|:---------------|:--------|:----------|
+|showCityPicker|Function|显示三级联动, 地区选择器|
+
+
+### showCityPicker 参数说明
+
+|名称|类型|默认值|描述|
+|:---------------|:--------|:----|:----------|
+|context|BuildContext|null|上下文对象|
+|locationCode|String|110000| 初始化位置信息|
+|height|double|300| 弹出层的容器高度|
+
+
+
+
