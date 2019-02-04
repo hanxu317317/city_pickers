@@ -7,7 +7,7 @@ import 'base.dart';
 ///   location: '640202',
 ///   height,
 /// );
-class CityPicker {
+class CityPickers {
 
   static Future showCityPicker({
     BuildContext context,
