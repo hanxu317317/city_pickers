@@ -1,4 +1,4 @@
-# city_pickers
+# city_picker
 
 A new flutter plugin project.
 
@@ -9,6 +9,10 @@ This project is a starting point for a Flutter
 a specialized package that includes platform-specific implementation code for
 Android and/or iOS.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
+For help getting started with Flutter, view our
+[online documentation](https://flutter.io/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## 介绍
+
+这是一个适用于中国的城市三级联动的选择器.

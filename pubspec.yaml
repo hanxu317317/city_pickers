@@ -1,8 +1,8 @@
 name: city_pickers
 description: A new flutter plugin project.
 version: 0.0.1
-author:
-homepage:
+author: sanfan.hx<sanfan.hx@alibaba-inc.com>
+homepage: https://github.com/hanxu317317/city_pickers
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

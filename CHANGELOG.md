@@ -1,3 +1,5 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* 加入三级联动
+- 支持配置高度
+- 支持初始化地理位置
