@@ -14,15 +14,13 @@ import '../modal/point.dart';
 import '../modal/result.dart';
 import 'package:city_pickers/modal/base_citys.dart';
 
-
-const double _DefaultHeight = 300;
 class BaseView extends StatefulWidget {
   final double progress;
   final String locationCode;
   final Function onChangeData;
   // 容器高度
   final double height;
-  BaseView({this.progress,this.height, this.locationCode, this.onChangeData});
+  BaseView({this.progress, this.height, this.locationCode, this.onChangeData});
   _BaseView createState() => _BaseView();
 }
 
@@ -47,7 +45,6 @@ class _BaseView extends State<BaseView> {
     super.initState();
     _initLocation(widget.locationCode);
     _initController();
-
   }
 
   void dispose() {
@@ -59,41 +56,36 @@ class _BaseView extends State<BaseView> {
     }
     super.dispose();
   }
+
   /// 初始化controller, 为了使给定的默认值, 在选框的中心位置
   void _initController() {
     provinceController = new FixedExtentScrollController(
-        initialItem: provinces.indexWhere((Point p) => p.code == targetProvince.code)
-    );
+        initialItem:
+            provinces.indexWhere((Point p) => p.code == targetProvince.code));
 
     cityController = new FixedExtentScrollController(
-        initialItem: targetProvince.child.indexWhere((Point p) => p.code == targetCity.code)
-    );
+        initialItem: targetProvince.child
+            .indexWhere((Point p) => p.code == targetCity.code));
 
     areaController = new FixedExtentScrollController(
-        initialItem: targetCity.child.indexWhere((Point p) => p.code == targetArea.code)
-    );
+        initialItem: targetCity.child
+            .indexWhere((Point p) => p.code == targetArea.code));
   }
 
   /// 重置Controller的原因在于, 无法手动去更改initialItem, 也无法通过
   /// jumpTo or animateTo去更改, 强行更改, 会触发 _onProvinceChange  _onCityChange 与 _onAreacChange
   /// 只为覆盖初始化化的参数initialItem
   void _resetController() {
-    if (_resetControllerOnce) return ;
-    provinceController = new FixedExtentScrollController(
-        initialItem: 0
-    );
+    if (_resetControllerOnce) return;
+    provinceController = new FixedExtentScrollController(initialItem: 0);
 
-    cityController = new FixedExtentScrollController(
-        initialItem: 0
-    );
-    areaController = new FixedExtentScrollController(
-        initialItem: 0
-    );
+    cityController = new FixedExtentScrollController(initialItem: 0);
+    areaController = new FixedExtentScrollController(initialItem: 0);
     _resetControllerOnce = true;
   }
+
   /// initialize tree by locationCode
   void _initLocation(String locationCode) {
-
     int _locationCode;
     if (locationCode != null) {
 //      print("加载初始化地区参数");
@@ -101,8 +93,9 @@ class _BaseView extends State<BaseView> {
       try {
         _locationCode = int.parse(locationCode);
       } catch (e) {
-        print(ArgumentError("The Argument locationCode must be valid like: '100000' but get '$locationCode' "));
-        return ;
+        print(ArgumentError(
+            "The Argument locationCode must be valid like: '100000' but get '$locationCode' "));
+        return;
       }
 
       targetProvince = cityTree.initTreeByCode(_locationCode);
@@ -125,13 +118,13 @@ class _BaseView extends State<BaseView> {
     }
 
     if (targetCity == null) {
-      targetCity =  targetProvince.child.first ?? Point();
+      targetCity = targetProvince.child.first ?? Point();
     }
     if (targetArea == null) {
-      targetArea =  targetCity.child.first ?? Point();
+      targetArea = targetCity.child.first ?? Point();
     }
-
   }
+
   /// 通过选中的省份, 构建以省份为根节点的树型结构
   List<String> getCityItemList() {
     List<String> result = [];
@@ -140,12 +133,12 @@ class _BaseView extends State<BaseView> {
     }
     return result;
   }
+
   List<String> getAreaItemList() {
     List<String> result = [];
 
     if (targetCity != null) {
       result.addAll(targetCity.child.toList().map((p) => p.name).toList());
-
     }
     return result;
   }
@@ -157,7 +150,8 @@ class _BaseView extends State<BaseView> {
       _changeTimer.cancel();
     }
     _changeTimer = new Timer(Duration(milliseconds: 500), () {
-      Point _provinceTree = cityTree.initTree(int.parse(_province.code.toString()));
+      Point _provinceTree =
+          cityTree.initTree(int.parse(_province.code.toString()));
       setState(() {
         targetProvince = _provinceTree;
         if (_provinceTree.child.isNotEmpty) {
@@ -176,7 +170,7 @@ class _BaseView extends State<BaseView> {
       _changeTimer.cancel();
     }
     _changeTimer = new Timer(Duration(milliseconds: 500), () {
-      if (!mounted)  return ;
+      if (!mounted) return;
       setState(() {
         targetCity = _targetCity;
       });
@@ -189,118 +183,109 @@ class _BaseView extends State<BaseView> {
       _changeTimer.cancel();
     }
     _changeTimer = new Timer(Duration(milliseconds: 500), () {
-      if (!mounted)  return ;
+      if (!mounted) return;
       setState(() {
         targetArea = _targetArea;
       });
     });
   }
-  Result _buildResult() {
 
+  Result _buildResult() {
     return Result(
-      provinceId: targetProvince.code.toString(),
-      provinceName: targetProvince.name,
-      cityId: targetCity.code.toString(),
-      cityName: targetCity.name,
-      areaName: targetArea.name,
-      areaId: targetArea.code.toString()
-    );
+        provinceId: targetProvince.code.toString(),
+        provinceName: targetProvince.name,
+        cityId: targetCity.code.toString(),
+        cityName: targetCity.name,
+        areaName: targetArea.name,
+        areaId: targetArea.code.toString());
   }
+
   Widget _bottomBuild() {
 //    return Container();
     return new Container(
         width: double.infinity,
         color: Colors.white,
         child: new Column(
-            crossAxisAlignment: CrossAxisAlignment.start
-          , mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-
-              new Expanded(
-                child: new Row(
-                  children: <Widget>[
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: new Text(
-                        '取消',
-                        style: new TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context, _buildResult());
-                      },
-                      child: new Text(
-                        '确定',
-                        style: new TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                ),
-              ),
-              new Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            new Expanded(
+              child: new Row(
                 children: <Widget>[
-                  new _MyCityPicker(
-                    key: Key('province'),
-                    height: widget.height,
-                    controller: provinceController,
-                    value: targetProvince.name,
-                    itemList: provinces.toList().map((v) => v.name).toList(),
-                    changed: (index) {
-                      _onProvinceChange(provinces[index]);
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
                     },
+                    child: new Text(
+                      '取消',
+                      style: new TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
                   ),
-                  new _MyCityPicker(
-                    key: Key('citys $targetProvince'), // 这个属性是为了强制刷新
-                    controller: cityController,
-                    height: widget.height,
-                    value: targetCity.name,
-                    itemList: getCityItemList(),
-                    changed: (index) {
-                      _onCityChange(targetProvince.child[index]);
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context, _buildResult());
                     },
+                    child: new Text(
+                      '确定',
+                      style: new TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
                   ),
-                  new _MyCityPicker(
-                    key: Key('towns $targetCity'),
-                    controller: areaController,
-                    value: targetArea.name,
-                    height: widget.height,
-                    itemList: getAreaItemList(),
-                    changed: (index) {
-                      _onAreaChange(targetCity.child[index]);
-                    },
-                  )
                 ],
-              )
-            ],
-
-        )
-    );
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+            ),
+            new Row(
+              children: <Widget>[
+                new _MyCityPicker(
+                  key: Key('province'),
+                  height: widget.height,
+                  controller: provinceController,
+                  value: targetProvince.name,
+                  itemList: provinces.toList().map((v) => v.name).toList(),
+                  changed: (index) {
+                    _onProvinceChange(provinces[index]);
+                  },
+                ),
+                new _MyCityPicker(
+                  key: Key('citys $targetProvince'), // 这个属性是为了强制刷新
+                  controller: cityController,
+                  height: widget.height,
+                  value: targetCity.name,
+                  itemList: getCityItemList(),
+                  changed: (index) {
+                    _onCityChange(targetProvince.child[index]);
+                  },
+                ),
+                new _MyCityPicker(
+                  key: Key('towns $targetCity'),
+                  controller: areaController,
+                  value: targetArea.name,
+                  height: widget.height,
+                  itemList: getAreaItemList(),
+                  changed: (index) {
+                    _onAreaChange(targetCity.child[index]);
+                  },
+                )
+              ],
+            )
+          ],
+        ));
   }
 
   Widget build(BuildContext context) {
 //    print("widget.height> ${widget.height}");
     return new CustomSingleChildLayout(
-      delegate: _WrapLayout(
-        progress: widget.progress,
-        height: widget.height
-      ),
+      delegate: _WrapLayout(progress: widget.progress, height: widget.height),
       child: new GestureDetector(
         child: new Material(
           color: Colors.transparent,
-          child: new Container(
-            width: double.infinity,
-            child: _bottomBuild()
-          ),
+          child: new Container(width: double.infinity, child: _bottomBuild()),
         ),
       ),
     );
@@ -315,7 +300,12 @@ class _MyCityPicker extends StatefulWidget {
   final ValueChanged<int> changed;
   final double height;
   _MyCityPicker(
-      {this.key, this.controller, this.changed, this.height, this.itemList, this.value});
+      {this.key,
+      this.controller,
+      this.changed,
+      this.height,
+      this.itemList,
+      this.value});
 
   @override
   State createState() {
@@ -335,39 +325,33 @@ class _MyCityPickerState extends State<_MyCityPicker> {
   Widget build(BuildContext context) {
     return new Expanded(
       child: new Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(6.0),
-        height: widget.height - 40,
-        alignment: Alignment.center,
-        child: CupertinoPicker.builder(
-            magnification: 1.0,
-            itemExtent: 40.0,
-            backgroundColor: Colors.white,
-            scrollController: widget.controller,
-            onSelectedItemChanged: (index) {
-              widget.changed(index);
-            },
-            itemBuilder: (context, index) {
-              return Center(
-                child: Text(
-                  '${widget.itemList[index]}',
-                  maxLines: 1,
-                  overflow: TextOverflow.fade,
-                  textAlign: TextAlign.center,
-                ),
-              );
-            },
-            childCount: widget.itemList.length
-        )
-      ),
+          color: Colors.white,
+          padding: const EdgeInsets.all(6.0),
+          height: widget.height - 40,
+          alignment: Alignment.center,
+          child: CupertinoPicker.builder(
+              magnification: 1.0,
+              itemExtent: 40.0,
+              backgroundColor: Colors.white,
+              scrollController: widget.controller,
+              onSelectedItemChanged: (index) {
+                widget.changed(index);
+              },
+              itemBuilder: (context, index) {
+                return Center(
+                  child: Text(
+                    '${widget.itemList[index]}',
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              },
+              childCount: widget.itemList.length)),
       flex: 1,
     );
   }
 }
-
-
-
-
 
 class _WrapLayout extends SingleChildLayoutDelegate {
   _WrapLayout({
@@ -377,7 +361,6 @@ class _WrapLayout extends SingleChildLayoutDelegate {
 
   final double progress;
   final double height;
-
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
@@ -401,5 +384,4 @@ class _WrapLayout extends SingleChildLayoutDelegate {
   bool shouldRelayout(_WrapLayout oldDelegate) {
     return progress != oldDelegate.progress;
   }
-
 }

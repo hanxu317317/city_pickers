@@ -14,7 +14,7 @@ class Cache {
   factory Cache() {
     return _getInstance();
   }
-  
+
   static Cache get instance => _getInstance();
   static Cache _instance;
 
@@ -27,19 +27,20 @@ class Cache {
   bool has(String key) {
     return _cache.containsKey(key);
   }
+
   dynamic get(String key) {
     if (has(key)) {
       return _cache[key];
     }
     return null;
   }
+
   dynamic remove(String key) {
     if (has(key)) {
       _cache.remove(key);
     }
     return null;
   }
-
 
   static Cache _getInstance() {
     if (_instance == null) {

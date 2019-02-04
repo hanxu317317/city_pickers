@@ -27,12 +27,18 @@ class Result {
   /// 地区名称
   final String areaName;
 
-  Result({this.provinceId, this.cityId, this.areaId, this.provinceName, this.cityName, this.areaName});
+  Result(
+      {this.provinceId,
+      this.cityId,
+      this.areaId,
+      this.provinceName,
+      this.cityName,
+      this.areaName});
 
   /// 返回String类型的json数据
   @override
   String toString() {
-   //TODO: implement toString
+    //TODO: implement toString
     return "{provinceName: $provinceName, provinceId: $provinceId, cityName: $cityName, cityId: $cityId, areaName: $areaName, areaId: $areaId}";
   }
 }

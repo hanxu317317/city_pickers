@@ -14,7 +14,6 @@ import 'base.dart';
 ///
 /// ```
 class CityPickers {
-
   /// 用来弹出地区选择器
   /// @param context 上下文对象
   /// @param locationCode 初始化地区选择, 可是以省份, 城市, 乡镇的 id,
@@ -33,10 +32,11 @@ class CityPickers {
   }) {
     return Navigator.of(context, rootNavigator: true).push(
       new _CityPickerRoute(
-          theme: Theme.of(context, shadowThemeOnly: true),
-          locationCode: locationCode,
-          height: height,
-          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        theme: Theme.of(context, shadowThemeOnly: true),
+        locationCode: locationCode,
+        height: height,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
       ),
     );
   }
@@ -48,13 +48,12 @@ class _CityPickerRoute<T> extends PopupRoute<T> {
   final String locationCode;
   final Function onChangeData;
   final double height;
-  _CityPickerRoute({
-    this.theme,
-    this.height,
-    this.barrierLabel,
-    this.onChangeData,
-    this.locationCode
-  });
+  _CityPickerRoute(
+      {this.theme,
+      this.height,
+      this.barrierLabel,
+      this.onChangeData,
+      this.locationCode});
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 2000);
@@ -80,14 +79,10 @@ class _CityPickerRoute<T> extends PopupRoute<T> {
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
     Widget bottomSheet = new MediaQuery.removePadding(
-      removeTop: true,
-      context: context,
-      child: _CityPickerWidget(
-        route: this,
-        height: this.height,
-        locationCode: locationCode
-      )
-    );
+        removeTop: true,
+        context: context,
+        child: _CityPickerWidget(
+            route: this, height: this.height, locationCode: locationCode));
     if (theme != null) {
       bottomSheet = new Theme(data: theme, child: bottomSheet);
     }
@@ -96,7 +91,6 @@ class _CityPickerRoute<T> extends PopupRoute<T> {
 }
 
 class _CityPickerWidget extends StatefulWidget {
-
   final _CityPickerRoute route;
   final String locationCode;
   final double height;
@@ -104,10 +98,10 @@ class _CityPickerWidget extends StatefulWidget {
 
   _CityPickerWidget(
       {Key key,
-        this.height,
-        this.locationCode,
-        this.onChangeData,
-        @required this.route});
+      this.height,
+      this.locationCode,
+      this.onChangeData,
+      @required this.route});
 
   @override
   State createState() {
@@ -124,10 +118,10 @@ class _CityPickerState extends State<_CityPickerWidget> {
         animation: widget.route.animation,
         builder: (BuildContext context, Widget child) {
           return BaseView(
-              progress: widget.route.animation.value,
-              locationCode: widget.locationCode,
-              height: widget.height,
-              onChangeData: widget.onChangeData,
+            progress: widget.route.animation.value,
+            locationCode: widget.locationCode,
+            height: widget.height,
+            onChangeData: widget.onChangeData,
           );
         },
       ),

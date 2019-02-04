@@ -3,15 +3,13 @@ import '../src/util.dart';
 import 'package:city_pickers/modal/point.dart';
 import 'package:lpinyin/lpinyin.dart';
 
-
-
-
 /// tree point
 
 class CityTree {
   /// 元数据
   Map<String, dynamic> metaInfo;
   Cache _cache = new Cache();
+
   /// 结构话的数据
   /// data = Point(
   ///   letter,
@@ -35,9 +33,7 @@ class CityTree {
   ///   }
   /// ]
   Point tree;
-  CityTree({
-    this.metaInfo = citysData
-  });
+  CityTree({this.metaInfo = citysData});
 
   /// 构建以省为根节点的树型结构
   initTree(int provinceId) {
@@ -48,7 +44,8 @@ class CityTree {
 
     String name = provinceData[provinceId.toString()];
     String letter = PinyinHelper.getFirstWordPinyin(name).substring(0, 1);
-    var root = new Point(code: provinceId, letter: letter, child: [], name: name);
+    var root =
+        new Point(code: provinceId, letter: letter, child: [], name: name);
     tree = _buildTree(root, metaInfo[provinceId.toString()], metaInfo);
     _cache.set(_cacheKey, tree);
     return tree;
@@ -56,7 +53,7 @@ class CityTree {
 
   int _getProviceIdByCode(int code) {
     String _code = code.toString();
-    List<String> keys  = citysData.keys.toList();
+    List<String> keys = citysData.keys.toList();
     for (int i = 0; i < keys.length; i++) {
       String key = keys[i];
       Map<String, dynamic> child = citysData[key];
@@ -83,6 +80,7 @@ class CityTree {
     }
     return null;
   }
+
   /// 树的构建方法
   Point _buildTree(Point target, Map citys, Map meta) {
     if (citys == null || citys.isEmpty) {
@@ -99,6 +97,7 @@ class CityTree {
           child: [],
           name: value['name'],
         );
+
         /// 用来规避
         /// 以下数据导致的死循环递归
         ///  "469027": {
@@ -107,7 +106,7 @@ class CityTree {
         //            "alpha": "l"
         //        }
         //    },
-        if (citys.keys.length == 1)  {
+        if (citys.keys.length == 1) {
           if (target.code.toString() == citys.keys.first) {
             continue;
           }
@@ -120,6 +119,7 @@ class CityTree {
     return target;
   }
 }
+
 class Provinces {
   Map<String, String> metaInfo;
   Provinces({this.metaInfo = provinceData});
@@ -131,11 +131,9 @@ class Provinces {
     for (int i = 0; i < keys.length; i++) {
       String name = metaInfo[keys[i]];
       provList.add(Point(
-        code: int.parse(keys[i]),
-        letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1),
-        name: name
-      ));
-
+          code: int.parse(keys[i]),
+          letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1),
+          name: name));
     }
     provList.sort((Point a, Point b) {
       return a.letter.compareTo(b.letter);
