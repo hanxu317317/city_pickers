@@ -6,11 +6,11 @@ import 'package:lpinyin/lpinyin.dart';
 /// tree point
 
 class CityTree {
-  /// 元数据
+  /// build cityTrees's meta, it can be changed bu developers
   Map<String, dynamic> metaInfo;
   Cache _cache = new Cache();
 
-  /// 结构话的数据
+  /// the tree's modal
   /// data = Point(
   ///   letter,
   ///   name
@@ -33,9 +33,13 @@ class CityTree {
   ///   }
   /// ]
   Point tree;
+
+  /// @param metaInfo city and areas meta describe
   CityTree({this.metaInfo = citysData});
 
-  /// 构建以省为根节点的树型结构
+  /// build tree by int provinceId,
+  /// @param provinceId this is province id
+  /// @return tree
   initTree(int provinceId) {
     String _cacheKey = provinceId.toString();
     if (_cache.has(_cacheKey)) {
@@ -50,8 +54,10 @@ class CityTree {
     _cache.set(_cacheKey, tree);
     return tree;
   }
-
-  int _getProviceIdByCode(int code) {
+  /// this is a private function, used the return to get a correct tree contain cities and areas
+  /// @param code one of province city or area id;
+  /// @return provinceId return id which province's child contain code
+  int _getProvinceByCode(int code) {
     String _code = code.toString();
     List<String> keys = citysData.keys.toList();
     for (int i = 0; i < keys.length; i++) {
@@ -62,26 +68,29 @@ class CityTree {
         if (provinceData.containsKey(key)) {
           return int.parse(key);
         }
-        return _getProviceIdByCode(int.parse(key));
+        return _getProvinceByCode(int.parse(key));
       }
     }
     return null;
   }
 
-  // build tree by any code provinceId or cityCode or areaCode
+  /// build tree by any code provinceId or cityCode or areaCode
+  /// @param code build a tree
+  /// @return Point a province with its cities and areas tree
   Point initTreeByCode(int code) {
     String _code = code.toString();
     if (provinceData[_code] != null) {
       return initTree(code);
     }
-    int provinceId = _getProviceIdByCode(code);
+    int provinceId = _getProvinceByCode(code);
     if (provinceId != null) {
       return initTree(provinceId);
     }
     return null;
   }
 
-  /// 树的构建方法
+  /// private function
+  /// recursion to build tree
   Point _buildTree(Point target, Map citys, Map meta) {
     if (citys == null || citys.isEmpty) {
       return target;
@@ -98,14 +107,13 @@ class CityTree {
           name: value['name'],
         );
 
-        /// 用来规避
-        /// 以下数据导致的死循环递归
-        ///  "469027": {
+        // for avoid the data  error that such as
+        //  "469027": {
         //        "469027": {
         //            "name": "乐东黎族自治县",
         //            "alpha": "l"
         //        }
-        //    },
+        //    }
         if (citys.keys.length == 1) {
           if (target.code.toString() == citys.keys.first) {
             continue;
@@ -119,7 +127,7 @@ class CityTree {
     return target;
   }
 }
-
+/// Province Class
 class Provinces {
   Map<String, String> metaInfo;
   Provinces({this.metaInfo = provinceData});
