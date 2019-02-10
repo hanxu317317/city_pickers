@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'dart:io';
 
 const Map<String, dynamic> citysData = {
+  "710000": {
+    "710100": {"name": "台湾", "alpha": "t"}
+  },
   "110000": {"110100": "北京城区"},
   "110100": {
     "110101": "东城区",

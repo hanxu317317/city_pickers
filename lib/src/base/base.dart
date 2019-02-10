@@ -20,19 +20,17 @@ class BaseView extends StatefulWidget {
   final double progress;
   final String locationCode;
   final ShowType showType;
-  final Function onChangeData;
+  final Map<String, dynamic> provinceData;
   // 容器高度
   final double height;
   BaseView({
     this.progress,
-    this.showType = ShowType.p,
+    this.showType = ShowType.pca,
     this.height =  400.0,
     this.locationCode,
-    this.onChangeData
+    this.provinceData
   });
-  _BaseView createState() => _BaseView(
-
-  );
+  _BaseView createState() => _BaseView();
 }
 
 class _BaseView extends State<BaseView> {
@@ -45,7 +43,7 @@ class _BaseView extends State<BaseView> {
   // 所有省的列表. 因为性能等综合原因,
   // 没有一次性构建整个以国为根的树. 动态的构建以省为根的树, 效率高.
   List<Point> provinces = new Provinces(metaInfo: provinceData).provinces;
-  CityTree cityTree = new CityTree(metaInfo: citysData);
+  CityTree cityTree = new CityTree(metaInfo: citiesData);
 
   Point targetProvince;
   Point targetCity;
@@ -212,6 +210,13 @@ class _BaseView extends State<BaseView> {
      if (showType.contain(ShowType.a)) {
        result.areaId = targetArea.code.toString();
        result.areaName = targetArea.name;
+     }
+     // 台湾异常数据. 需要过滤
+     if (result.provinceId == "710000") {
+       result.cityId = null;
+       result.cityName = null;
+       result.areaId = null;
+       result.areaName = null;
      }
      return result;
   }

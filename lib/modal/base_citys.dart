@@ -35,7 +35,7 @@ class CityTree {
   Point tree;
 
   /// @param metaInfo city and areas meta describe
-  CityTree({this.metaInfo = citysData});
+  CityTree({this.metaInfo = citiesData});
 
   /// build tree by int provinceId,
   /// @param provinceId this is province id
@@ -59,10 +59,10 @@ class CityTree {
   /// @return provinceId return id which province's child contain code
   int _getProvinceByCode(int code) {
     String _code = code.toString();
-    List<String> keys = citysData.keys.toList();
+    List<String> keys = citiesData.keys.toList();
     for (int i = 0; i < keys.length; i++) {
       String key = keys[i];
-      Map<String, dynamic> child = citysData[key];
+      Map<String, dynamic> child = citiesData[key];
       if (child.containsKey(_code)) {
         // 当前元素的父key在省份内
         if (provinceData.containsKey(key)) {
