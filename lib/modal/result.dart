@@ -7,38 +7,47 @@
 // tartget:  xxx
 //
 
+import 'dart:convert';
 /// CityPicker 返回的 **Result** 结果函数
 class Result {
   /// provinceId
-  final String provinceId;
+  String provinceId;
 
   /// cityId
-  final String cityId;
+  String cityId;
 
   /// areaId
-  final String areaId;
+  String areaId;
 
   /// provinceName
-  final String provinceName;
+  String provinceName;
 
   /// cityName
-  final String cityName;
+  String cityName;
 
   /// areaName
-  final String areaName;
+  String areaName;
 
-  Result(
-      {this.provinceId,
-      this.cityId,
-      this.areaId,
-      this.provinceName,
-      this.cityName,
-      this.areaName});
+  Result({this.provinceId,
+    this.cityId,
+    this.areaId,
+    this.provinceName,
+    this.cityName,
+    this.areaName});
 
   /// string json
   @override
   String toString() {
     //TODO: implement toString
-    return "{provinceName: $provinceName, provinceId: $provinceId, cityName: $cityName, cityId: $cityId, areaName: $areaName, areaId: $areaId}";
+    Map<String, dynamic> obj = {
+      'provinceName': provinceName,
+      'provinceId': provinceId,
+      'cityName': cityName,
+      'cityId': cityId,
+      'areaName': areaName,
+      'areaId': areaId};
+    obj.removeWhere((key, value) => value == null);
+
+    return json.encode(obj);
   }
 }

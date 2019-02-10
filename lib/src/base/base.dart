@@ -7,21 +7,32 @@
  * tartget:  xxx
  */
 import 'dart:async';
-import '../meta/province.dart';
+import '../../meta/province.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../modal/point.dart';
-import '../modal/result.dart';
+import '../../modal/point.dart';
+import '../../modal/result.dart';
 import 'package:city_pickers/modal/base_citys.dart';
+import '../mod/inherit_process.dart';
+import '../show_types.dart';
 
 class BaseView extends StatefulWidget {
   final double progress;
   final String locationCode;
+  final ShowType showType;
   final Function onChangeData;
   // 容器高度
   final double height;
-  BaseView({this.progress, this.height, this.locationCode, this.onChangeData});
-  _BaseView createState() => _BaseView();
+  BaseView({
+    this.progress,
+    this.showType = ShowType.p,
+    this.height =  400.0,
+    this.locationCode,
+    this.onChangeData
+  });
+  _BaseView createState() => _BaseView(
+
+  );
 }
 
 class _BaseView extends State<BaseView> {
@@ -188,16 +199,25 @@ class _BaseView extends State<BaseView> {
   }
 
   Result _buildResult() {
-    return Result(
-        provinceId: targetProvince.code.toString(),
-        provinceName: targetProvince.name,
-        cityId: targetCity.code.toString(),
-        cityName: targetCity.name,
-        areaName: targetArea.name,
-        areaId: targetArea.code.toString());
+     Result result = Result();
+     ShowType showType = widget.showType;
+     if (showType.contain(ShowType.p)) {
+       result.provinceId = targetProvince.code.toString();
+       result.provinceName = targetProvince.name;
+     }
+     if (showType.contain(ShowType.c)) {
+       result.cityId = targetCity.code.toString();
+       result.cityName = targetCity.name;
+     }
+     if (showType.contain(ShowType.a)) {
+       result.areaId = targetArea.code.toString();
+       result.areaName = targetArea.name;
+     }
+     return result;
   }
 
   Widget _bottomBuild() {
+
     return new Container(
         width: double.infinity,
         color: Colors.white,
@@ -240,6 +260,7 @@ class _BaseView extends State<BaseView> {
               children: <Widget>[
                 new _MyCityPicker(
                   key: Key('province'),
+                  isShow: widget.showType.contain(ShowType.p),
                   height: widget.height,
                   controller: provinceController,
                   value: targetProvince.name,
@@ -250,6 +271,7 @@ class _BaseView extends State<BaseView> {
                 ),
                 new _MyCityPicker(
                   key: Key('citys $targetProvince'), // 这个属性是为了强制刷新
+                  isShow: widget.showType.contain(ShowType.c),
                   controller: cityController,
                   height: widget.height,
                   value: targetCity.name,
@@ -260,6 +282,7 @@ class _BaseView extends State<BaseView> {
                 ),
                 new _MyCityPicker(
                   key: Key('towns $targetCity'),
+                  isShow: widget.showType.contain(ShowType.a),
                   controller: areaController,
                   value: targetArea.name,
                   height: widget.height,
@@ -275,14 +298,20 @@ class _BaseView extends State<BaseView> {
   }
 
   Widget build(BuildContext context) {
-    return new CustomSingleChildLayout(
-      delegate: _WrapLayout(progress: widget.progress, height: widget.height),
-      child: new GestureDetector(
-        child: new Material(
-          color: Colors.transparent,
-          child: new Container(width: double.infinity, child: _bottomBuild()),
-        ),
-      ),
+    final route = InheritRouteWidget.of(context).router;
+    return new AnimatedBuilder(
+      animation: route.animation,
+      builder: (BuildContext context, Widget child) {
+        return new CustomSingleChildLayout(
+          delegate: _WrapLayout(progress: route.animation.value, height: widget.height),
+          child: new GestureDetector(
+            child: new Material(
+              color: Colors.transparent,
+              child: new Container(width: double.infinity, child: _bottomBuild()),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -291,12 +320,14 @@ class _MyCityPicker extends StatefulWidget {
   final List<String> itemList;
   final Key key;
   final String value;
+  final bool isShow;
   final FixedExtentScrollController controller;
   final ValueChanged<int> changed;
   final double height;
   _MyCityPicker(
       {this.key,
       this.controller,
+      this.isShow = false,
       this.changed,
       this.height,
       this.itemList,
@@ -316,8 +347,12 @@ class _MyCityPickerState extends State<_MyCityPicker> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
+    if (!widget.isShow) {
+      return Container();
+    }
     return new Expanded(
       child: new Container(
           color: Colors.white,
