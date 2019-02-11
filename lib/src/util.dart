@@ -5,6 +5,8 @@
 // Time: 21:38
 // email: sanfan.hx@alibaba-inc.com
 // tartget:  xxx
+import 'package:flutter/material.dart';
+import 'dart:async';
 
 /// it's a cache class, aim to reduce calculations;
 class Cache {
@@ -48,4 +50,10 @@ class Cache {
     }
     return _instance;
   }
+}
+
+void setTimeout({int milliseconds, callback = VoidCallback}) {
+  new Timer(Duration(milliseconds: milliseconds), () {
+    callback();
+  });
 }
