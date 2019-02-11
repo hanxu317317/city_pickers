@@ -1,4 +1,4 @@
-const Map<String, String> provinceData = {
+const Map<String, String> provincesData = {
   "110000": "北京市",
   "120000": "天津市",
   "130000": "河北省",

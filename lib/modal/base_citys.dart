@@ -46,7 +46,7 @@ class CityTree {
       return tree = _cache.get(_cacheKey);
     }
 
-    String name = provinceData[provinceId.toString()];
+    String name = provincesData[provinceId.toString()];
     String letter = PinyinHelper.getFirstWordPinyin(name).substring(0, 1);
     var root =
         new Point(code: provinceId, letter: letter, child: [], name: name);
@@ -65,7 +65,7 @@ class CityTree {
       Map<String, dynamic> child = citiesData[key];
       if (child.containsKey(_code)) {
         // 当前元素的父key在省份内
-        if (provinceData.containsKey(key)) {
+        if (provincesData.containsKey(key)) {
           return int.parse(key);
         }
         return _getProvinceByCode(int.parse(key));
@@ -79,7 +79,7 @@ class CityTree {
   /// @return Point a province with its cities and areas tree
   Point initTreeByCode(int code) {
     String _code = code.toString();
-    if (provinceData[_code] != null) {
+    if (provincesData[_code] != null) {
       return initTree(code);
     }
     int provinceId = _getProvinceByCode(code);
@@ -130,7 +130,7 @@ class CityTree {
 /// Province Class
 class Provinces {
   Map<String, String> metaInfo;
-  Provinces({this.metaInfo = provinceData});
+  Provinces({this.metaInfo = provincesData});
 
   // 获取省份数据
   get provinces {
@@ -158,7 +158,7 @@ class Provinces {
 
 //main() {
 //  var p = new Provinces(
-////    metaInfo: provinceData
+////    metaInfo: provincesData
 //  );
 //  print("p.provinces ${p.provinces}");
 //}
