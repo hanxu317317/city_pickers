@@ -7,7 +7,7 @@
  * tartget:  xxx
  */
 import 'dart:async';
-import '../../meta/province.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../modal/point.dart';
@@ -20,20 +20,24 @@ class BaseView extends StatefulWidget {
   final double progress;
   final String locationCode;
   final ShowType showType;
-  final Map<String, dynamic> provinceData;
+  final Map<String, dynamic> provincesData;
+  final Map<String, dynamic> citiesData;
   // 容器高度
   final double height;
   BaseView({
     this.progress,
-    this.showType = ShowType.pca,
-    this.height =  400.0,
+    this.showType,
+    this.height,
     this.locationCode,
-    this.provinceData
+    this.citiesData,
+    this.provincesData,
+
   });
   _BaseView createState() => _BaseView();
 }
 
 class _BaseView extends State<BaseView> {
+
   Timer _changeTimer;
   bool _resetControllerOnce = false;
   FixedExtentScrollController provinceController;
@@ -42,8 +46,8 @@ class _BaseView extends State<BaseView> {
 
   // 所有省的列表. 因为性能等综合原因,
   // 没有一次性构建整个以国为根的树. 动态的构建以省为根的树, 效率高.
-  List<Point> provinces = new Provinces(metaInfo: provinceData).provinces;
-  CityTree cityTree = new CityTree(metaInfo: citiesData);
+  List<Point> provinces;
+  CityTree cityTree;
 
   Point targetProvince;
   Point targetCity;
@@ -52,6 +56,8 @@ class _BaseView extends State<BaseView> {
   @override
   void initState() {
     super.initState();
+    provinces = new Provinces(metaInfo: widget.provincesData).provinces;
+    cityTree = new CityTree(metaInfo: widget.citiesData);
     _initLocation(widget.locationCode);
     _initController();
   }
