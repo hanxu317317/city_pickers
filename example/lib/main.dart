@@ -1,33 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/cupertino.dart';
+import 'src/item_container.dart';
+import 'view/show_city_picker.dart';
+import 'view/wip.dart';
+import 'package:city_pickers_example/view/show_full_page_picker.dart';
 void main() => runApp(MyApp());
 
 
 class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Welcome to Flutt2er',
-      debugShowCheckedModeBanner: false,
-      home: Main(),
-    );
-  }
-}
-
-
-class Main extends StatefulWidget {
-  @override
-  _MainState createState() => _MainState();
-}
-
-class _MainState extends State<Main> {
-
-
-  @override
-  void initState() {
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,10 +22,18 @@ class _MainState extends State<Main> {
         ),
 
       ),
+      title: 'Welcome to Flutt2er',
+      debugShowCheckedModeBanner: false,
+      routes: <String, WidgetBuilder> {
+        '/name': (_) => new ShowCityPicker(),
+        '/full_page': (_) => new ShowFullPageCityPicker(),
+        '/city_select': (_) => new WorkInProgress()
+      },
       home: Body(),
     );
   }
 }
+
 
 class Body extends StatefulWidget {
   @override
@@ -52,51 +41,35 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  String _result;
-  show(context) async {
-    Result temp  = await CityPickers.showCityPicker(
-      context: context,
-//      locationCode: '640221',
-      height: 400,
-    );
-    setState(() {
-      _result = "${temp.toString()}";
-    });
-  }
-  show2(conext) async {
-    Result temp  = await CityPickers.showFullPageCityPicker(
-      context: context,
-    );
-    setState(() {
-      _result = "${temp.toString()}";
-    });
-  }
-
+  List demoList = [
+    {
+      "icon": Icons.place,
+      "name": "ios选择器",
+      "routerName": '/name'
+    },
+    {
+      "icon": Icons.fullscreen,
+      "name": "三级全屏选择器",
+      "routerName": '/full_page'
+    },
+    {
+      "icon": Icons.location_city,
+      "name": "城市选择器",
+      "routerName": '/city_select'
+    }
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Plugin example app'),
+        title: const Text('CityPickers Examples'),
       ),
-      body: Center(
-          child: Column(
-            children: <Widget>[
-              Text("result: ${_result.toString()}"),
-              RaisedButton(
-                onPressed: () {this.show(context);
-                },
-                child: Text("select"),
-              ),
-              RaisedButton(
-                onPressed: () {this.show2(context);
-                },
-                child: Text("select2"),
-              ),
-            ],
-          )
-      ),
+      body: ItemContainer(
+        itemList: demoList,
+      )
     );
   }
 }
+
 
 

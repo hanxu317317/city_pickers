@@ -26,7 +26,9 @@ class CityPickers {
   ///                 if given id is provinceId, the city and area id will be this province's first city and first area in metadata
   /// @param height Container's height
   ///
-  /// @param onChangeDat not use
+  /// @param Theme used it's primaryColor
+  ///
+  /// @param barrierDismissible whether user can dismiss the modal by touch background
   ///
   /// @return Result see [Result]
   ///
@@ -35,13 +37,21 @@ class CityPickers {
     showType = ShowType.pca,
     double height =  400.0,
     String locationCode = '110000',
+    ThemeData theme,
     Map<String, dynamic> citiesData = meta.citiesData,
     Map<String, dynamic> provincesData = meta.provincesData,
-  }) {
 
+    // CityPickerRoute params
+    bool barrierDismissible = true,
+    double barrierOpacity = 0.5,
+
+
+  }) {
     return Navigator.of(context, rootNavigator: true).push(
       new CityPickerRoute(
-        theme: Theme.of(context, shadowThemeOnly: true),
+        theme: theme ?? Theme.of(context),
+        canBarrierDismiss:barrierDismissible,
+        barrierOpacity: barrierOpacity,
         barrierLabel:
             MaterialLocalizations.of(context).modalBarrierDismissLabel,
         child: BaseView(
@@ -55,21 +65,28 @@ class CityPickers {
     );
   }
 
+  /// @theme Theme used it's primaryColor
+  ///
   static Future<Result> showFullPageCityPicker({
     @required BuildContext context,
-    showType = ShowType.pca,
+    ThemeData theme,
+    ShowType showType = ShowType.pca,
     String locationCode = '110000',
     Map<String, dynamic> citiesData = meta.citiesData,
     Map<String, dynamic> provincesData = meta.provincesData,
   }) {
-    print("theme of context ${Theme.of(context)}");
     return Navigator.push(
         context,
         new PageRouteBuilder(
           settings: RouteSettings(name: 'fullPageCityPicker'),
-          transitionDuration: const Duration(milliseconds: 100),
+          transitionDuration: const Duration(milliseconds: 250),
           pageBuilder: (context, _, __)
-            => new Theme(data: Theme.of(context), child: FullPage())
+            => new Theme(data: theme ?? Theme.of(context), child: FullPage(
+                showType: showType,
+                locationCode: locationCode,
+                citiesData: citiesData,
+                provincesData: provincesData,
+            ))
           ,
           transitionsBuilder: (_, Animation<double> animation, __, Widget child) =>
             new SlideTransition(

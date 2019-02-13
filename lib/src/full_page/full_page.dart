@@ -18,7 +18,7 @@ class FullPage extends StatefulWidget {
   final ShowType showType;
   final Map<String, dynamic> provincesData;
   final Map<String, dynamic> citiesData;
-  FullPage({this.locationCode = '120106', this.showType, this.provincesData, this.citiesData});
+  FullPage({this.locationCode, this.showType, this.provincesData, this.citiesData});
   @override
   _FullPageState createState() => _FullPageState();
 }
@@ -26,7 +26,8 @@ class FullPage extends StatefulWidget {
 enum Status  {
   Province,
   City,
-  Area
+  Area,
+  Over,
 }
 class HistoryPageInfo {
   Status status;
@@ -35,14 +36,31 @@ class HistoryPageInfo {
 
 }
 class _FullPageState extends State<FullPage> {
+  /// list scroll control
   ScrollController scrollController;
+
+  /// provinces object [Point]
   List<Point> provinces;
+  /// cityTree modal ,for building tree that root is province
   CityTree cityTree;
+
+  /// page current statue, show p or a or c or over
   Status pageStatus;
+
+  /// show items maybe province city or area;
+
   List<Point> itemList;
+
+  /// body history, the max length is three
   List<HistoryPageInfo> _history = [];
+
+  /// the target province user selected
   Point targetProvince;
+
+  /// the target city user selected
   Point targetCity;
+
+  /// the target area user selected
   Point targetArea;
 
   @override
@@ -111,7 +129,7 @@ class _FullPageState extends State<FullPage> {
 
   Result _buildResult() {
     Result result = Result();
-    ShowType showType = ShowType.pca;
+    ShowType showType = widget.showType;
     try {
       if (showType.contain(ShowType.p)) {
         result.provinceId = targetProvince.code.toString();
@@ -149,7 +167,6 @@ class _FullPageState extends State<FullPage> {
     });
   }
   _onAreaSelect(Point area) {
-    print("_onAreaSelect");
     this.setState(() {
       targetArea = area;
 
@@ -172,9 +189,13 @@ class _FullPageState extends State<FullPage> {
       case Status.Area:
         selectId = targetArea.code;
         break;
+      case Status.Over:
+        break;
     }
     return selectId;
   }
+  /// 所有选项的点击事件入口
+  /// @param targetPoint 被点击对象的point对象
   _onItemSelect(Point targetPoint) {
     _history.add(HistoryPageInfo(itemList: itemList, status: pageStatus));
     Status nextStatus;
@@ -184,18 +205,28 @@ class _FullPageState extends State<FullPage> {
         _onProvinceSelect(targetPoint);
         nextStatus = Status.City;
         nextItemList = targetProvince.child;
+        if (!widget.showType.contain(ShowType.c)) {
+          nextStatus = Status.Over;
+        }
         break;
       case Status.City:
         _onCitySelect(targetPoint);
         nextStatus = Status.Area;
         nextItemList = targetCity.child;
+        if (!widget.showType.contain(ShowType.a)) {
+          nextStatus = Status.Over;
+        }
         break;
       case Status.Area:
+        nextStatus = Status.Over;
         _onAreaSelect(targetPoint);
         break;
+      case Status.Over:
+        break;
     }
+
     setTimeout(milliseconds: 300, callback: () {
-      if (nextItemList == null ) {
+      if (nextItemList == null || nextStatus == Status.Over) {
         return popHome();
       }
       if (mounted) {
@@ -217,6 +248,8 @@ class _FullPageState extends State<FullPage> {
         break;
       case Status.Area:
         title = targetCity.name;
+        break;
+      case Status.Over:
         break;
     }
     return Text(title);
@@ -268,19 +301,21 @@ class ListWidget extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: theme.dividerColor, width: 1.0))
           ),
-          child: ListTile(
-            title:  Text(item.name, style: TextStyle(color: Theme.of(context).primaryColor)), // item 标题
-            dense:true,                // item 直观感受是整体大小
-            trailing: selectedId == item.code ? Icon(Icons.check, color: theme.primaryColor) : null,
-            contentPadding: EdgeInsets.fromLTRB(24.0, .0, 24.0, 3.0),// item 内容内边距
-            enabled:true,
-            onTap:() {
-              onSelect(itemList[index]);
-            },// item onTap 点击事件
-            onLongPress:(){
+          child: ListTileTheme(
+            child: ListTile(
+              title:  Text(item.name), // item 标题
+              dense:true,                // item 直观感受是整体大小
+              trailing: selectedId == item.code ? Icon(Icons.check, color: theme.primaryColor) : null,
+              contentPadding: EdgeInsets.fromLTRB(24.0, .0, 24.0, 3.0),// item 内容内边距
+              enabled:true,
+              onTap:() {
+                onSelect(itemList[index]);
+              },// item onTap 点击事件
+              onLongPress:(){
 
-            },// item onLongPress 长按事件
-            selected: selectedId == item.code,     // item 是否选中状态
+              },// item onLongPress 长按事件
+              selected: selectedId == item.code,     // item 是否选中状态
+            ),
           ),
         );
       },

@@ -13,9 +13,13 @@ import 'package:city_pickers/src/mod/inherit_process.dart';
 class CityPickerRoute<T> extends PopupRoute<T> {
   final ThemeData theme;
   final String barrierLabel;
+  final bool canBarrierDismiss;
   final Widget child;
+  final double barrierOpacity;
   CityPickerRoute({this.theme,
     this.child,
+    this.canBarrierDismiss = true,
+    this.barrierOpacity = 0.5,
     this.barrierLabel,
   });
 
@@ -24,10 +28,10 @@ class CityPickerRoute<T> extends PopupRoute<T> {
 
   @override
   @override
-  Color get barrierColor => Colors.black54;
+  Color get barrierColor => Color.fromRGBO(0, 0, 0, barrierOpacity);
 
   @override
-  bool get barrierDismissible => true;
+  bool get barrierDismissible => canBarrierDismiss;
 
   AnimationController _animationController;
 
@@ -42,7 +46,6 @@ class CityPickerRoute<T> extends PopupRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    print("animation.value: ${animation.value}");
     Widget bottomSheet = new MediaQuery.removePadding(
         removeTop: true,
         context: context,
