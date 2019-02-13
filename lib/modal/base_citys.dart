@@ -54,6 +54,7 @@ class CityTree {
     _cache.set(_cacheKey, tree);
     return tree;
   }
+
   /// this is a private function, used the return to get a correct tree contain cities and areas
   /// @param code one of province city or area id;
   /// @return provinceId return id which province's child contain code
@@ -127,9 +128,11 @@ class CityTree {
     return target;
   }
 }
+
 /// Province Class
 class Provinces {
   Map<String, String> metaInfo;
+
   Provinces({this.metaInfo = provincesData});
 
   // 获取省份数据

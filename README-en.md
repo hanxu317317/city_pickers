@@ -3,7 +3,7 @@
 this is china area selector.
 
 # Demo
-<image src="https://img.alicdn.com/tfs/TB1_rnrFXzqK1RjSZFCXXbbxVXa-362-751.gif" style="width: 300px" />
+<image src="https://img.alicdn.com/tfs/TB16H9XGCzqK1RjSZPcXXbTepXa-329-687.gif" style="width: 300px" />
 
 # Getting Started
 

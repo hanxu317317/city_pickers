@@ -12,8 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:city_pickers/city_pickers.dart';
 import '../src/attr_item_container.dart';
 import '../src/location_selector.dart';
-import 'package:city_pickers_example/src/picker.dart';
-import 'dart:async';
+import '../src/picker.dart';
 var emptyResult = new Result();
 
 class ShowCityPicker extends StatefulWidget {

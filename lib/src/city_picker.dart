@@ -35,7 +35,7 @@ class CityPickers {
   static Future<Result> showCityPicker({
     @required BuildContext context,
     showType = ShowType.pca,
-    double height =  400.0,
+    double height = 400.0,
     String locationCode = '110000',
     ThemeData theme,
     Map<String, dynamic> citiesData = meta.citiesData,
@@ -44,24 +44,20 @@ class CityPickers {
     // CityPickerRoute params
     bool barrierDismissible = true,
     double barrierOpacity = 0.5,
-
-
   }) {
     return Navigator.of(context, rootNavigator: true).push(
       new CityPickerRoute(
-        theme: theme ?? Theme.of(context),
-        canBarrierDismiss:barrierDismissible,
-        barrierOpacity: barrierOpacity,
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        child: BaseView(
-          showType: showType,
-          height: height,
-          citiesData: citiesData,
-          provincesData: provincesData,
-          locationCode: locationCode
-        )
-      ),
+          theme: theme ?? Theme.of(context),
+          canBarrierDismiss: barrierDismissible,
+          barrierOpacity: barrierOpacity,
+          barrierLabel:
+              MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          child: BaseView(
+              showType: showType,
+              height: height,
+              citiesData: citiesData,
+              provincesData: provincesData,
+              locationCode: locationCode)),
     );
   }
 
@@ -80,22 +76,22 @@ class CityPickers {
         new PageRouteBuilder(
           settings: RouteSettings(name: 'fullPageCityPicker'),
           transitionDuration: const Duration(milliseconds: 250),
-          pageBuilder: (context, _, __)
-            => new Theme(data: theme ?? Theme.of(context), child: FullPage(
+          pageBuilder: (context, _, __) => new Theme(
+              data: theme ?? Theme.of(context),
+              child: FullPage(
                 showType: showType,
                 locationCode: locationCode,
                 citiesData: citiesData,
                 provincesData: provincesData,
-            ))
-          ,
-          transitionsBuilder: (_, Animation<double> animation, __, Widget child) =>
-            new SlideTransition(
-              position: new Tween<Offset>(
-                begin: Offset(0.0, 1.0),
-                end: Offset(0.0, 0.0),
-              ).animate(animation),
-              child: child
-            ),
+              )),
+          transitionsBuilder:
+              (_, Animation<double> animation, __, Widget child) =>
+                  new SlideTransition(
+                      position: new Tween<Offset>(
+                        begin: Offset(0.0, 1.0),
+                        end: Offset(0.0, 0.0),
+                      ).animate(animation),
+                      child: child),
         ));
   }
 }

@@ -12,8 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:city_pickers/city_pickers.dart';
 import '../src/attr_item_container.dart';
 import '../src/location_selector.dart';
-import 'package:city_pickers_example/src/picker.dart';
-import 'dart:async';
+import '../src/picker.dart';
 var emptyResult = new Result();
 
 class ShowFullPageCityPicker extends StatefulWidget {
@@ -99,42 +98,6 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
     );
   }
 
-  Widget _buildBarrierDismissible() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: CupertinoSwitch(
-        value: barrierDismissibleAttr,
-        onChanged: (bool val) {
-          this.setState(() {
-            barrierDismissibleAttr = !barrierDismissibleAttr;
-          });
-        },
-      )
-    );
-  }
-  Widget _buildBarrierOpacity() {
-
-    return Row(
-      children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: CupertinoSlider(
-            value: barrierOpacityAttr,//实际进度的位置
-            min: 0.01,
-            max: 1.0,
-            divisions: 100,
-            activeColor: Colors.blue,//进度中活动部分的颜色
-            onChanged: (double){
-              setState(() {
-                barrierOpacityAttr = double.toDouble();
-              });
-            },
-          ),
-        ),
-        Text("${barrierOpacityAttr.toStringAsFixed(2)}")
-      ],
-    );
-  }
   Widget _buildTheme() {
     return Picker(
         target: themeAttr != null && themeAttr.name != null ? Text(themeAttr.name) : Text("主题切换"),

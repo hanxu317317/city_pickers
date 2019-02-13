@@ -1,9 +1,10 @@
-# city_pickers[English]()
+Language: [English](https://github.com/hanxu317317/city_pickers/blob/master/README-en.md)
+# city_pickers
 
 中国的城市三级联动选择器
 
 # Demo
-<image src="https://img.alicdn.com/tfs/TB1_rnrFXzqK1RjSZFCXXbbxVXa-362-751.gif" style="width: 300px" />
+<image src="https://img.alicdn.com/tfs/TB16H9XGCzqK1RjSZPcXXbTepXa-329-687.gif" style="width: 300px" />
 
 # 开始
 

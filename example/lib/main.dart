@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/cupertino.dart';
 import 'src/item_container.dart';
 import 'view/show_city_picker.dart';
 import 'view/wip.dart';
-import 'package:city_pickers_example/view/show_full_page_picker.dart';
+import 'view/show_full_page_picker.dart';
 void main() => runApp(MyApp());
 
 

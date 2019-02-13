@@ -22,8 +22,10 @@ class BaseView extends StatefulWidget {
   final ShowType showType;
   final Map<String, dynamic> provincesData;
   final Map<String, dynamic> citiesData;
+
   // 容器高度
   final double height;
+
   BaseView({
     this.progress,
     this.showType,
@@ -31,13 +33,12 @@ class BaseView extends StatefulWidget {
     this.locationCode,
     this.citiesData,
     this.provincesData,
-
   });
+
   _BaseView createState() => _BaseView();
 }
 
 class _BaseView extends State<BaseView> {
-
   Timer _changeTimer;
   bool _resetControllerOnce = false;
   FixedExtentScrollController provinceController;
@@ -203,38 +204,37 @@ class _BaseView extends State<BaseView> {
   }
 
   Result _buildResult() {
-     Result result = Result();
-     ShowType showType = widget.showType;
-     if (showType.contain(ShowType.p)) {
-       result.provinceId = targetProvince.code.toString();
-       result.provinceName = targetProvince.name;
-     }
-     if (showType.contain(ShowType.c)) {
-       result.provinceId = targetProvince.code.toString();
-       result.provinceName = targetProvince.name;
-       result.cityId = targetCity.code.toString();
-       result.cityName = targetCity.name;
-     }
-     if (showType.contain(ShowType.a)) {
-       result.provinceId = targetProvince.code.toString();
-       result.provinceName = targetProvince.name;
-       result.cityId = targetCity.code.toString();
-       result.cityName = targetCity.name;
-       result.areaId = targetArea.code.toString();
-       result.areaName = targetArea.name;
-     }
-     // 台湾异常数据. 需要过滤
-     if (result.provinceId == "710000") {
-       result.cityId = null;
-       result.cityName = null;
-       result.areaId = null;
-       result.areaName = null;
-     }
-     return result;
+    Result result = Result();
+    ShowType showType = widget.showType;
+    if (showType.contain(ShowType.p)) {
+      result.provinceId = targetProvince.code.toString();
+      result.provinceName = targetProvince.name;
+    }
+    if (showType.contain(ShowType.c)) {
+      result.provinceId = targetProvince.code.toString();
+      result.provinceName = targetProvince.name;
+      result.cityId = targetCity.code.toString();
+      result.cityName = targetCity.name;
+    }
+    if (showType.contain(ShowType.a)) {
+      result.provinceId = targetProvince.code.toString();
+      result.provinceName = targetProvince.name;
+      result.cityId = targetCity.code.toString();
+      result.cityName = targetCity.name;
+      result.areaId = targetArea.code.toString();
+      result.areaName = targetArea.name;
+    }
+    // 台湾异常数据. 需要过滤
+    if (result.provinceId == "710000") {
+      result.cityId = null;
+      result.cityName = null;
+      result.areaId = null;
+      result.areaName = null;
+    }
+    return result;
   }
 
   Widget _bottomBuild() {
-
     return new Container(
         width: double.infinity,
         color: Colors.white,
@@ -287,7 +287,8 @@ class _BaseView extends State<BaseView> {
                   },
                 ),
                 new _MyCityPicker(
-                  key: Key('citys $targetProvince'), // 这个属性是为了强制刷新
+                  key: Key('citys $targetProvince'),
+                  // 这个属性是为了强制刷新
                   isShow: widget.showType.contain(ShowType.c),
                   controller: cityController,
                   height: widget.height,
@@ -320,11 +321,13 @@ class _BaseView extends State<BaseView> {
       animation: route.animation,
       builder: (BuildContext context, Widget child) {
         return new CustomSingleChildLayout(
-          delegate: _WrapLayout(progress: route.animation.value, height: widget.height),
+          delegate: _WrapLayout(
+              progress: route.animation.value, height: widget.height),
           child: new GestureDetector(
             child: new Material(
               color: Colors.transparent,
-              child: new Container(width: double.infinity, child: _bottomBuild()),
+              child:
+                  new Container(width: double.infinity, child: _bottomBuild()),
             ),
           ),
         );
@@ -341,6 +344,7 @@ class _MyCityPicker extends StatefulWidget {
   final FixedExtentScrollController controller;
   final ValueChanged<int> changed;
   final double height;
+
   _MyCityPicker(
       {this.key,
       this.controller,
@@ -358,12 +362,12 @@ class _MyCityPicker extends StatefulWidget {
 
 class _MyCityPickerState extends State<_MyCityPicker> {
   List<Widget> children;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {

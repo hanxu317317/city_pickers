@@ -13,34 +13,42 @@ import 'package:city_pickers/modal/base_citys.dart';
 import 'package:city_pickers/src/show_types.dart';
 import 'package:city_pickers/modal/result.dart';
 import 'package:city_pickers/src/util.dart';
+
 class FullPage extends StatefulWidget {
   final String locationCode;
   final ShowType showType;
   final Map<String, dynamic> provincesData;
   final Map<String, dynamic> citiesData;
-  FullPage({this.locationCode, this.showType, this.provincesData, this.citiesData});
+
+  FullPage(
+      {this.locationCode, this.showType, this.provincesData, this.citiesData});
+
   @override
   _FullPageState createState() => _FullPageState();
 }
+
 // 界面状态
-enum Status  {
+enum Status {
   Province,
   City,
   Area,
   Over,
 }
+
 class HistoryPageInfo {
   Status status;
   List<Point> itemList;
-  HistoryPageInfo({this.status, this.itemList});
 
+  HistoryPageInfo({this.status, this.itemList});
 }
+
 class _FullPageState extends State<FullPage> {
   /// list scroll control
   ScrollController scrollController;
 
   /// provinces object [Point]
   List<Point> provinces;
+
   /// cityTree modal ,for building tree that root is province
   CityTree cityTree;
 
@@ -75,7 +83,6 @@ class _FullPageState extends State<FullPage> {
 
     _initLocation(widget.locationCode);
   }
-  
 
   Future<bool> back() {
     HistoryPageInfo last = _history.length > 0 ? _history.last : null;
@@ -156,30 +163,32 @@ class _FullPageState extends State<FullPage> {
     }
     return result;
   }
+
   popHome() {
     Navigator.of(context).pop(_buildResult());
   }
 
   _onProvinceSelect(Point province) {
-
     this.setState(() {
       targetProvince = cityTree.initTree(province.code);
     });
   }
+
   _onAreaSelect(Point area) {
     this.setState(() {
       targetArea = area;
-
     });
   }
+
   _onCitySelect(Point city) {
     this.setState(() {
       targetCity = city;
     });
   }
+
   int _getSelectedId() {
     int selectId;
-    switch(pageStatus) {
+    switch (pageStatus) {
       case Status.Province:
         selectId = targetProvince.code;
         break;
@@ -194,13 +203,14 @@ class _FullPageState extends State<FullPage> {
     }
     return selectId;
   }
+
   /// 所有选项的点击事件入口
   /// @param targetPoint 被点击对象的point对象
   _onItemSelect(Point targetPoint) {
     _history.add(HistoryPageInfo(itemList: itemList, status: pageStatus));
     Status nextStatus;
     List<Point> nextItemList;
-    switch(pageStatus) {
+    switch (pageStatus) {
       case Status.Province:
         _onProvinceSelect(targetPoint);
         nextStatus = Status.City;
@@ -225,22 +235,25 @@ class _FullPageState extends State<FullPage> {
         break;
     }
 
-    setTimeout(milliseconds: 300, callback: () {
-      if (nextItemList == null || nextStatus == Status.Over) {
-        return popHome();
-      }
-      if (mounted) {
-        this.setState(() {
-          itemList = nextItemList;
-          pageStatus = nextStatus;
+    setTimeout(
+        milliseconds: 300,
+        callback: () {
+          if (nextItemList == null || nextStatus == Status.Over) {
+            return popHome();
+          }
+          if (mounted) {
+            this.setState(() {
+              itemList = nextItemList;
+              pageStatus = nextStatus;
+            });
+            scrollController.jumpTo(0.0);
+          }
         });
-        scrollController.jumpTo(0.0);
-      }
-    });
   }
+
   Widget _buildHead() {
     String title = '请选择城市';
-    switch(pageStatus) {
+    switch (pageStatus) {
       case Status.Province:
         break;
       case Status.City:
@@ -267,13 +280,11 @@ class _FullPageState extends State<FullPage> {
           body: SafeArea(
               bottom: true,
               child: ListWidget(
-                  itemList: itemList,
-                  controller: scrollController,
-                  onSelect: _onItemSelect,
-                  selectedId: _getSelectedId(),
-              )
-          )
-      ),
+                itemList: itemList,
+                controller: scrollController,
+                onSelect: _onItemSelect,
+                selectedId: _getSelectedId(),
+              ))),
     );
   }
 }
@@ -283,12 +294,8 @@ class ListWidget extends StatelessWidget {
   final ScrollController controller;
   final int selectedId;
   final ValueChanged<Point> onSelect;
-  ListWidget({
-    this.itemList,
-    this.onSelect,
-    this.controller,
-    this.selectedId
-  });
+
+  ListWidget({this.itemList, this.onSelect, this.controller, this.selectedId});
 
   @override
   Widget build(BuildContext context) {
@@ -299,22 +306,27 @@ class ListWidget extends StatelessWidget {
         Point item = itemList[index];
         return Container(
           decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: theme.dividerColor, width: 1.0))
-          ),
+              border: Border(
+                  bottom: BorderSide(color: theme.dividerColor, width: 1.0))),
           child: ListTileTheme(
             child: ListTile(
-              title:  Text(item.name), // item 标题
-              dense:true,                // item 直观感受是整体大小
-              trailing: selectedId == item.code ? Icon(Icons.check, color: theme.primaryColor) : null,
-              contentPadding: EdgeInsets.fromLTRB(24.0, .0, 24.0, 3.0),// item 内容内边距
-              enabled:true,
-              onTap:() {
+              title: Text(item.name),
+              // item 标题
+              dense: true,
+              // item 直观感受是整体大小
+              trailing: selectedId == item.code
+                  ? Icon(Icons.check, color: theme.primaryColor)
+                  : null,
+              contentPadding: EdgeInsets.fromLTRB(24.0, .0, 24.0, 3.0),
+              // item 内容内边距
+              enabled: true,
+              onTap: () {
                 onSelect(itemList[index]);
-              },// item onTap 点击事件
-              onLongPress:(){
-
-              },// item onLongPress 长按事件
-              selected: selectedId == item.code,     // item 是否选中状态
+              },
+              // item onTap 点击事件
+              onLongPress: () {},
+              // item onLongPress 长按事件
+              selected: selectedId == item.code, // item 是否选中状态
             ),
           ),
         );

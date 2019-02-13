@@ -16,7 +16,9 @@ class CityPickerRoute<T> extends PopupRoute<T> {
   final bool canBarrierDismiss;
   final Widget child;
   final double barrierOpacity;
-  CityPickerRoute({this.theme,
+
+  CityPickerRoute({
+    this.theme,
     this.child,
     this.canBarrierDismiss = true,
     this.barrierOpacity = 0.5,
@@ -49,11 +51,8 @@ class CityPickerRoute<T> extends PopupRoute<T> {
     Widget bottomSheet = new MediaQuery.removePadding(
         removeTop: true,
         context: context,
-        child: InheritRouteWidget(
-            router: this,
-            child: child
-        ));
-        if (theme != null) {
+        child: InheritRouteWidget(router: this, child: child));
+    if (theme != null) {
       bottomSheet = new Theme(data: theme, child: bottomSheet);
     }
     return bottomSheet;
