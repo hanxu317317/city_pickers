@@ -79,3 +79,5 @@ Result result2 = await CityPickers.showFullPageCityPicker(
  [National Bureau of Statistics](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
 
 
+# 声明
+本项目Example部份代码与样式, 参考借鉴[Flutter Go](https://github.com/alibaba/flutter-go/), **flutter go** 是flutter 开发者帮助 APP，包含 flutter 常用 140+ 组件的demo 演示与中文文档
