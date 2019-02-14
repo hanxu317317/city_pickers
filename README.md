@@ -81,3 +81,10 @@ Result result2 = await CityPickers.showFullPageCityPicker(
 
 # 声明
 本项目Example部份代码与样式, 参考借鉴[Flutter Go](https://github.com/alibaba/flutter-go/), **flutter go** 是flutter 开发者帮助 APP，包含 flutter 常用 140+ 组件的demo 演示与中文文档
+
+
+### To Do List
+
+- [ ] 城市选择器, 借鉴点评
+- [ ] 支持拼音等模糊搜索
+
