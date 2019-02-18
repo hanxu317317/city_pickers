@@ -8,7 +8,13 @@ class Point {
   int depth;
   String letter;
   String name = NoName;
-  Point({this.code = 0, this.child = EmptyArray, this.depth, this.letter, this.name});
+
+  Point(
+      {this.code = 0,
+      this.child = EmptyArray,
+      this.depth,
+      this.letter,
+      this.name});
 
   /// add node for Point, the node's type must is [Point]
   addChild(Point node) {
