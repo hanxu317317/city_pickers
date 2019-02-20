@@ -9,7 +9,6 @@
 
 import 'dart:convert';
 
-
 /// CityPicker 返回的 **Result** 结果函数
 class Result {
   /// provinceId

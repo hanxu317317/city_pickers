@@ -2,7 +2,7 @@
 
 library city_pickers;
 
-export 'src/city_picker.dart';
-export 'modal/result.dart';
 export 'modal/point.dart';
+export 'modal/result.dart';
+export 'src/city_picker.dart';
 export 'src/show_types.dart';

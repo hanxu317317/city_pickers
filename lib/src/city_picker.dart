@@ -7,11 +7,12 @@ import 'mod/picker_popup_route.dart';
 import 'package:city_pickers/src/base/base.dart';
 import 'package:city_pickers/src/full_page/full_page.dart';
 import 'show_types.dart';
+import 'dart:async';
 
-/// ios city picers
+/// ios city pickers
 /// provide config height, initLocation and so on
 ///
-/// Sample:
+/// Sample:flutter format
 /// ```
 /// await CityPicker.showPicker(
 ///   location: String,
@@ -62,7 +63,6 @@ class CityPickers {
   }
 
   /// @theme Theme used it's primaryColor
-  ///
   static Future<Result> showFullPageCityPicker({
     @required BuildContext context,
     ThemeData theme,
@@ -94,4 +94,29 @@ class CityPickers {
                       child: child),
         ));
   }
+
+//  static Future<Result> showCitiesSelector({
+//    @required BuildContext context,
+//    ThemeData theme,
+//    bool showAlpha,
+//
+//  }) {
+//    return Navigator.push(
+//        context,
+//        new PageRouteBuilder(
+//          settings: RouteSettings(name: 'fullPageCityPicker'),
+//          transitionDuration: const Duration(milliseconds: 250),
+//          pageBuilder: (context, _, __) => new Theme(
+//              data: theme ?? Theme.of(context),
+//              child: null),
+//          transitionsBuilder:
+//              (_, Animation<double> animation, __, Widget child) =>
+//          new SlideTransition(
+//              position: new Tween<Offset>(
+//                begin: Offset(0.0, 1.0),
+//                end: Offset(0.0, 0.0),
+//              ).animate(animation),
+//              child: child),
+//        ));
+//  }
 }
