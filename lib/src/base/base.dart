@@ -186,6 +186,9 @@ class _BaseView extends State<BaseView> {
       if (!mounted) return;
       setState(() {
         targetCity = _targetCity;
+        if (targetCity.child.isNotEmpty) {
+          targetArea = targetCity.child.first;
+        }
       });
     });
     _resetController();
