@@ -1,13 +1,14 @@
-///
+//
 // Created with Android Studio.
 // User: 三帆
 // Date: 03/02/2019
 // Time: 22:43
 // email: sanfan.hx@alibaba-inc.com
-// tartget:  xxx
+// target:  xxx
 //
 
 import 'dart:convert';
+
 /// CityPicker 返回的 **Result** 结果函数
 class Result {
   /// provinceId
@@ -28,12 +29,13 @@ class Result {
   /// areaName
   String areaName;
 
-  Result({this.provinceId,
-    this.cityId,
-    this.areaId,
-    this.provinceName,
-    this.cityName,
-    this.areaName});
+  Result(
+      {this.provinceId,
+      this.cityId,
+      this.areaId,
+      this.provinceName,
+      this.cityName,
+      this.areaName});
 
   /// string json
   @override
@@ -45,7 +47,8 @@ class Result {
       'cityName': cityName,
       'cityId': cityId,
       'areaName': areaName,
-      'areaId': areaId};
+      'areaId': areaId
+    };
     obj.removeWhere((key, value) => value == null);
 
     return json.encode(obj);

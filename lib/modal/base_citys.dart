@@ -1,7 +1,8 @@
-import '../meta/province.dart';
-import '../src/util.dart';
 import 'package:city_pickers/modal/point.dart';
 import 'package:lpinyin/lpinyin.dart';
+
+import '../meta/province.dart';
+import '../src/util.dart';
 
 /// tree point
 
