@@ -87,4 +87,5 @@ Result result2 = await CityPickers.showFullPageCityPicker(
 
 - [ ] 城市选择器, 借鉴点评
 - [ ] 支持拼音等模糊搜索
+- [ ] 加入单元测试
 
