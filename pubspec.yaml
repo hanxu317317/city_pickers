@@ -1,7 +1,7 @@
 name: city_pickers
 description:  Flutter plugin for city picker,  Popups widgets,
         call by function,  supoort china areas for the moment.
-version: 0.1.8
+version: 0.1.9
 author: sanfan.hx<sanfan.hx@alibaba-inc.com>
 homepage: https://github.com/hanxu317317/city_pickers
 
