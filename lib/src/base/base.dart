@@ -293,7 +293,7 @@ class _BaseView extends State<BaseView> {
                   isShow: widget.showType.contain(ShowType.c),
                   controller: cityController,
                   height: widget.height,
-                  value: targetCity.name,
+                  value: targetCity == null ? null :targetCity.name ,
                   itemList: getCityItemList(),
                   changed: (index) {
                     _onCityChange(targetProvince.child[index]);
@@ -374,6 +374,11 @@ class _MyCityPickerState extends State<_MyCityPicker> {
   Widget build(BuildContext context) {
     if (!widget.isShow) {
       return Container();
+    }
+    if (widget.itemList == null || widget.itemList.isEmpty) {
+      return new Expanded(
+        child: Container(),
+      );
     }
     return new Expanded(
       child: new Container(

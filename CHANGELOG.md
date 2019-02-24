@@ -1,3 +1,5 @@
+## 0.1.10
+- 优化当市级无选项时的显示逻辑
 ## 0.1.9
 - 修复 https://github.com/hanxu317317/city_pickers/issues/5 初始化child为空的Point时，会报错
 
