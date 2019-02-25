@@ -7,13 +7,15 @@
 // tartget:  xxx
 //
 
-import 'package:flutter/material.dart';
-import 'package:city_pickers/modal/point.dart';
-import 'package:city_pickers/modal/base_citys.dart';
-import 'package:city_pickers/src/show_types.dart';
-import 'package:city_pickers/modal/result.dart';
-import 'package:city_pickers/src/util.dart';
 import 'dart:async';
+
+import 'package:city_pickers/modal/base_citys.dart';
+import 'package:city_pickers/modal/point.dart';
+import 'package:city_pickers/modal/result.dart';
+import 'package:city_pickers/src/show_types.dart';
+import 'package:city_pickers/src/util.dart';
+import 'package:flutter/material.dart';
+
 class FullPage extends StatefulWidget {
   final String locationCode;
   final ShowType showType;
@@ -113,7 +115,7 @@ class _FullPageState extends State<FullPage> {
       targetProvince.child.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;
-          targetArea = _city.child.first ?? null;
+          targetArea = _getTargetChildFirst(_city) ?? null;
         }
         _city.child.forEach((Point _area) {
           if (_area.code == _locationCode) {
@@ -127,10 +129,10 @@ class _FullPageState extends State<FullPage> {
     }
 
     if (targetCity == null) {
-      targetCity = targetProvince.child.first ?? Point();
+      targetCity = _getTargetChildFirst(targetProvince);
     }
     if (targetArea == null) {
-      targetArea = targetCity.child.first ?? Point();
+      targetArea = _getTargetChildFirst(targetCity);
     }
   }
 
@@ -143,12 +145,18 @@ class _FullPageState extends State<FullPage> {
         result.provinceName = targetProvince.name;
       }
       if (showType.contain(ShowType.c)) {
-        result.cityId = targetCity.code.toString();
-        result.cityName = targetCity.name;
+        result.provinceId = targetProvince.code.toString();
+        result.provinceName = targetProvince.name;
+        result.cityId = targetCity != null ? targetCity.code.toString() : null;
+        result.cityName = targetCity != null ? targetCity.name : null;
       }
       if (showType.contain(ShowType.a)) {
-        result.areaId = targetArea.code.toString();
-        result.areaName = targetArea.name;
+        result.provinceId = targetProvince.code.toString();
+        result.provinceName = targetProvince.name;
+        result.cityId = targetCity != null ? targetCity.code.toString() : null;
+        result.cityName = targetCity != null ? targetCity.name : null;
+        result.areaId = targetArea != null ? targetArea.code.toString() : null;
+        result.areaName = targetArea != null ? targetArea.name : null;
       }
     } catch (e) {
       // 此处兼容, 部分城市下无地区信息的情况
@@ -162,6 +170,16 @@ class _FullPageState extends State<FullPage> {
       result.areaName = null;
     }
     return result;
+  }
+
+  Point _getTargetChildFirst(Point target) {
+    if (target == null) {
+      return null;
+    }
+    if (target.child != null && target.child.isNotEmpty) {
+      return target.child.first;
+    }
+    return null;
   }
 
   popHome() {
@@ -218,12 +236,21 @@ class _FullPageState extends State<FullPage> {
         if (!widget.showType.contain(ShowType.c)) {
           nextStatus = Status.Over;
         }
+        if (nextItemList.isEmpty) {
+          targetCity = null;
+          targetArea = null;
+          nextStatus = Status.Over;
+        }
         break;
       case Status.City:
         _onCitySelect(targetPoint);
         nextStatus = Status.Area;
         nextItemList = targetCity.child;
         if (!widget.showType.contain(ShowType.a)) {
+          nextStatus = Status.Over;
+        }
+        if (nextItemList.isEmpty) {
+          targetArea = null;
           nextStatus = Status.Over;
         }
         break;

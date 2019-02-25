@@ -8,11 +8,12 @@
  */
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:city_pickers/modal/base_citys.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import '../../modal/point.dart';
 import '../../modal/result.dart';
-import 'package:city_pickers/modal/base_citys.dart';
 import '../mod/inherit_process.dart';
 import '../show_types.dart';
 
@@ -117,7 +118,7 @@ class _BaseView extends State<BaseView> {
       targetProvince.child.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;
-          targetArea = _getTargetChildFirst(_city) ?? null;
+          targetArea = _getTargetChildFirst(_city);
         }
         _city.child.forEach((Point _area) {
           if (_area.code == _locationCode) {
@@ -210,6 +211,7 @@ class _BaseView extends State<BaseView> {
       });
     });
   }
+
   Result _buildResult() {
     Result result = Result();
     ShowType showType = widget.showType;
@@ -218,12 +220,18 @@ class _BaseView extends State<BaseView> {
       result.provinceName = targetProvince.name;
     }
     if (showType.contain(ShowType.c)) {
+      result.provinceId = targetProvince.code.toString();
+      result.provinceName = targetProvince.name;
       result.cityId = targetCity != null ? targetCity.code.toString() : null;
       result.cityName = targetCity != null ? targetCity.name : null;
     }
     if (showType.contain(ShowType.a)) {
+      result.provinceId = targetProvince.code.toString();
+      result.provinceName = targetProvince.name;
+      result.cityId = targetCity != null ? targetCity.code.toString() : null;
+      result.cityName = targetCity != null ? targetCity.name : null;
       result.areaId = targetArea != null ? targetArea.code.toString() : null;
-      result.areaName = targetArea != null ?  targetArea.name : null;
+      result.areaName = targetArea != null ? targetArea.name : null;
     }
     // 台湾异常数据. 需要过滤
     if (result.provinceId == "710000") {
@@ -293,7 +301,7 @@ class _BaseView extends State<BaseView> {
                   isShow: widget.showType.contain(ShowType.c),
                   controller: cityController,
                   height: widget.height,
-                  value: targetCity == null ? null :targetCity.name ,
+                  value: targetCity == null ? null : targetCity.name,
                   itemList: getCityItemList(),
                   changed: (index) {
                     _onCityChange(targetProvince.child[index]);
