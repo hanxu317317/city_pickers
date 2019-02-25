@@ -117,7 +117,7 @@ class _BaseView extends State<BaseView> {
       targetProvince.child.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;
-          targetArea = _city.child.first ?? null;
+          targetArea = _getTargetChildFirst(_city) ?? null;
         }
         _city.child.forEach((Point _area) {
           if (_area.code == _locationCode) {
@@ -129,13 +129,24 @@ class _BaseView extends State<BaseView> {
     } else {
       targetProvince = cityTree.initTreeByCode(110000);
     }
-
+    // 尝试试图匹配到下一个级别的第一个,
     if (targetCity == null) {
-      targetCity = targetProvince.child.first ?? Point();
+      targetCity = _getTargetChildFirst(targetProvince);
     }
+    // 尝试试图匹配到下一个级别的第一个,
     if (targetArea == null) {
-      targetArea = targetCity.child.first ?? Point();
+      targetArea = _getTargetChildFirst(targetCity);
     }
+  }
+
+  Point _getTargetChildFirst(Point target) {
+    if (target == null) {
+      return null;
+    }
+    if (target.child != null && target.child.isNotEmpty) {
+      return target.child.first;
+    }
+    return null;
   }
 
   // 通过选中的省份, 构建以省份为根节点的树型结构
@@ -167,12 +178,8 @@ class _BaseView extends State<BaseView> {
           cityTree.initTree(int.parse(_province.code.toString()));
       setState(() {
         targetProvince = _provinceTree;
-        if (_provinceTree.child.isNotEmpty) {
-          targetCity = _provinceTree.child.first;
-        }
-        if (targetCity.child.isNotEmpty) {
-          targetArea = targetCity.child.first;
-        }
+        targetCity = _getTargetChildFirst(_provinceTree);
+        targetArea = _getTargetChildFirst(targetCity);
         _resetController();
       });
     });
@@ -186,9 +193,7 @@ class _BaseView extends State<BaseView> {
       if (!mounted) return;
       setState(() {
         targetCity = _targetCity;
-        if (targetCity.child.isNotEmpty) {
-          targetArea = targetCity.child.first;
-        }
+        targetArea = _getTargetChildFirst(targetCity);
       });
     });
     _resetController();
@@ -205,7 +210,6 @@ class _BaseView extends State<BaseView> {
       });
     });
   }
-
   Result _buildResult() {
     Result result = Result();
     ShowType showType = widget.showType;
@@ -214,18 +218,12 @@ class _BaseView extends State<BaseView> {
       result.provinceName = targetProvince.name;
     }
     if (showType.contain(ShowType.c)) {
-      result.provinceId = targetProvince.code.toString();
-      result.provinceName = targetProvince.name;
-      result.cityId = targetCity.code.toString();
-      result.cityName = targetCity.name;
+      result.cityId = targetCity != null ? targetCity.code.toString() : null;
+      result.cityName = targetCity != null ? targetCity.name : null;
     }
     if (showType.contain(ShowType.a)) {
-      result.provinceId = targetProvince.code.toString();
-      result.provinceName = targetProvince.name;
-      result.cityId = targetCity.code.toString();
-      result.cityName = targetCity.name;
-      result.areaId = targetArea.code.toString();
-      result.areaName = targetArea.name;
+      result.areaId = targetArea != null ? targetArea.code.toString() : null;
+      result.areaName = targetArea != null ?  targetArea.name : null;
     }
     // 台湾异常数据. 需要过滤
     if (result.provinceId == "710000") {
@@ -295,7 +293,7 @@ class _BaseView extends State<BaseView> {
                   isShow: widget.showType.contain(ShowType.c),
                   controller: cityController,
                   height: widget.height,
-                  value: targetCity.name,
+                  value: targetCity == null ? null :targetCity.name ,
                   itemList: getCityItemList(),
                   changed: (index) {
                     _onCityChange(targetProvince.child[index]);
@@ -305,7 +303,7 @@ class _BaseView extends State<BaseView> {
                   key: Key('towns $targetCity'),
                   isShow: widget.showType.contain(ShowType.a),
                   controller: areaController,
-                  value: targetArea.name,
+                  value: targetArea == null ? null : targetArea.name,
                   height: widget.height,
                   itemList: getAreaItemList(),
                   changed: (index) {
@@ -376,6 +374,11 @@ class _MyCityPickerState extends State<_MyCityPicker> {
   Widget build(BuildContext context) {
     if (!widget.isShow) {
       return Container();
+    }
+    if (widget.itemList == null || widget.itemList.isEmpty) {
+      return new Expanded(
+        child: Container(),
+      );
     }
     return new Expanded(
       child: new Container(
