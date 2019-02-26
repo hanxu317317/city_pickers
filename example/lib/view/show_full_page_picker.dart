@@ -13,6 +13,8 @@ import 'package:city_pickers/city_pickers.dart';
 import '../src/attr_item_container.dart';
 import '../src/location_selector.dart';
 import '../src/picker.dart';
+import '../meta/province.dart';
+
 var emptyResult = new Result();
 
 class ShowFullPageCityPicker extends StatefulWidget {
@@ -26,6 +28,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
   Result result = new Result();
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
+  bool customerMeta = false;
   PickerItem themeAttr;
   Widget _buildShowTypes() {
     return Picker(
@@ -115,6 +118,20 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
     );
   }
 
+  Widget _buildCustomerMeta() {
+    return Container(
+        alignment: Alignment.centerRight,
+        child: CupertinoSwitch(
+          value: customerMeta,
+          onChanged: (bool val) {
+            this.setState(() {
+              customerMeta = !customerMeta;
+            });
+          },
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,6 +153,10 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
               editor: _buildTheme()
           ),
           AttrItemContainer(
+              title: '是否采用自定义数据',
+              editor: _buildCustomerMeta()
+          ),
+          AttrItemContainer(
               title: '选择结果',
               editor: Text("${result.toString()}")
           ),
@@ -147,6 +168,8 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
                 theme: themeAttr !=null ? themeAttr.value : null,
                 locationCode: resultAttr != null ? resultAttr.areaId ?? resultAttr.cityId ?? resultAttr.provinceId : null,
                 showType: showTypeAttr.value,
+                citiesData: customerMeta ? citiesData : null,
+                provincesData: customerMeta ? provincesData : null
               );
               if (tempResult == null) {
                 return ;
