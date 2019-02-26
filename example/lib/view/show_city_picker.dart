@@ -13,6 +13,7 @@ import 'package:city_pickers/city_pickers.dart';
 import '../src/attr_item_container.dart';
 import '../src/location_selector.dart';
 import '../src/picker.dart';
+import '../meta/province.dart';
 var emptyResult = new Result();
 
 class ShowCityPicker extends StatefulWidget {
@@ -26,6 +27,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
   Result result = new Result();
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
+  bool customerMeta = false;
   PickerItem themeAttr;
   Widget _buildShowTypes() {
     return Picker(
@@ -134,6 +136,20 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
       ],
     );
   }
+  Widget _buildCustomerMeta() {
+    return Container(
+        alignment: Alignment.centerRight,
+        child: CupertinoSwitch(
+          value: customerMeta,
+          onChanged: (bool val) {
+            this.setState(() {
+              customerMeta = !customerMeta;
+            });
+          },
+        )
+    );
+  }
+
   Widget _buildTheme() {
     return Picker(
         target: themeAttr != null && themeAttr.name != null ? Text(themeAttr.name) : Text("主题切换"),
@@ -176,6 +192,10 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
               editor: _buildBarrierDismissible()
           ),
           AttrItemContainer(
+              title: '是否采用自定义数据',
+              editor: _buildCustomerMeta()
+          ),
+          AttrItemContainer(
               title: '主题选择',
               editor: _buildTheme()
           ),
@@ -192,7 +212,9 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
                 locationCode: resultAttr != null ? resultAttr.areaId ?? resultAttr.cityId ?? resultAttr.provinceId : null,
                 showType: showTypeAttr.value,
                 barrierOpacity: barrierOpacityAttr,
-                barrierDismissible: barrierDismissibleAttr
+                barrierDismissible: barrierDismissibleAttr,
+                citiesData: customerMeta == true ? citiesData : null,
+                provincesData: customerMeta == true ? provincesData : null
               );
               if (tempResult == null) {
                 return ;
