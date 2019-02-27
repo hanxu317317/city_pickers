@@ -61,6 +61,9 @@ Result result2 = await CityPickers.showFullPageCityPicker(
 |showType|ShowType|ShowType.pca| 三级联动, 显示类型|
 |barrierOpacity|double|0.5|弹出层的背景透明度, 应该是大于0, 小于1|
 |barrierDismissible|bool|true| 是否可以通过点击弹出层背景, 关闭弹出层|
+|citiesData|Map|[城市数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的城市与区的数据源|
+|provincesData|Map|[省份数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的省份数据源|
+
 
 
 ### showFullPageCityPicker 参数说明
@@ -71,6 +74,8 @@ Result result2 = await CityPickers.showFullPageCityPicker(
 |theme|ThemeData|Theme.of(context)| 主题, 可以自定义|
 |locationCode|String|110000| 初始化地址信息, 可以是省, 市, 区的地区码|
 |showType|ShowType|ShowType.pca| 三级联动, 显示类型|
+|citiesData|Map|[城市数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的城市与区的数据源|
+|provincesData|Map|[省份数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的省份数据源|
 
 
 
