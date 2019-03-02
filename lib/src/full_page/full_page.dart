@@ -111,7 +111,9 @@ class _FullPageState extends State<FullPage> {
       }
 
       targetProvince = cityTree.initTreeByCode(_locationCode);
-
+      if (targetProvince.isNull) {
+        targetProvince = cityTree.initTreeByCode(provinces.first.code);
+      }
       targetProvince.child.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;

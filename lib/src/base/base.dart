@@ -114,7 +114,10 @@ class _BaseView extends State<BaseView> {
       }
 
       targetProvince = cityTree.initTreeByCode(_locationCode);
-
+      /// 为用户给出的locationCode不正确做一个容错
+      if (targetProvince.isNull) {
+        targetProvince = cityTree.initTreeByCode(provinces.first.code);
+      }
       targetProvince.child.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;
