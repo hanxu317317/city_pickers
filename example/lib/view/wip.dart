@@ -8,27 +8,32 @@
 //
 
 import 'package:flutter/material.dart';
-
+import 'package:city_pickers/city_pickers.dart';
+//showCitiesSelector
 class WorkInProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff25a89c),
-        appBar: AppBar(
-          title: const Text('CityPickers Examples'),
-        ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 200),
-              Text("Working In Progress", style: TextStyle(fontSize: 20, color: Colors.white),),
-              Image.asset(
-                'assets/wip.jpeg',
-                width: 200,
-              ),
-            ],
-          ),
-        )
+      appBar: AppBar(
+        title: Text("省市县三级全屏联动"),
+      ),
+      body: Column(
+        children: <Widget>[
+
+          RaisedButton(
+            onPressed: () async {
+              Result tempResult = await CityPickers.showCitiesSelector(
+                context: context,
+              );
+              if (tempResult == null) {
+                return ;
+              }
+              print("result>> ${tempResult.toString()}");
+            },
+            child: Text("展示city picker"),
+          )
+        ],
+      ),
     );
   }
 }
