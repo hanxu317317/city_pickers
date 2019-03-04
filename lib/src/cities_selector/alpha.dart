@@ -60,14 +60,29 @@ class Alpha extends StatefulWidget {
   final OnTouchMove onTouchMove;
   final OnTouchEnd onTouchEnd;
 
+  /// 激活状态下的背景色
+  final Color activeBgColor;
+  /// 未激活状态下的背景色
+  final Color bgColor;
+  /// 未激活状态下字体的颜色
+  final Color fontColor;
+  /// 激活状态下字体的颜色
+  final Color fontActiveColor;
+
   Alpha({
+    /// 字母列表的高度大小与字体大小
     this.alphaItemSize = 14,
+    /// 可供选择的字母集
     this.alphas = ALPHAS_INDEX,
+    /// 当右侧字母集, 因触摸而产生的回调
     this.onAlphaChange,
     this.onTouchStart,
     this.onTouchMove,
-    this.onTouchEnd
-
+    this.onTouchEnd,
+    this.activeBgColor = Colors.green,
+    this.bgColor = Colors.white,
+    this.fontColor = Colors.black,
+    this.fontActiveColor = Colors.yellow
   });
   @override
   AlphaState createState() {
@@ -79,8 +94,11 @@ class AlphaState extends State<Alpha> {
   Timer _changeTimer;
 
   bool isTouched = false;
+
   List<double> indexRange = [];
-  Offset _distance2Top;
+
+  /// 第一个字母或者分类距离global坐标系的高度
+  double _distance2Top;
   // 当触摸结束前, 最后一个字母;
   String _lastTag;
 
@@ -92,9 +110,8 @@ class AlphaState extends State<Alpha> {
 
   _init() {
     List alphas = widget.alphas;
-    indexRange.add(0);
-    for (int i = 0; i < alphas.length; i++) {
-      indexRange.add((i + 1) * widget.alphaItemSize);
+    for (int i = 0; i <= alphas.length; i++) {
+      indexRange.add((i) * widget.alphaItemSize);
     }
   }
   String _getHitAlpha(offset) {
@@ -116,28 +133,35 @@ class AlphaState extends State<Alpha> {
 
   }
 
-  _touchEvent(String tag) {
+  _touchStartEvent(String tag) {
     this.setState(() {
       isTouched = true;
     });
-    _onAlphaChange(tag);
-    if (widget.onTouchStart != null) {
+    if (tag != null) {
+      _onAlphaChange(tag);
+    }
+
+    if (widget.onTouchStart != null && tag != null) {
       widget.onTouchStart();
     }
 
   }
-  _moveEvent(String tag) {
-
-    _onAlphaChange(tag);
+  _touchMoveEvent(String tag) {
+    if (tag != null) {
+      _onAlphaChange(tag);
+    }
     if (widget.onTouchMove != null) {
       widget.onTouchMove();
     }
   }
-  _moveOverEvent() {
+  _touchEndEvent() {
     this.setState(() {
       isTouched = false;
     });
-    _onAlphaChange(_lastTag);
+    // 这里本可以不用再触发一次的. 但是为了数据的准备, 最后再触发一次
+    if (_lastTag != null) {
+      _onAlphaChange(_lastTag);
+    }
     if (widget.onTouchEnd != null) {
       widget.onTouchEnd();
     }
@@ -148,42 +172,51 @@ class AlphaState extends State<Alpha> {
       result.add(new SizedBox(
         key: Key(alpha),
         height: widget.alphaItemSize,
-        child: new Text(alpha.toUpperCase(), textAlign: TextAlign.center, style: TextStyle(fontSize: widget.alphaItemSize, color: Colors.red),),
-      ));
+        child: new Text(alpha.toUpperCase(),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: widget.alphaItemSize,
+              color: isTouched ? widget.fontActiveColor : widget.fontColor)
+          ),
+        )
+      );
     }
-
-
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: result
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        alignment: Alignment.center,
+        color: isTouched ? widget.activeBgColor : widget.bgColor,
+        width: 50,
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: result
+        ),
+      )
     );
   }
 
   @override
   Widget build(BuildContext context) {
-//    print("indexRange ${indexRange}");
     return GestureDetector(
       onVerticalDragDown: (DragDownDetails details) {
         if (_distance2Top == null ) {
           RenderBox renderBox = context.findRenderObject();
-          _distance2Top = renderBox.localToGlobal(Offset.zero);
+          _distance2Top = renderBox.localToGlobal(Offset.zero).dy.toInt() + (renderBox.size.height - widget.alphaItemSize * widget.alphas.length) / 2;
         }
 
-        int touchOffset2Begin = details.globalPosition.dy.toInt() - _distance2Top.dy.toInt();
+        int touchOffset2Begin = details.globalPosition.dy.toInt() - _distance2Top.toInt();
         String tag = _getHitAlpha(touchOffset2Begin);
-        if (tag != null) {
-          _touchEvent(tag);
-        }
+        _touchStartEvent(tag);
       },
       onVerticalDragUpdate: (DragUpdateDetails details) {
-        int touchOffset2Begin = details.globalPosition.dy.toInt() - _distance2Top.dy.toInt();
+        int touchOffset2Begin = details.globalPosition.dy.toInt() - _distance2Top.toInt();
         String tag = _getHitAlpha(touchOffset2Begin);
         if (tag != null) {
-          _moveEvent(tag);
+          _touchMoveEvent(tag);
         }
       },
       onVerticalDragEnd: (DragEndDetails details) {
-        _moveOverEvent();
+        _touchEndEvent();
       },
       child: _buildAlpha()
     );
