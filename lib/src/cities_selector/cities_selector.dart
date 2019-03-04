@@ -16,7 +16,7 @@ import '../../modal/point.dart';
 import 'alpha.dart';
 import 'utils.dart';
 
-const _scrollTopOffset = 1;
+const _scrollTopOffset = 3;
 
 class CitiesSelector extends StatefulWidget {
 //  String title;
@@ -32,9 +32,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
 
   /// 是否显示顶部的tag提示标签
   bool _showTopOffstage = true;
-  bool _animteTopOffstage = false;
   /// 顶部tag标签的动态高度
-  double _topOffstateTop = 0;
+  bool _topOffstageIsSuperTop = 0;
   List<Point> _cities = new List();
   ScrollController _scrollController;
   // 用二个key  去标记 Offstage 与 item, 只需要初始化一次
@@ -61,11 +60,13 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     _scrollController.addListener(() {
       _initOffsetRangList();
       _dynamicChangeTopStagePosition(_scrollController.offset.toDouble());
+
     });
     super.initState();
   }
+
+  /// 只有当组件加载后. 才能获取_key0的高度,要保证该函数只会被执行一次
   _initOffsetRangList() {
-    // 只有当组件加载后. 才能获取高度,该函数只会被执行一次
     if (_offsetTagRangeList.isEmpty) {
         double itemContainerHeight = _key0.currentContext.findRenderObject().paintBounds.size.height;
         double offstageHeight = topTagHeight;
@@ -73,26 +74,36 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     }
     return _offsetTagRangeList;
   }
+  /// 动态计算顶部topStage标题的位置
   _dynamicChangeTopStagePosition(double scrollTopOffset) {
     // 应该显示标签的视觉窗口中的对象
     CityOffsetRange tempViewTarget = _offsetTagRangeList.firstWhere((CityOffsetRange range) {
       return scrollTopOffset > range.start && scrollTopOffset < range.end;
+    }, orElse: () {
+      return null;
     });
+
+    if (tempViewTarget == null) {
+      return ;
+    }
+
     if (scrollTopOffset + topTagHeight >= tempViewTarget.end - _scrollTopOffset) {
+      print('_dynamicChangeTopStagePosition');
       this.setState(() {
-        _animteTopOffstage = true;
-        _topOffstateTop = 0 - (scrollTopOffset + topTagHeight - tempViewTarget.end + _scrollTopOffset);
+        _topOffstageIsSuperTop = false;
       });
+//      this.setState(() {
+//        _topOffstageIsSuperTop = 0 - (scrollTopOffset + topTagHeight - tempViewTarget.end + _scrollTopOffset);
+//      });
     }
-
-    if (_topOffstateTop < 0 - topTagHeight && _topOffstateTop != 0) {
-      print("_topOffstateTop: $_topOffstateTop} and topTagHeight $topTagHeight");
-
-      this.setState(() {
-        _topOffstateTop = 0;
-        _animteTopOffstage = false;
-      });
-    }
+//
+//    if (_topOffstateTop < 0 - topTagHeight && _topOffstateTop != 0) {
+//      print("顶部tagName = $_tagName");
+//      this.setState(() {
+//        _tagName = tempViewTarget.tag;
+//        _topOffstateTop = 0;
+//      });
+//    }
   }
   _onTagChange(String alpha) {
     if (_changeTimer != null && _changeTimer.isActive) {
@@ -125,90 +136,80 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     );
   }
   Widget _buildAlphaAndTags() {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(3.0),
-          margin: EdgeInsets.all(5.0),
-          color: _isTouchTagBar ? Colors.cyan : Colors.indigo,
-          width: 30,
-          child: Alpha(
-            alphas: _tagList,
-            alphaItemSize:14,
-            onTouchStart: () {
-              this.setState(() {
-                _isTouchTagBar = true;
-              });
-            },
-            onTouchEnd: () {
-              this.setState(() {
-                _isTouchTagBar = false;
-              });
-            },
-            onAlphaChange: (String alpha) {
-              this.setState(() {
-                _tagName = alpha;
-              });
-              _initOffsetRangList();
-              _onTagChange(alpha.toUpperCase());
-
-            },
-          ),
-        )
+    return Alpha(
+      alphas: _tagList,
+      alphaItemSize:14,
+      onTouchStart: () {
+        this.setState(() {
+          _isTouchTagBar = true;
+        });
+      },
+      onTouchEnd: () {
+        this.setState(() {
+          _isTouchTagBar = false;
+        });
+      },
+      onAlphaChange: (String alpha) {
+        this.setState(() {
+          if (!_isTouchTagBar) {
+            _isTouchTagBar = true;
+          }
+          _tagName = alpha;
+        });
+        _initOffsetRangList();
+        _onTagChange(alpha.toUpperCase());
+      },
     );
   }
   List<Widget> _buildChildren() {
-    List<Widget> children = [
-      ListView.builder(
-          controller: _scrollController,
-          itemCount: _cities.length,
-          itemBuilder: (context, index) {
-            bool offstage = false;
-            if (index !=0 && _cities[index - 1].letter == _cities[index].letter) {
-              offstage = true;
-            }
-            return Column(
-              children: <Widget>[
-                Offstage(
-                  offstage: offstage,
-                  child: Container(
-                    height: topTagHeight,
-                    alignment:Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 15.0),
-                    color: Color(0xfff3f4f5),
-                    child: Text(
-                      _cities[index].letter.toUpperCase(),
-                      softWrap: true,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xff999999),
-                      ),
+    List<Widget> children = [];
+    children.add(ListView.builder(
+        controller: _scrollController,
+        itemCount: _cities.length,
+        itemBuilder: (context, index) {
+          bool offstage = false;
+          if (index !=0 && _cities[index - 1].letter == _cities[index].letter) {
+            offstage = true;
+          }
+          return Column(
+            children: <Widget>[
+              Offstage(
+                offstage: offstage,
+                child: Container(
+                  height: topTagHeight,
+                  alignment:Alignment.centerLeft,
+                  padding: const EdgeInsets.only(left: 15.0),
+                  color: Color(0xfff3f4f5),
+                  child: Text(
+                    _cities[index].letter.toUpperCase(),
+                    softWrap: true,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Color(0xff999999),
                     ),
                   ),
                 ),
-                Container(
-//                  height: itemHeight,
-                  alignment:Alignment.centerLeft,
-                  key: index == 0 ? _key0 : null,
-                  child: Center(
-                    child: ListTile(
-                      title: Text(_cities[index].name, style: TextStyle(height: 1.0, fontSize: itemFontSize)),
-                      onTap: () {
+              ),
+              Container(
+                alignment:Alignment.centerLeft,
+                key: index == 0 ? _key0 : null,
+                child: Center(
+                  child: ListTile(
+                    title: Text(_cities[index].name, style: TextStyle(height: 1.0, fontSize: itemFontSize)),
+                    onTap: () {
 //                      print("OnItemClick: $model");
-                        Navigator.pop(context,);
-                      },
-                    ),
+                      Navigator.pop(context,);
+                    },
                   ),
-                )
-              ],
-            );
-          }
-      )
-    ];
+                ),
+              )
+            ],
+          );
+        }
+    ));
     if (_showTopOffstage) {
       children.add(Positioned(
-        top: _topOffstateTop - 0.1,
+        top: 0,
         left: 0,
         right: 0,
         child: Offstage(
@@ -220,7 +221,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
             padding: const EdgeInsets.only(left: 15.0),
             color: Colors.red,
             child: Text(
-              'BBB',
+              _tagName ?? _tagList.first.toUpperCase(),
               softWrap: true,
               style: TextStyle(
                 fontSize: 14.0,

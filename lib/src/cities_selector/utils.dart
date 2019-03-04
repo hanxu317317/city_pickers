@@ -87,10 +87,6 @@ class CitiesUtils {
         )
       );
     });
-
-    result.forEach((item) {
-      print("${item.tag} : item.start: ${item.start}, item.end: ${item.end}");
-    });
     return result;
   }
 }
