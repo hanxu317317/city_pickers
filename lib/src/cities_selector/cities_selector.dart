@@ -16,11 +16,9 @@ import '../../modal/point.dart';
 import 'alpha.dart';
 import 'utils.dart';
 
-const _scrollTopOffset = 3;
 
 class CitiesSelector extends StatefulWidget {
-//  String title;
-//
+
   @override
   _CitiesSelectorState createState() => _CitiesSelectorState();
 }
@@ -33,12 +31,12 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   /// 是否显示顶部的tag提示标签
   bool _showTopOffstage = true;
   /// 顶部tag标签的动态高度
-  bool _topOffstageIsSuperTop = 0;
+  double _topOffstageTop = 0;
   List<Point> _cities = new List();
   ScrollController _scrollController;
   // 用二个key  去标记 Offstage 与 item, 只需要初始化一次
   GlobalKey _key0 =  new GlobalKey();
-  GlobalKey _key1 =  new GlobalKey();
+
   /// 计算每一个letter or tag的列表区间范围
   /// 存放每个tag集的偏移start 与 end . 通过计算Alpha的位置, 判定滚动
   List<CityOffsetRange> _offsetTagRangeList = [];
@@ -59,6 +57,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     _scrollController = new ScrollController();
     _scrollController.addListener(() {
       _initOffsetRangList();
+// 可以用来强行关闭键盘
+//      FocusScope.of(context).requestFocus(FocusNode());
       _dynamicChangeTopStagePosition(_scrollController.offset.toDouble());
 
     });
@@ -74,37 +74,49 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     }
     return _offsetTagRangeList;
   }
+  /// 获取滚动时的命中区间
+  _getScrollOffsetTarget() {
+
+  }
   /// 动态计算顶部topStage标题的位置
   _dynamicChangeTopStagePosition(double scrollTopOffset) {
     // 应该显示标签的视觉窗口中的对象
     CityOffsetRange tempViewTarget = _offsetTagRangeList.firstWhere((CityOffsetRange range) {
       return scrollTopOffset > range.start && scrollTopOffset < range.end;
-    }, orElse: () {
-      return null;
-    });
+    }, orElse: () => null);
+    if (tempViewTarget == null) {return;}
 
-    if (tempViewTarget == null) {
-      return ;
-    }
-
-    if (scrollTopOffset + topTagHeight >= tempViewTarget.end - _scrollTopOffset) {
-      print('_dynamicChangeTopStagePosition');
-      this.setState(() {
-        _topOffstageIsSuperTop = false;
+    // 跟随滚动, 因为滚动精度问题. 实际上很难到让_topOffstageTop=0;
+    if (scrollTopOffset + topTagHeight >= tempViewTarget.end - 0.1) {
+      return this.setState(() {
+        _tagName = tempViewTarget.tag;
+        _topOffstageTop = -(scrollTopOffset + topTagHeight - tempViewTarget.end + 0.1);
       });
-//      this.setState(() {
-//        _topOffstageIsSuperTop = 0 - (scrollTopOffset + topTagHeight - tempViewTarget.end + _scrollTopOffset);
-//      });
     }
-//
-//    if (_topOffstateTop < 0 - topTagHeight && _topOffstateTop != 0) {
-//      print("顶部tagName = $_tagName");
-//      this.setState(() {
-//        _tagName = tempViewTarget.tag;
-//        _topOffstateTop = 0;
-//      });
-//    }
+
+
+    // 修正topStage的位置, 分二种情况将期归0
+    // 第一种情况, 是当上方动态跟随. 精度达到预期时._topOffstageTop 被置0
+    // 第二种. 当则是补偿以上的运行
+    if (_topOffstageTop < -topTagHeight && _topOffstageTop != 0) {
+      this.setState(() {
+        _topOffstageTop = 0;
+      });
+    } else if (_topOffstageTop != 0) {
+//      print("补偿运算");
+      _offsetTagRangeList.forEach((CityOffsetRange item) {
+        if (scrollTopOffset > item.start && scrollTopOffset < item.end) {
+          this.setState(() {
+            _topOffstageTop = 0;
+            _tagName = item.tag;
+          });
+          return 0;
+        }
+      });
+    }
   }
+
+  /// 当右侧的类型. 因为触摸而发生改变
   _onTagChange(String alpha) {
     if (_changeTimer != null && _changeTimer.isActive) {
       _changeTimer.cancel();
@@ -209,17 +221,16 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     ));
     if (_showTopOffstage) {
       children.add(Positioned(
-        top: 0,
+        top: _topOffstageTop,
         left: 0,
         right: 0,
         child: Offstage(
           offstage: false,
           child: Container(
             height: topTagHeight,
-
             alignment:Alignment.centerLeft,
             padding: const EdgeInsets.only(left: 15.0),
-            color: Colors.red,
+            color: Color(0xfff3f4f5),
             child: Text(
               _tagName ?? _tagList.first.toUpperCase(),
               softWrap: true,
@@ -244,13 +255,13 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text("title",
           )
         ),
         body: Column(
           children: <Widget>[
-            TextField(),
             Container(
               child: Text("当前城市"),
               alignment: Alignment.centerLeft,

@@ -40,6 +40,9 @@ class CitiesUtils {
 //      print("${a.name} => ${a.letter} ${a.letter.codeUnitAt(0)}");
       return a.letter.codeUnitAt(0) - b.letter.codeUnitAt(0);
     });
+    cities.forEach((Point point) {
+      point.letter = point.letter.toUpperCase();
+    });
     return cities;
   }
   static List<String> getValidTagsByCityList(List<Point> citiesList) {

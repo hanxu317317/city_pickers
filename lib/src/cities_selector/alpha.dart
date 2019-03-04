@@ -172,7 +172,7 @@ class AlphaState extends State<Alpha> {
       result.add(new SizedBox(
         key: Key(alpha),
         height: widget.alphaItemSize,
-        child: new Text(alpha.toUpperCase(),
+        child: new Text(alpha,
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: widget.alphaItemSize,
