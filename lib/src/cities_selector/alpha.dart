@@ -69,6 +69,7 @@ class Alpha extends StatefulWidget {
   /// 激活状态下字体的颜色
   final Color fontActiveColor;
 
+
   Alpha({
     /// 字母列表的高度大小与字体大小
     this.alphaItemSize = 14,
@@ -80,7 +81,7 @@ class Alpha extends StatefulWidget {
     this.onTouchMove,
     this.onTouchEnd,
     this.activeBgColor = Colors.green,
-    this.bgColor = Colors.white,
+    this.bgColor = Colors.yellow,
     this.fontColor = Colors.black,
     this.fontActiveColor = Colors.yellow
   });
@@ -186,7 +187,7 @@ class AlphaState extends State<Alpha> {
       child: Container(
         alignment: Alignment.center,
         color: isTouched ? widget.activeBgColor : widget.bgColor,
-        width: 50,
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
             mainAxisSize: MainAxisSize.min,
             children: result
