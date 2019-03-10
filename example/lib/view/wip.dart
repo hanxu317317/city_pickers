@@ -25,10 +25,10 @@ class WorkInProgress extends StatefulWidget {
 
 class WorkInProgressState extends State<WorkInProgress> {
   String title = '城市选择';
-  Color tagBgColor = Colors.black45;
-  Color tagBgActiveColor = Colors.black87;
-  Color tagFontColor = Colors.white12;
-  Color tagFontActiveColor = Colors.red;
+  Color tagBgColor = Color.fromRGBO(255, 255, 255, 0);
+  Color tagBgActiveColor = Color(0xffeeeeee);
+  Color tagFontColor = Color(0xff666666);
+  Color tagFontActiveColor = Color(0xff242424);
 
   double tagBarFontSize = 12;
 
@@ -38,9 +38,9 @@ class WorkInProgressState extends State<WorkInProgress> {
 
   double topIndexFontSize = 13;
 
-  Color topIndexFontColor = Colors.red;
+  Color topIndexFontColor = Color(0xffc0c0c0);
 
-  Color topIndexBgColor = Colors.black87;
+  Color topIndexBgColor = Color(0xfff3f4f5);
 
   Color itemSelectFontColor = Colors.cyan;
 
@@ -179,6 +179,11 @@ class WorkInProgressState extends State<WorkInProgress> {
             title: '标题',
             editor: TextField(
               controller: TextEditingController(text: title),
+              onChanged: (String value) {
+                this.setState(() {
+                  title = value;
+                })
+              },
             ),
           ),
           AttrItemContainer(
@@ -251,7 +256,7 @@ class WorkInProgressState extends State<WorkInProgress> {
 
           AttrItemContainer(
 //              topIndexFontSize
-              title: '顶部tag分类字体背景颜色',
+              title: '顶部tag分类字体颜色',
             editor: ColorPickers(
               target: Text('选择颜色', style: TextStyle(color: topIndexFontColor)),
               initColor: topIndexFontColor,

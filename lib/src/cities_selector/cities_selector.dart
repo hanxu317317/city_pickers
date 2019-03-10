@@ -16,6 +16,13 @@ import '../../modal/point.dart';
 import 'alpha.dart';
 import 'utils.dart';
 
+const defaultTagBgColor = Color.fromRGBO(0, 0, 0, 0);
+const defaultTagActiveBgColor = Color(0xffeeeeee);
+const defaultTagActiveFontColor = Color(0xff242424);
+const defaultTagFontColor = Color(0xff666666);
+const defaultTopIndexFontColor = Color(0xffc0c0c0);
+const defaultTopIndexBgColor = Color(0xfff3f4f5);
+
 class CitiesSelector extends StatefulWidget {
   final String locationCode;
   final String title;

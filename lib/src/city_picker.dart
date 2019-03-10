@@ -12,6 +12,7 @@ import '../modal/result.dart';
 import 'mod/picker_popup_route.dart';
 import 'show_types.dart';
 
+
 /// ios city pickers
 /// provide config height, initLocation and so on
 ///
@@ -106,16 +107,16 @@ class CityPickers {
     String title = '城市选择器',
     Map<String, dynamic> citiesData = meta.citiesData,
     Map<String, dynamic> provincesData = meta.provincesData,
-    Color tagBarActiveColor = Colors.yellow,
-    Color tagBarFontActiveColor = Colors.red,
-    Color tagBarBarColor = Colors.cyanAccent,
-    Color tagBarFontColor = Colors.white,
+    Color tagBarActiveColor = defaultTagActiveBgColor,
+    Color tagBarFontActiveColor = defaultTagFontColor,
+    Color tagBarBarColor = defaultTagBgColor,
+    Color tagBarFontColor = defaultTagFontColor,
     double tagBarFontSize = 14.0,
     double cityItemFontSize = 12.0,
     double topIndexFontSize = 16,
     double topIndexHeight = 40,
-    Color topIndexFontColor = Colors.green,
-    Color topIndexBgColor = Colors.blueGrey,
+    Color topIndexFontColor = defaultTopIndexFontColor,
+    Color topIndexBgColor = defaultTopIndexBgColor,
     Color itemFontColor = Colors.black,
     Color itemSelectFontColor = Colors.red,
   }) {
