@@ -5,6 +5,8 @@ Language: [English](https://github.com/hanxu317317/city_pickers/blob/master/READ
 
 # Demo
 <image src="https://img.alicdn.com/tfs/TB16H9XGCzqK1RjSZPcXXbTepXa-329-687.gif" style="width: 300px" />
+<image src="https://img.alicdn.com/tfs/TB1CXEhLlLoK1RjSZFuXXXn0XXa-347-705.gif" style="width: 300px" />
+
 
 # 开始
 
@@ -48,6 +50,7 @@ Result result2 = await CityPickers.showFullPageCityPicker(
 |:---------------|:--------|:----------|
 |showCityPicker|Function|呼出弹出层,显示多级选择器 |
 |showFullPageCityPicker|Function|呼出一层界面, 显示多级选择器|
+|showCitiesSelector |Function|呼出一层界面, 显示支持字母定位城市选择器|
 
 
 ### showCityPicker 参数说明
