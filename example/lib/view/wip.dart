@@ -25,6 +25,7 @@ class WorkInProgress extends StatefulWidget {
 
 class WorkInProgressState extends State<WorkInProgress> {
   String title = '城市选择';
+  Result result = Result();
   Color tagBgColor = Color.fromRGBO(255, 255, 255, 0);
   Color tagBgActiveColor = Color(0xffeeeeee);
   Color tagFontColor = Color(0xff666666);
@@ -159,6 +160,9 @@ class WorkInProgressState extends State<WorkInProgress> {
     if (tempResult == null) {
       return ;
     }
+    this.setState(() {
+      result = tempResult;
+    });
     print("result>> ${tempResult.toString()}");
   }
 
@@ -315,6 +319,10 @@ class WorkInProgressState extends State<WorkInProgress> {
                 });
               },
             ),
+          ),
+          AttrItemContainer(
+              title: '选择结果',
+              editor: Text("${result.toString()}")
           ),
 
           RaisedButton(

@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 
 import '../../meta/province.dart';
 import '../../modal/point.dart';
+import '../../modal/result.dart';
+
 import 'alpha.dart';
 import 'utils.dart';
 
@@ -277,7 +279,13 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       },
     );
   }
-
+  Result _buildResult(Point city) {
+    Result result = Result();
+    result.cityId = city.code.toString();
+    result.cityName = city.name;
+    print('result $result');
+    return result;
+  }
   List<Widget> _buildChildren(BuildContext context) {
     print("_initTargetCity.code ${_initTargetCity}");
     List<Widget> children = [];
@@ -322,9 +330,10 @@ class _CitiesSelectorState extends State<CitiesSelector> {
                       selected: selected,
                       title: Text(_cities[index].name, style: TextStyle(fontSize: itemFontSize)),
                       onTap: () {
-//                      print("OnItemClick: $model");
+
                         Navigator.pop(
                           context,
+                          _buildResult(_cities[index])
                         );
                       },
                     ),
