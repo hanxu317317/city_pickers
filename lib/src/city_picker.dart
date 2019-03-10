@@ -43,9 +43,8 @@ class CityPickers {
     double height = 400.0,
     String locationCode = '110000',
     ThemeData theme,
-    Map<String, dynamic> citiesData = meta.citiesData,
-    Map<String, dynamic> provincesData = meta.provincesData,
-
+    Map<String, dynamic> citiesData,
+    Map<String, dynamic> provincesData,
     // CityPickerRoute params
     bool barrierDismissible = true,
     double barrierOpacity = 0.5,
@@ -60,8 +59,8 @@ class CityPickers {
           child: BaseView(
               showType: showType,
               height: height,
-              citiesData: citiesData,
-              provincesData: provincesData,
+              citiesData: citiesData ?? meta.citiesData,
+              provincesData: provincesData ?? meta.provincesData,
               locationCode: locationCode)),
     );
   }
@@ -72,8 +71,8 @@ class CityPickers {
     ThemeData theme,
     ShowType showType = ShowType.pca,
     String locationCode = '110000',
-    Map<String, dynamic> citiesData = meta.citiesData,
-    Map<String, dynamic> provincesData = meta.provincesData,
+    Map<String, dynamic> citiesData,
+    Map<String, dynamic> provincesData,
   }) {
     return Navigator.push(
         context,
@@ -85,8 +84,8 @@ class CityPickers {
               child: FullPage(
                 showType: showType,
                 locationCode: locationCode,
-                citiesData: citiesData,
-                provincesData: provincesData,
+                citiesData: citiesData ?? meta.citiesData,
+                provincesData: provincesData ?? meta.provincesData,
               )),
           transitionsBuilder:
               (_, Animation<double> animation, __, Widget child) =>

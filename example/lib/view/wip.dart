@@ -182,7 +182,7 @@ class WorkInProgressState extends State<WorkInProgress> {
               onChanged: (String value) {
                 this.setState(() {
                   title = value;
-                })
+                });
               },
             ),
           ),
