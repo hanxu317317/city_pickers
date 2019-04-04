@@ -14,9 +14,11 @@ import 'package:flutter/material.dart';
 import '../../meta/province.dart';
 import '../../modal/point.dart';
 import '../../modal/result.dart';
-
+import 'citiesStyle.dart';
 import 'alpha.dart';
 import 'utils.dart';
+
+export 'citiesStyle.dart';
 
 const defaultTagBgColor = Color.fromRGBO(0, 0, 0, 0);
 const defaultTagActiveBgColor = Color(0xffeeeeee);
@@ -32,7 +34,7 @@ class CitiesSelector extends StatefulWidget {
   final Map<String, dynamic> citiesData;
 
   /// 定义右侧bar的激活与普通状态的颜色
-  final Color tagBarBarColor;
+  final Color tagBarBgColor;
   final Color tagBarActiveColor;
 
   /// 定义右侧bar的字体的激活与普通状态的颜色
@@ -70,7 +72,7 @@ class CitiesSelector extends StatefulWidget {
     this.provincesData,
     this.tagBarActiveColor = Colors.yellow,
     this.tagBarFontActiveColor = Colors.red,
-    this.tagBarBarColor = Colors.cyanAccent,
+    this.tagBarBgColor = Colors.cyanAccent,
     this.tagBarFontColor = Colors.white,
     this.tagBarFontSize = 14.0,
     this.cityItemFontSize = 12.0,
@@ -130,8 +132,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     _cities = CitiesUtils.getAllCitiesByMeta(
         widget.provincesData ?? provincesData, widget.citiesData ?? citiesData);
     _initTargetCity = getInitialCityCode();
-    print("_cities>>> ${_cities.length}");
-    print("locationCode ${widget.locationCode}");
+//    print("_cities>>> ${_cities.length}");
+//    print("locationCode ${widget.locationCode}");
     _tagList = CitiesUtils.getValidTagsByCityList(_cities);
 
     _scrollController = new ScrollController();
@@ -155,7 +157,6 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     }
     int code = int.parse(widget.locationCode);
     return _cities.firstWhere((Point point) {
-      print("${point.code} == ${code}");
       return point.code == code;
     }, orElse: () => null);
   }
@@ -253,7 +254,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     return Alpha(
       alphas: _tagList,
       activeBgColor: widget.tagBarActiveColor,
-      bgColor: widget.tagBarBarColor,
+      bgColor: widget.tagBarBgColor,
       fontColor: widget.tagBarFontColor,
       fontActiveColor: widget.tagBarFontActiveColor,
       alphaItemSize: widget.tagBarFontSize,
@@ -283,11 +284,11 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     Result result = Result();
     result.cityId = city.code.toString();
     result.cityName = city.name;
-    print('result $result');
+//    print('result $result');
     return result;
   }
   List<Widget> _buildChildren(BuildContext context) {
-    print("_initTargetCity.code ${_initTargetCity}");
+//    print("_initTargetCity.code ${_initTargetCity}");
     List<Widget> children = [];
     ThemeData theme = Theme.of(context);
     children.add(ListView.builder(
