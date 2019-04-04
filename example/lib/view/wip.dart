@@ -143,27 +143,18 @@ class WorkInProgressState extends State<WorkInProgress> {
   toggle(BuildContext context) async {
     Result tempResult = await CityPickers.showCitiesSelector(
       context: context,
-      locationCode: '100100',
-      tagBarActiveColor: tagBgActiveColor,
-      tagBarFontActiveColor: tagFontActiveColor,
-      tagBarBarColor: tagBgColor,
-      tagBarFontColor: tagFontColor,
-      tagBarFontSize: tagBarFontSize,
-      cityItemFontSize: cityItemFontSize,
-      topIndexFontSize: topIndexFontSize,
-      topIndexHeight: topIndexHeight,
-      topIndexFontColor: topIndexFontColor,
-      topIndexBgColor: topIndexBgColor,
-      itemFontColor: itemFontColor,
-      itemSelectFontColor: itemSelectFontColor
+      locationCode: '110100',
+      sideBarStyle: BaseStyle(fontSize: tagBarFontSize, color: tagFontColor,  backgroundColor: tagBgColor, backgroundActiveColor: tagBgActiveColor,activeColor: tagFontActiveColor),
+      cityItemStyle: BaseStyle(fontSize: cityItemFontSize, color: itemFontColor, activeColor: itemSelectFontColor),
+      topStickStyle: BaseStyle(fontSize: topIndexFontSize, color: topIndexFontColor, backgroundColor: topIndexBgColor, height: topIndexHeight)
     );
+
     if (tempResult == null) {
       return ;
     }
     this.setState(() {
       result = tempResult;
     });
-    print("result>> ${tempResult.toString()}");
   }
 
   handleOnTitleChanged(String value) {
@@ -191,7 +182,7 @@ class WorkInProgressState extends State<WorkInProgress> {
             ),
           ),
           AttrItemContainer(
-            title: 'tag集颜色',
+            title: '边栏背景色',
             editor: ColorPickers(
               target: Text('选择颜色', style: TextStyle(color: tagBgColor)),
               initColor: tagBgColor,
@@ -203,7 +194,7 @@ class WorkInProgressState extends State<WorkInProgress> {
             ),
           ),
           AttrItemContainer(
-            title: 'tag集激活颜色',
+            title: '边栏背景激活颜色',
             editor: ColorPickers(
               target: Text('选择颜色', style: TextStyle(color: tagBgActiveColor)),
               initColor: tagBgActiveColor,
@@ -215,7 +206,7 @@ class WorkInProgressState extends State<WorkInProgress> {
             ),
           ),
           AttrItemContainer(
-            title: 'tag集字体颜色',
+            title: '边栏字体颜色',
             editor: ColorPickers(
               target: Text('选择颜色', style: TextStyle(color: tagFontColor)),
               initColor: tagFontColor,
@@ -227,7 +218,7 @@ class WorkInProgressState extends State<WorkInProgress> {
             ),
           ),
           AttrItemContainer(
-            title: 'tag集字体激活颜色',
+            title: '边栏字体激活颜色',
             editor: ColorPickers(
               target: Text('选择颜色', style: TextStyle(color: tagFontActiveColor)),
               initColor: tagFontActiveColor,
