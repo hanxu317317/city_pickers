@@ -5,6 +5,8 @@ Language: [English](https://github.com/hanxu317317/city_pickers/blob/master/READ
 
 # Demo
 <image src="https://img.alicdn.com/tfs/TB16H9XGCzqK1RjSZPcXXbTepXa-329-687.gif" style="width: 300px" />
+<image src="https://img.alicdn.com/tfs/TB1CXEhLlLoK1RjSZFuXXXn0XXa-347-705.gif" style="width: 300px" />
+
 
 # 开始
 
@@ -38,9 +40,15 @@ Result result = await CityPickers.showCityPicker(
 Result result2 = await CityPickers.showFullPageCityPicker(
   context: context,
 );
+// type 3
+Result result2 = await CityPickers.showCitiesSelector(
+  context: context,
+);
 ```
 
+### 注意事项
 
+showCitiesSelector 是在版本:0.1.16中刚封装出的功能. 可能存在不稳定或者未知的bug. 欢迎大家使用的时候提出反馈与issue.
 
 ### CityPickers 静态方法
 
@@ -48,6 +56,7 @@ Result result2 = await CityPickers.showFullPageCityPicker(
 |:---------------|:--------|:----------|
 |showCityPicker|Function|呼出弹出层,显示多级选择器 |
 |showFullPageCityPicker|Function|呼出一层界面, 显示多级选择器|
+|showCitiesSelector |Function|呼出一层, 显示支持字母定位城市选择器|
 
 
 ### showCityPicker 参数说明
@@ -77,6 +86,21 @@ Result result2 = await CityPickers.showFullPageCityPicker(
 |citiesData|Map|[城市数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的城市与区的数据源|
 |provincesData|Map|[省份数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的省份数据源|
 
+### showCitiesSelector 参数说明
+
+|Name|Type|Default|Desc|
+|:---------------|:--------|:----|:----------|
+|context|BuildContext|null|上下文对象|
+|theme|ThemeData|Theme.of(context)| 主题, 可以自定义|
+|locationCode|String|110000| 初始化地址信息, 可以是省, 市, 区的地区码|
+|title|String|城市选择器|弹出层界面标题|
+|citiesData|Map|[城市数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的城市与区的数据源|
+|provincesData|Map|[省份数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的省份数据源|
+|sideBarStyle|[BaseStyle]|初始默认样式| 右侧字母索引集样式|
+|cityItemStyle|[BaseStyle]|初始默认样式| 城市选项样式|
+|topStickStyle|[BaseStyle]|初始默认样式| 顶部索引吸顶样式|
+
+
 
 
 # 数据来源
@@ -90,7 +114,7 @@ Result result2 = await CityPickers.showFullPageCityPicker(
 
 ### To Do List
 
-- [ ] 城市选择器, 借鉴点评
+- [x] 城市选择器, 借鉴点评
 - [ ] 支持拼音等模糊搜索
 - [ ] 加入单元测试
 

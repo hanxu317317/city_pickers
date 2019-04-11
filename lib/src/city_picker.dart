@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:city_pickers/src/base/base.dart';
+import 'package:city_pickers/src/cities_selector/cities_selector.dart';
 import 'package:city_pickers/src/full_page/full_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +23,7 @@ import 'show_types.dart';
 /// );
 ///
 /// ```
+
 class CityPickers {
   /// use
   /// @param context BuildContext for navigator
@@ -96,28 +98,71 @@ class CityPickers {
         ));
   }
 
-//  static Future<Result> showCitiesSelector({
-//    @required BuildContext context,
-//    ThemeData theme,
-//    bool showAlpha,
-//
-//  }) {
-//    return Navigator.push(
-//        context,
-//        new PageRouteBuilder(
-//          settings: RouteSettings(name: 'fullPageCityPicker'),
-//          transitionDuration: const Duration(milliseconds: 250),
-//          pageBuilder: (context, _, __) => new Theme(
-//              data: theme ?? Theme.of(context),
-//              child: null),
-//          transitionsBuilder:
-//              (_, Animation<double> animation, __, Widget child) =>
-//          new SlideTransition(
-//              position: new Tween<Offset>(
-//                begin: Offset(0.0, 1.0),
-//                end: Offset(0.0, 0.0),
-//              ).animate(animation),
-//              child: child),
-//        ));
-//  }
+  static Future<Result> showCitiesSelector({
+    @required BuildContext context,
+    ThemeData theme,
+    bool showAlpha,
+    String locationCode,
+    String title = '城市选择器',
+    Map<String, dynamic> citiesData = meta.citiesData,
+    Map<String, dynamic> provincesData = meta.provincesData,
+    BaseStyle sideBarStyle,
+    BaseStyle cityItemStyle,
+    BaseStyle topStickStyle,
+  }) {
+    BaseStyle _sideBarStyle = BaseStyle(
+        fontSize: 14,
+        color: defaultTagFontColor,
+        activeColor: defaultTagActiveBgColor,
+        backgroundColor: defaultTagBgColor,
+        backgroundActiveColor: defaultTagActiveBgColor);
+    _sideBarStyle =  _sideBarStyle.merge(sideBarStyle);
+
+    BaseStyle _cityItemStyle = BaseStyle(
+        fontSize: 12,
+        color: Colors.black,
+        activeColor: Colors.red,
+    );
+    _cityItemStyle = _cityItemStyle.merge(cityItemStyle);
+
+    BaseStyle _topStickStyle = BaseStyle(
+      fontSize: 16,
+      height: 40,
+      color: defaultTopIndexFontColor,
+      backgroundColor: defaultTopIndexBgColor
+    );
+
+    _topStickStyle = _topStickStyle.merge(topStickStyle);
+    return Navigator.push(
+        context,
+        new PageRouteBuilder(
+          settings: RouteSettings(name: 'CitiesPicker'),
+          transitionDuration: const Duration(milliseconds: 250),
+          pageBuilder: (context, _, __) => new Theme(
+              data: theme ?? Theme.of(context),
+              child: CitiesSelector(
+                  title: title,
+                  locationCode: locationCode,
+                  tagBarActiveColor: _sideBarStyle.backgroundActiveColor,
+                  tagBarFontActiveColor: _sideBarStyle.activeColor,
+                  tagBarBgColor: _sideBarStyle.backgroundColor,
+                  tagBarFontColor: _sideBarStyle.color,
+                  tagBarFontSize: _sideBarStyle.fontSize,
+                  topIndexFontSize: _topStickStyle.fontSize,
+                  topIndexHeight: _topStickStyle.height,
+                  topIndexFontColor: _topStickStyle.color,
+                  topIndexBgColor: _topStickStyle.backgroundColor,
+                  itemFontColor: _cityItemStyle.color,
+                  cityItemFontSize: _cityItemStyle.fontSize,
+                  itemSelectFontColor: _cityItemStyle.activeColor)),
+          transitionsBuilder:
+              (_, Animation<double> animation, __, Widget child) =>
+                  new SlideTransition(
+                      position: new Tween<Offset>(
+                        begin: Offset(0.0, 1.0),
+                        end: Offset(0.0, 0.0),
+                      ).animate(animation),
+                      child: child),
+        ));
+  }
 }
