@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import '../../meta/province.dart';
 import '../../modal/point.dart';
 import '../../modal/result.dart';
-import 'citiesStyle.dart';
 import 'alpha.dart';
 import 'utils.dart';
 
@@ -60,6 +59,7 @@ class CitiesSelector extends StatefulWidget {
   final Color topIndexBgColor;
 
   final Color itemSelectFontColor;
+
 //  暂时无用
 //  final Color itemSelectBgColor;
 
@@ -93,6 +93,7 @@ class CitiesSelector extends StatefulWidget {
 class _CitiesSelectorState extends State<CitiesSelector> {
   String _tagName;
   Timer _changeTimer;
+
   /// 进行计算 .获取的初始化的城市code码
   Point _initTargetCity;
   bool _isTouchTagBar = false;
@@ -151,7 +152,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     itemFontSize = widget.cityItemFontSize;
   }
 
-  Point getInitialCityCode () {
+  Point getInitialCityCode() {
     if (widget.locationCode == null) {
       return null;
     }
@@ -160,6 +161,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       return point.code == code;
     }, orElse: () => null);
   }
+
   /// 只有当组件加载后. 才能获取_key0的高度,要保证该函数只会被执行一次
   List<CityOffsetRange> _initOffsetRangList() {
     if (_offsetTagRangeList.isEmpty) {
@@ -280,6 +282,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       },
     );
   }
+
   Result _buildResult(Point city) {
     Result result = Result();
     result.cityId = city.code.toString();
@@ -287,6 +290,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
 //    print('result $result');
     return result;
   }
+
   List<Widget> _buildChildren(BuildContext context) {
 //    print("_initTargetCity.code ${_initTargetCity}");
     List<Widget> children = [];
@@ -296,7 +300,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
         itemCount: _cities.length,
         itemBuilder: (context, index) {
           bool offstage = false;
-          bool selected = _initTargetCity != null  && _initTargetCity.code == _cities[index].code;
+          bool selected = _initTargetCity != null &&
+              _initTargetCity.code == _cities[index].code;
           if (index != 0 &&
               _cities[index - 1].letter == _cities[index].letter) {
             offstage = true;
@@ -329,13 +334,10 @@ class _CitiesSelectorState extends State<CitiesSelector> {
                     textColor: widget.itemFontColor ?? theme.accentColor,
                     child: ListTile(
                       selected: selected,
-                      title: Text(_cities[index].name, style: TextStyle(fontSize: itemFontSize)),
+                      title: Text(_cities[index].name,
+                          style: TextStyle(fontSize: itemFontSize)),
                       onTap: () {
-
-                        Navigator.pop(
-                          context,
-                          _buildResult(_cities[index])
-                        );
+                        Navigator.pop(context, _buildResult(_cities[index]));
                       },
                     ),
                   ),
