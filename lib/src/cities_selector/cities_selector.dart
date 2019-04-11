@@ -17,7 +17,7 @@ import '../../modal/result.dart';
 import 'alpha.dart';
 import 'utils.dart';
 
-export 'citiesStyle.dart';
+export 'cities_style.dart';
 
 const defaultTagBgColor = Color.fromRGBO(0, 0, 0, 0);
 const defaultTagActiveBgColor = Color(0xffeeeeee);
