@@ -79,11 +79,15 @@ class _FullPageState extends State<FullPage> {
 
     scrollController = new ScrollController();
     provinces = new Provinces(metaInfo: widget.provincesData).provinces;
-    cityTree = new CityTree(metaInfo: widget.citiesData);
+    cityTree = new CityTree(
+        metaInfo: widget.citiesData, provincesInfo: widget.provincesData);
     itemList = provinces;
     pageStatus = Status.Province;
-
-    _initLocation(widget.locationCode);
+    try {
+      _initLocation(widget.locationCode);
+    } catch (e) {
+      print('Exception details:\n 初始化地理位置信息失败, 请检查省分城市数据 \n $e');
+    }
   }
 
   Future<bool> back() {
@@ -111,7 +115,9 @@ class _FullPageState extends State<FullPage> {
       }
 
       targetProvince = cityTree.initTreeByCode(_locationCode);
-
+      if (targetProvince.isNull) {
+        targetProvince = cityTree.initTreeByCode(provinces.first.code);
+      }
       targetProvince.child.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;
@@ -125,7 +131,8 @@ class _FullPageState extends State<FullPage> {
         });
       });
     } else {
-      targetProvince = cityTree.initTreeByCode(110000);
+      targetProvince =
+          cityTree.initTreeByCode(int.parse(widget.provincesData.keys.first));
     }
 
     if (targetCity == null) {

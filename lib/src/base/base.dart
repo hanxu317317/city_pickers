@@ -59,8 +59,15 @@ class _BaseView extends State<BaseView> {
   void initState() {
     super.initState();
     provinces = new Provinces(metaInfo: widget.provincesData).provinces;
-    cityTree = new CityTree(metaInfo: widget.citiesData);
-    _initLocation(widget.locationCode);
+
+    cityTree = new CityTree(
+        metaInfo: widget.citiesData, provincesInfo: widget.provincesData);
+
+    try {
+      _initLocation(widget.locationCode);
+    } catch (e) {
+      print('Exception details:\n 初始化地理位置信息失败, 请检查省分城市数据 \n $e');
+    }
     _initController();
   }
 
@@ -115,6 +122,10 @@ class _BaseView extends State<BaseView> {
 
       targetProvince = cityTree.initTreeByCode(_locationCode);
 
+      /// 为用户给出的locationCode不正确做一个容错
+      if (targetProvince.isNull) {
+        targetProvince = cityTree.initTreeByCode(provinces.first.code);
+      }
       targetProvince.child.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;
@@ -128,7 +139,9 @@ class _BaseView extends State<BaseView> {
         });
       });
     } else {
-      targetProvince = cityTree.initTreeByCode(110000);
+      /// 本来默认想定在北京, 但是由于有可能出现用户的省份数据为不包含北京, 所以采用第一个省份做为初始
+      targetProvince =
+          cityTree.initTreeByCode(int.parse(widget.provincesData.keys.first));
     }
     // 尝试试图匹配到下一个级别的第一个,
     if (targetCity == null) {

@@ -14,9 +14,10 @@ import 'package:flutter/material.dart';
 import '../../meta/province.dart';
 import '../../modal/point.dart';
 import '../../modal/result.dart';
-
 import 'alpha.dart';
 import 'utils.dart';
+
+export 'citiesStyle.dart';
 
 const defaultTagBgColor = Color.fromRGBO(0, 0, 0, 0);
 const defaultTagActiveBgColor = Color(0xffeeeeee);
@@ -32,7 +33,7 @@ class CitiesSelector extends StatefulWidget {
   final Map<String, dynamic> citiesData;
 
   /// 定义右侧bar的激活与普通状态的颜色
-  final Color tagBarBarColor;
+  final Color tagBarBgColor;
   final Color tagBarActiveColor;
 
   /// 定义右侧bar的字体的激活与普通状态的颜色
@@ -58,6 +59,7 @@ class CitiesSelector extends StatefulWidget {
   final Color topIndexBgColor;
 
   final Color itemSelectFontColor;
+
 //  暂时无用
 //  final Color itemSelectBgColor;
 
@@ -70,7 +72,7 @@ class CitiesSelector extends StatefulWidget {
     this.provincesData,
     this.tagBarActiveColor = Colors.yellow,
     this.tagBarFontActiveColor = Colors.red,
-    this.tagBarBarColor = Colors.cyanAccent,
+    this.tagBarBgColor = Colors.cyanAccent,
     this.tagBarFontColor = Colors.white,
     this.tagBarFontSize = 14.0,
     this.cityItemFontSize = 12.0,
@@ -91,6 +93,7 @@ class CitiesSelector extends StatefulWidget {
 class _CitiesSelectorState extends State<CitiesSelector> {
   String _tagName;
   Timer _changeTimer;
+
   /// 进行计算 .获取的初始化的城市code码
   Point _initTargetCity;
   bool _isTouchTagBar = false;
@@ -130,8 +133,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     _cities = CitiesUtils.getAllCitiesByMeta(
         widget.provincesData ?? provincesData, widget.citiesData ?? citiesData);
     _initTargetCity = getInitialCityCode();
-    print("_cities>>> ${_cities.length}");
-    print("locationCode ${widget.locationCode}");
+//    print("_cities>>> ${_cities.length}");
+//    print("locationCode ${widget.locationCode}");
     _tagList = CitiesUtils.getValidTagsByCityList(_cities);
 
     _scrollController = new ScrollController();
@@ -149,16 +152,16 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     itemFontSize = widget.cityItemFontSize;
   }
 
-  Point getInitialCityCode () {
+  Point getInitialCityCode() {
     if (widget.locationCode == null) {
       return null;
     }
     int code = int.parse(widget.locationCode);
     return _cities.firstWhere((Point point) {
-      print("${point.code} == ${code}");
       return point.code == code;
     }, orElse: () => null);
   }
+
   /// 只有当组件加载后. 才能获取_key0的高度,要保证该函数只会被执行一次
   List<CityOffsetRange> _initOffsetRangList() {
     if (_offsetTagRangeList.isEmpty) {
@@ -253,7 +256,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     return Alpha(
       alphas: _tagList,
       activeBgColor: widget.tagBarActiveColor,
-      bgColor: widget.tagBarBarColor,
+      bgColor: widget.tagBarBgColor,
       fontColor: widget.tagBarFontColor,
       fontActiveColor: widget.tagBarFontActiveColor,
       alphaItemSize: widget.tagBarFontSize,
@@ -279,15 +282,17 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       },
     );
   }
+
   Result _buildResult(Point city) {
     Result result = Result();
     result.cityId = city.code.toString();
     result.cityName = city.name;
-    print('result $result');
+//    print('result $result');
     return result;
   }
+
   List<Widget> _buildChildren(BuildContext context) {
-    print("_initTargetCity.code ${_initTargetCity}");
+//    print("_initTargetCity.code ${_initTargetCity}");
     List<Widget> children = [];
     ThemeData theme = Theme.of(context);
     children.add(ListView.builder(
@@ -295,7 +300,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
         itemCount: _cities.length,
         itemBuilder: (context, index) {
           bool offstage = false;
-          bool selected = _initTargetCity != null  && _initTargetCity.code == _cities[index].code;
+          bool selected = _initTargetCity != null &&
+              _initTargetCity.code == _cities[index].code;
           if (index != 0 &&
               _cities[index - 1].letter == _cities[index].letter) {
             offstage = true;
@@ -328,13 +334,10 @@ class _CitiesSelectorState extends State<CitiesSelector> {
                     textColor: widget.itemFontColor ?? theme.accentColor,
                     child: ListTile(
                       selected: selected,
-                      title: Text(_cities[index].name, style: TextStyle(fontSize: itemFontSize)),
+                      title: Text(_cities[index].name,
+                          style: TextStyle(fontSize: itemFontSize)),
                       onTap: () {
-
-                        Navigator.pop(
-                          context,
-                          _buildResult(_cities[index])
-                        );
+                        Navigator.pop(context, _buildResult(_cities[index]));
                       },
                     ),
                   ),

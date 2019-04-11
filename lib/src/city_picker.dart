@@ -12,7 +12,6 @@ import '../modal/result.dart';
 import 'mod/picker_popup_route.dart';
 import 'show_types.dart';
 
-
 /// ios city pickers
 /// provide config height, initLocation and so on
 ///
@@ -24,6 +23,7 @@ import 'show_types.dart';
 /// );
 ///
 /// ```
+
 class CityPickers {
   /// use
   /// @param context BuildContext for navigator
@@ -106,19 +106,33 @@ class CityPickers {
     String title = '城市选择器',
     Map<String, dynamic> citiesData = meta.citiesData,
     Map<String, dynamic> provincesData = meta.provincesData,
-    Color tagBarActiveColor = defaultTagActiveBgColor,
-    Color tagBarFontActiveColor = defaultTagFontColor,
-    Color tagBarBarColor = defaultTagBgColor,
-    Color tagBarFontColor = defaultTagFontColor,
-    double tagBarFontSize = 14.0,
-    double cityItemFontSize = 12.0,
-    double topIndexFontSize = 16,
-    double topIndexHeight = 40,
-    Color topIndexFontColor = defaultTopIndexFontColor,
-    Color topIndexBgColor = defaultTopIndexBgColor,
-    Color itemFontColor = Colors.black,
-    Color itemSelectFontColor = Colors.red,
+    BaseStyle sideBarStyle,
+    BaseStyle cityItemStyle,
+    BaseStyle topStickStyle,
   }) {
+    BaseStyle _sideBarStyle = BaseStyle(
+        fontSize: 14,
+        color: defaultTagFontColor,
+        activeColor: defaultTagActiveBgColor,
+        backgroundColor: defaultTagBgColor,
+        backgroundActiveColor: defaultTagActiveBgColor);
+    _sideBarStyle =  _sideBarStyle.merge(sideBarStyle);
+
+    BaseStyle _cityItemStyle = BaseStyle(
+        fontSize: 12,
+        color: Colors.black,
+        activeColor: Colors.red,
+    );
+    _cityItemStyle = _cityItemStyle.merge(cityItemStyle);
+
+    BaseStyle _topStickStyle = BaseStyle(
+      fontSize: 16,
+      height: 40,
+      color: defaultTopIndexFontColor,
+      backgroundColor: defaultTopIndexBgColor
+    );
+
+    _topStickStyle = _topStickStyle.merge(topStickStyle);
     return Navigator.push(
         context,
         new PageRouteBuilder(
@@ -127,19 +141,20 @@ class CityPickers {
           pageBuilder: (context, _, __) => new Theme(
               data: theme ?? Theme.of(context),
               child: CitiesSelector(
+                  title: title,
                   locationCode: locationCode,
-                  tagBarActiveColor: tagBarActiveColor,
-                  tagBarFontActiveColor: tagBarFontActiveColor,
-                  tagBarBarColor: tagBarBarColor,
-                  tagBarFontColor: tagBarFontColor,
-                  tagBarFontSize: tagBarFontSize,
-                  cityItemFontSize: cityItemFontSize,
-                  topIndexFontSize: topIndexFontSize,
-                  topIndexHeight: topIndexHeight,
-                  topIndexFontColor: topIndexFontColor,
-                  topIndexBgColor: topIndexBgColor,
-                  itemFontColor: itemFontColor,
-                  itemSelectFontColor: itemSelectFontColor)),
+                  tagBarActiveColor: _sideBarStyle.backgroundActiveColor,
+                  tagBarFontActiveColor: _sideBarStyle.activeColor,
+                  tagBarBgColor: _sideBarStyle.backgroundColor,
+                  tagBarFontColor: _sideBarStyle.color,
+                  tagBarFontSize: _sideBarStyle.fontSize,
+                  topIndexFontSize: _topStickStyle.fontSize,
+                  topIndexHeight: _topStickStyle.height,
+                  topIndexFontColor: _topStickStyle.color,
+                  topIndexBgColor: _topStickStyle.backgroundColor,
+                  itemFontColor: _cityItemStyle.color,
+                  cityItemFontSize: _cityItemStyle.fontSize,
+                  itemSelectFontColor: _cityItemStyle.activeColor)),
           transitionsBuilder:
               (_, Animation<double> animation, __, Widget child) =>
                   new SlideTransition(

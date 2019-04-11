@@ -8,25 +8,30 @@
 //
 
 import 'package:flutter/material.dart';
-import '../../modal/point.dart';
+
 import '../../modal/base_citys.dart';
+import '../../modal/point.dart';
 
 // 城市列表偏移量结构
 class CityOffsetRange {
   double start;
   double end;
   String tag;
+
   CityOffsetRange({this.start, this.end, this.tag});
 }
+
 class TagCount {
   int count;
   String letter;
+
   TagCount({this.count, this.letter});
 }
-class CitiesUtils {
 
+class CitiesUtils {
   /// 获取城市选择器所有的数据
-  static List<Point> getAllCitiesByMeta(Map provinceMeta,  Map<String, dynamic> citiesMeta) {
+  static List<Point> getAllCitiesByMeta(
+      Map provinceMeta, Map<String, dynamic> citiesMeta) {
     List<Point> trees = [];
     List<Point> cities = [];
     CityTree citiesTreeBuilder = new CityTree();
@@ -45,8 +50,10 @@ class CitiesUtils {
     });
     return cities;
   }
+
   static List<String> getValidTagsByCityList(List<Point> citiesList) {
     List<String> validTags = [];
+
     /// 先分类
     String lastTag = '';
     citiesList.forEach((Point item) {
@@ -58,13 +65,13 @@ class CitiesUtils {
     return validTags;
   }
 
-  static List<CityOffsetRange> getOffsetRangeByCitiesList({
-    @required List<Point> lists,
-    @required double itemHeight,
-    @required double tagHeight
-  }) {
+  static List<CityOffsetRange> getOffsetRangeByCitiesList(
+      {@required List<Point> lists,
+      @required double itemHeight,
+      @required double tagHeight}) {
     List<TagCount> categoriesList = [];
     List<CityOffsetRange> result = [];
+
     /// 先分类
     String lastTag = '';
     lists.forEach((Point item) {
@@ -77,18 +84,15 @@ class CitiesUtils {
       TagCount target = categoriesList.firstWhere((TagCount tagCount) {
         return tagCount.letter == item.letter;
       });
-      target.count +=1;
+      target.count += 1;
     });
     categoriesList.forEach((TagCount item) {
 //      print("item: ${item.letter}, ${item.count}");
-      double start = result.isNotEmpty  ? result.last.end : 0;
-      result.add(
-        CityOffsetRange(
+      double start = result.isNotEmpty ? result.last.end : 0;
+      result.add(CityOffsetRange(
           start: start,
           end: start + item.count * itemHeight + tagHeight,
-          tag: item.letter.toUpperCase()
-        )
-      );
+          tag: item.letter.toUpperCase()));
     });
     return result;
   }

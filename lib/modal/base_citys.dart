@@ -9,6 +9,9 @@ import '../src/util.dart';
 class CityTree {
   /// build cityTrees's meta, it can be changed bu developers
   Map<String, dynamic> metaInfo;
+
+  /// provData user self-defining data
+  Map<String, String> provincesInfo;
   Cache _cache = new Cache();
 
   /// the tree's modal
@@ -36,7 +39,9 @@ class CityTree {
   Point tree;
 
   /// @param metaInfo city and areas meta describe
-  CityTree({this.metaInfo = citiesData});
+  CityTree({this.metaInfo = citiesData, this.provincesInfo});
+
+  Map<String, String> get _provincesData => this.provincesInfo ?? provincesData;
 
   /// build tree by int provinceId,
   /// @param provinceId this is province id
@@ -47,7 +52,7 @@ class CityTree {
       return tree = _cache.get(_cacheKey);
     }
 
-    String name = provincesData[provinceId.toString()];
+    String name = this._provincesData[provinceId.toString()];
     String letter = PinyinHelper.getFirstWordPinyin(name).substring(0, 1);
     var root =
         new Point(code: provinceId, letter: letter, child: [], name: name);
@@ -61,13 +66,13 @@ class CityTree {
   /// @return provinceId return id which province's child contain code
   int _getProvinceByCode(int code) {
     String _code = code.toString();
-    List<String> keys = citiesData.keys.toList();
+    List<String> keys = metaInfo.keys.toList();
     for (int i = 0; i < keys.length; i++) {
       String key = keys[i];
-      Map<String, dynamic> child = citiesData[key];
+      Map<String, dynamic> child = metaInfo[key];
       if (child.containsKey(_code)) {
         // 当前元素的父key在省份内
-        if (provincesData.containsKey(key)) {
+        if (this._provincesData.containsKey(key)) {
           return int.parse(key);
         }
         return _getProvinceByCode(int.parse(key));
@@ -81,14 +86,15 @@ class CityTree {
   /// @return Point a province with its cities and areas tree
   Point initTreeByCode(int code) {
     String _code = code.toString();
-    if (provincesData[_code] != null) {
+    if (this._provincesData[_code] != null) {
       return initTree(code);
     }
     int provinceId = _getProvinceByCode(code);
     if (provinceId != null) {
       return initTree(provinceId);
     }
-    return null;
+    return Point().nullPoint;
+//    return Point.nullPoint;
   }
 
   /// private function
