@@ -7,15 +7,15 @@
 // target:  自定义数据源
 //
 const Map<String, String> provincesData = {
-  "110000": "北京市",
-  "120000": "天津市",
+  "10": "北京市",
+  "120": "天津市",
 };
 
 const Map<String, dynamic> citiesData = {
   "710000": {
     "710100": {"name": "台湾", "alpha": "t"}
   },
-  "110000": {
+  "10": {
     "110100": {"name": "北京城区", "alpha": "b"}
   },
   "110100": {
