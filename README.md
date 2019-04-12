@@ -96,9 +96,9 @@ showCitiesSelector 是在版本:0.1.16中刚封装出的功能. 可能存在不�
 |title|String|城市选择器|弹出层界面标题|
 |citiesData|Map|[城市数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的城市与区的数据源|
 |provincesData|Map|[省份数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的省份数据源|
-|sideBarStyle|[BaseStyle]|初始默认样式| 右侧字母索引集样式|
-|cityItemStyle|[BaseStyle]|初始默认样式| 城市选项样式|
-|topStickStyle|[BaseStyle]|初始默认样式| 顶部索引吸顶样式|
+|sideBarStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 右侧字母索引集样式|
+|cityItemStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 城市选项样式|
+|topStickStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 顶部索引吸顶样式|
 
 
 
@@ -114,7 +114,7 @@ showCitiesSelector 是在版本:0.1.16中刚封装出的功能. 可能存在不�
 
 ### To Do List
 
-- [ ] 城市选择器, 借鉴点评
+- [x] 城市选择器, 借鉴点评
 - [ ] 支持拼音等模糊搜索
 - [ ] 加入单元测试
 
