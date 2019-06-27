@@ -25,6 +25,10 @@ import 'show_types.dart';
 /// ```
 
 class CityPickers {
+  /// static original city data for this plugin
+  static Map<String, dynamic> metaCities = meta.citiesData;
+  /// static original province data for this plugin
+  static Map<String, dynamic> metaProvinces = meta.provincesData;
   /// use
   /// @param context BuildContext for navigator
   /// @param locationCode initial select, one of province area or city id
