@@ -4,6 +4,7 @@ import 'src/item_container.dart';
 import 'view/show_city_picker.dart';
 import 'view/wip.dart';
 import 'view/show_full_page_picker.dart';
+import 'view/util_getLocationInfo.dart';
 void main() => runApp(MyApp());
 
 
@@ -18,15 +19,15 @@ class MyApp extends StatelessWidget {
         textTheme: TextTheme(
           //设置Material的默认字体样式
           body1: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
-        ),
-
+        )
       ),
       title: 'Welcome to Flutt2er',
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder> {
         '/name': (_) => new ShowCityPicker(),
         '/full_page': (_) => new ShowFullPageCityPicker(),
-        '/city_select': (_) => new WorkInProgress()
+        '/city_select': (_) => new WorkInProgress(),
+        '/util_getLocationInfo': (_) => new UtilGetLocationInfo()
       },
       home: Body(),
     );
@@ -55,7 +56,12 @@ class _BodyState extends State<Body> {
       "icon": Icons.location_city,
       "name": "城市选择器",
       "routerName": '/city_select'
-    }
+    },
+    {
+      "icon": Icons.location_city,
+      "name": "内置工具类",
+      "routerName": '/util_getLocationInfo'
+    },
   ];
   @override
   Widget build(BuildContext context) {

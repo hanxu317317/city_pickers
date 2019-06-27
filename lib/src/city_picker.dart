@@ -6,12 +6,12 @@ import 'package:city_pickers/src/full_page/full_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:city_pickers/src/utils/index.dart';
 
 import '../meta/province.dart' as meta;
 import '../modal/result.dart';
 import 'mod/picker_popup_route.dart';
 import 'show_types.dart';
-
 /// ios city pickers
 /// provide config height, initLocation and so on
 ///
@@ -25,6 +25,14 @@ import 'show_types.dart';
 /// ```
 
 class CityPickers {
+
+  static utils ({Map<String, dynamic> provinceData, Map<String, dynamic> citiesData}) {
+
+    return CityPickerUtil(
+      provincesData: provinceData ?? meta.provincesData,
+      citiesData: citiesData ?? meta.citiesData,
+    );
+  }
   /// use
   /// @param context BuildContext for navigator
   /// @param locationCode initial select, one of province area or city id
