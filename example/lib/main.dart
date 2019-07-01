@@ -11,17 +11,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-//      theme: new ThemeData(
-//        primaryColor: Color(0xFFC91B3A),
-//        backgroundColor: Color(0xFFEFEFEF),
-//        accentColor: Color(0xFF888888),
-//        textTheme: TextTheme(
-//          //设置Material的默认字体样式
-//          body1: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
-//        ),
-//
-//      ),
-      theme: ThemeData.light(),
+      theme: new ThemeData(
+        primaryColor: Color(0xFFC91B3A),
+        backgroundColor: Color(0xFFEFEFEF),
+        accentColor: Color(0xFF888888),
+        textTheme: TextTheme(
+          //设置Material的默认字体样式
+          body1: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
+        ),
+
+      ),
       title: 'Welcome to Flutt2er',
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
