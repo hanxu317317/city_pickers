@@ -9,8 +9,11 @@ import 'package:flutter/material.dart';
 
 import '../meta/province.dart' as meta;
 import '../modal/result.dart';
+import './util.dart';
 import 'mod/picker_popup_route.dart';
 import 'show_types.dart';
+
+
 
 /// ios city pickers
 /// provide config height, initLocation and so on
@@ -52,17 +55,20 @@ class CityPickers {
     // CityPickerRoute params
     bool barrierDismissible = true,
     double barrierOpacity = 0.5,
+    ItemWidgetBuilder itemBuilder,
+    double itemExtent
   }) {
     return Navigator.of(context, rootNavigator: true).push(
       new CityPickerRoute(
           theme: theme ?? Theme.of(context),
           canBarrierDismiss: barrierDismissible,
           barrierOpacity: barrierOpacity,
-          barrierLabel:
-              MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
           child: BaseView(
               showType: showType,
               height: height,
+              itemExtent: itemExtent,
+              itemBuilder:itemBuilder,
               citiesData: citiesData ?? meta.citiesData,
               provincesData: provincesData ?? meta.provincesData,
               locationCode: locationCode)),

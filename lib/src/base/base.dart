@@ -16,6 +16,7 @@ import '../../modal/point.dart';
 import '../../modal/result.dart';
 import '../mod/inherit_process.dart';
 import '../show_types.dart';
+import '../util.dart';
 
 class BaseView extends StatefulWidget {
   final double progress;
@@ -23,9 +24,12 @@ class BaseView extends StatefulWidget {
   final ShowType showType;
   final Map<String, dynamic> provincesData;
   final Map<String, dynamic> citiesData;
-
+  final ItemWidgetBuilder itemBuilder;
+  // ios选择框的高度. 配合 itemBuilder中的字体使用.
+  final double itemExtent;
   // 容器高度
   final double height;
+
 
   BaseView({
     this.progress,
@@ -34,7 +38,9 @@ class BaseView extends StatefulWidget {
     this.locationCode,
     this.citiesData,
     this.provincesData,
-  });
+    this.itemBuilder,
+    this.itemExtent
+  }) : assert(!(itemBuilder != null && itemExtent == null), "\ritemExtent could't be null if itemBuilder exits");
 
   _BaseView createState() => _BaseView();
 }
@@ -302,6 +308,8 @@ class _BaseView extends State<BaseView> {
                   isShow: widget.showType.contain(ShowType.p),
                   height: widget.height,
                   controller: provinceController,
+                  itemBuilder: widget.itemBuilder,
+                  itemExtent: widget.itemExtent,
                   value: targetProvince.name,
                   itemList: provinces.toList().map((v) => v.name).toList(),
                   changed: (index) {
@@ -313,6 +321,8 @@ class _BaseView extends State<BaseView> {
                   // 这个属性是为了强制刷新
                   isShow: widget.showType.contain(ShowType.c),
                   controller: cityController,
+                  itemBuilder: widget.itemBuilder,
+                  itemExtent: widget.itemExtent,
                   height: widget.height,
                   value: targetCity == null ? null : targetCity.name,
                   itemList: getCityItemList(),
@@ -324,6 +334,8 @@ class _BaseView extends State<BaseView> {
                   key: Key('towns $targetCity'),
                   isShow: widget.showType.contain(ShowType.a),
                   controller: areaController,
+                  itemBuilder: widget.itemBuilder,
+                  itemExtent: widget.itemExtent,
                   value: targetArea == null ? null : targetArea.name,
                   height: widget.height,
                   itemList: getAreaItemList(),
@@ -366,6 +378,9 @@ class _MyCityPicker extends StatefulWidget {
   final FixedExtentScrollController controller;
   final ValueChanged<int> changed;
   final double height;
+  final ItemWidgetBuilder itemBuilder;
+  // ios选择框的高度. 配合 itemBuilder中的字体使用.
+  final double itemExtent;
 
   _MyCityPicker(
       {this.key,
@@ -374,6 +389,8 @@ class _MyCityPicker extends StatefulWidget {
       this.changed,
       this.height,
       this.itemList,
+      this.itemExtent,
+      this.itemBuilder,
       this.value});
 
   @override
@@ -409,19 +426,20 @@ class _MyCityPickerState extends State<_MyCityPicker> {
           alignment: Alignment.center,
           child: CupertinoPicker.builder(
               magnification: 1.0,
-              itemExtent: 40.0,
+              itemExtent: widget.itemExtent ?? 40.0,
               backgroundColor: Colors.white,
               scrollController: widget.controller,
               onSelectedItemChanged: (index) {
                 widget.changed(index);
               },
               itemBuilder: (context, index) {
+                if (widget.itemBuilder !=null) {
+                  return widget.itemBuilder(widget.itemList[index], widget.itemList, index);
+                }
                 return Center(
                   child: Text(
                     '${widget.itemList[index]}',
                     maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    textAlign: TextAlign.center,
                   ),
                 );
               },
