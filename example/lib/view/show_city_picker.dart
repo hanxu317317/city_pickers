@@ -4,7 +4,7 @@
 // Date: 12/02/2019
 // Time: 16:53
 // email: sanfan.hx@alibaba-inc.com
-// tartget:  xxx
+// target:  基本用法
 //
 
 import 'package:flutter/material.dart';
@@ -14,6 +14,7 @@ import '../src/attr_item_container.dart';
 import '../src/location_selector.dart';
 import '../src/picker.dart';
 import '../meta/province.dart';
+
 var emptyResult = new Result();
 
 class ShowCityPicker extends StatefulWidget {
@@ -22,16 +23,21 @@ class ShowCityPicker extends StatefulWidget {
 }
 
 class _ShowCityPickerState extends State<ShowCityPicker> {
-  PickerItem showTypeAttr =  PickerItem(name: '省+市+县', value: ShowType.pca);
+  PickerItem showTypeAttr = PickerItem(name: '省+市+县', value: ShowType.pca);
   Result resultAttr = new Result();
   Result result = new Result();
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
   bool customerMeta = false;
+  bool customerItemBuilder = false;
+  double customerItemExtent = 40;
   PickerItem themeAttr;
+
   Widget _buildShowTypes() {
     return Picker(
-      target: showTypeAttr != null && showTypeAttr.name != null ? Text(showTypeAttr.name) : Text("显示几级联动"),
+      target: showTypeAttr != null && showTypeAttr.name != null
+          ? Text(showTypeAttr.name)
+          : Text("显示几级联动"),
       onConfirm: (PickerItem item) {
         setState(() {
           showTypeAttr = item;
@@ -54,14 +60,15 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target:  Text("${resultAttr.provinceName ?? '省'}", maxLines: 1,overflow: TextOverflow.ellipsis),
+            target: Text("${resultAttr.provinceName ?? '省'}",
+                maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.p,
             initResult: resultAttr,
             onConfirm: (Result result) {
               if (result.provinceId != null) {
-               this.setState(() {
-                 resultAttr = result;
-               });
+                this.setState(() {
+                  resultAttr = result;
+                });
               }
             },
           ),
@@ -69,7 +76,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target:  Text("${resultAttr.cityName ?? '市'}", maxLines: 1,overflow: TextOverflow.ellipsis),
+            target: Text("${resultAttr.cityName ?? '市'}",
+                maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.c,
             initResult: resultAttr,
             onConfirm: (Result result) {
@@ -84,7 +92,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target:  Text("${resultAttr.areaName ?? '区'}", maxLines: 1,overflow: TextOverflow.ellipsis),
+            target: Text("${resultAttr.areaName ?? '区'}",
+                maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.a,
             initResult: resultAttr,
             onConfirm: (Result result) {
@@ -102,30 +111,31 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
 
   Widget _buildBarrierDismissible() {
     return Container(
-      alignment: Alignment.centerRight,
-      child: CupertinoSwitch(
-        value: barrierDismissibleAttr,
-        onChanged: (bool val) {
-          this.setState(() {
-            barrierDismissibleAttr = !barrierDismissibleAttr;
-          });
-        },
-      )
-    );
+        alignment: Alignment.centerRight,
+        child: CupertinoSwitch(
+          value: barrierDismissibleAttr,
+          onChanged: (bool val) {
+            this.setState(() {
+              barrierDismissibleAttr = !barrierDismissibleAttr;
+            });
+          },
+        ));
   }
-  Widget _buildBarrierOpacity() {
 
+  Widget _buildBarrierOpacity() {
     return Row(
       children: <Widget>[
         Expanded(
           flex: 1,
           child: CupertinoSlider(
-            value: barrierOpacityAttr,//实际进度的位置
+            value: barrierOpacityAttr,
+            //实际进度的位置
             min: 0.01,
             max: 1.0,
             divisions: 100,
-            activeColor: Colors.blue,//进度中活动部分的颜色
-            onChanged: (double){
+            activeColor: Colors.blue,
+            //进度中活动部分的颜色
+            onChanged: (double) {
               setState(() {
                 barrierOpacityAttr = double.toDouble();
               });
@@ -136,6 +146,32 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
       ],
     );
   }
+
+  Widget _buildItemExtent() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: CupertinoSlider(
+            value: customerItemExtent,
+            //实际进度的位置
+            min: 40,
+            max: 100,
+            divisions: 60,
+            activeColor: Colors.blue,
+            //进度中活动部分的颜色
+            onChanged: (double) {
+              setState(() {
+                customerItemExtent = double.toDouble();
+              });
+            },
+          ),
+        ),
+        Text("${customerItemExtent.toStringAsFixed(2)}")
+      ],
+    );
+  }
+
   Widget _buildCustomerMeta() {
     return Container(
         alignment: Alignment.centerRight,
@@ -146,13 +182,27 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
               customerMeta = !customerMeta;
             });
           },
-        )
-    );
+        ));
+  }
+
+  Widget _buildCustomerItem() {
+    return Container(
+        alignment: Alignment.centerRight,
+        child: CupertinoSwitch(
+          value: customerItemBuilder,
+          onChanged: (bool val) {
+            this.setState(() {
+              customerItemBuilder = !customerItemBuilder;
+            });
+          },
+        ));
   }
 
   Widget _buildTheme() {
     return Picker(
-        target: themeAttr != null && themeAttr.name != null ? Text(themeAttr.name) : Text("主题切换"),
+        target: themeAttr != null && themeAttr.name != null
+            ? Text(themeAttr.name)
+            : Text("主题切换"),
         onConfirm: (PickerItem item) {
           setState(() {
             themeAttr = item;
@@ -163,8 +213,18 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
           PickerItem(name: 'ThemeData.fallback()', value: ThemeData.fallback()),
           PickerItem(name: 'ThemeData.dark()', value: ThemeData.dark()),
           PickerItem(name: 'ThemeData.of(context)', value: null),
-        ]
-    );
+        ]);
+  }
+
+  getItemBuilder() {
+    if (customerItemBuilder) {
+      return (item, list, index) {
+        return Center(
+            child: Text(item, maxLines: 1, style: TextStyle(fontSize: 55)));
+      };
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -175,49 +235,37 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
       ),
       body: Column(
         children: <Widget>[
+          AttrItemContainer(title: '级联方式', editor: _buildShowTypes()),
+          AttrItemContainer(title: '默认地址', editor: _buildDefaultLocation()),
+          AttrItemContainer(title: '背景透明度', editor: _buildBarrierOpacity()),
+          AttrItemContainer(title: '选中区域高度', editor: _buildItemExtent()),
           AttrItemContainer(
-            title: '级联方式',
-            editor: _buildShowTypes()
-          ),
+              title: '背景点击关闭', editor: _buildBarrierDismissible()),
+          AttrItemContainer(title: '是否采用自定义数据', editor: _buildCustomerMeta()),
+          AttrItemContainer(title: '自定义item渲染', editor: _buildCustomerItem()),
+          AttrItemContainer(title: '主题选择', editor: _buildTheme()),
           AttrItemContainer(
-              title: '默认地址',
-              editor: _buildDefaultLocation()
-          ),
-          AttrItemContainer(
-              title: '背景透明度',
-              editor: _buildBarrierOpacity()
-          ),
-          AttrItemContainer(
-              title: '背景点击关闭',
-              editor: _buildBarrierDismissible()
-          ),
-          AttrItemContainer(
-              title: '是否采用自定义数据',
-              editor: _buildCustomerMeta()
-          ),
-          AttrItemContainer(
-              title: '主题选择',
-              editor: _buildTheme()
-          ),
-          AttrItemContainer(
-              title: '选择结果',
-              editor: Text("${result.toString()}")
-          ),
+              title: '选择结果', editor: Text("${result.toString()}")),
           RaisedButton(
             onPressed: () async {
               print("locationCode $resultAttr");
               Result tempResult = await CityPickers.showCityPicker(
-                context: context,
-                theme: themeAttr !=null ? themeAttr.value : null,
-                locationCode: resultAttr != null ? resultAttr.areaId ?? resultAttr.cityId ?? resultAttr.provinceId : null,
-                showType: showTypeAttr.value,
-                barrierOpacity: barrierOpacityAttr,
-                barrierDismissible: barrierDismissibleAttr,
-                citiesData: customerMeta == true ? citiesData : null,
-                provincesData: customerMeta == true ? provincesData : null
-              );
+                  context: context,
+                  theme: themeAttr != null ? themeAttr.value : null,
+                  locationCode: resultAttr != null
+                      ? resultAttr.areaId ??
+                          resultAttr.cityId ??
+                          resultAttr.provinceId
+                      : null,
+                  showType: showTypeAttr.value,
+                  barrierOpacity: barrierOpacityAttr,
+                  barrierDismissible: barrierDismissibleAttr,
+                  citiesData: customerMeta == true ? citiesData : null,
+                  provincesData: customerMeta == true ? provincesData : null,
+                  itemExtent: customerItemExtent,
+                  itemBuilder: this.getItemBuilder());
               if (tempResult == null) {
-                return ;
+                return;
               }
               this.setState(() {
                 result = tempResult;

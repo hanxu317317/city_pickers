@@ -23,16 +23,19 @@ class ShowFullPageCityPicker extends StatefulWidget {
 }
 
 class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
-  PickerItem showTypeAttr =  PickerItem(name: '省+市+县', value: ShowType.pca);
+  PickerItem showTypeAttr = PickerItem(name: '省+市+县', value: ShowType.pca);
   Result resultAttr = new Result();
   Result result = new Result();
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
   bool customerMeta = false;
   PickerItem themeAttr;
+
   Widget _buildShowTypes() {
     return Picker(
-      target: showTypeAttr != null && showTypeAttr.name != null ? Text(showTypeAttr.name) : Text("显示几级联动"),
+      target: showTypeAttr != null && showTypeAttr.name != null
+          ? Text(showTypeAttr.name)
+          : Text("显示几级联动"),
       onConfirm: (PickerItem item) {
         setState(() {
           showTypeAttr = item;
@@ -55,14 +58,15 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target:  Text("${resultAttr.provinceName ?? '省'}", maxLines: 1,overflow: TextOverflow.ellipsis),
+            target: Text("${resultAttr.provinceName ?? '省'}",
+                maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.p,
             initResult: resultAttr,
             onConfirm: (Result result) {
               if (result.provinceId != null) {
-               this.setState(() {
-                 resultAttr = result;
-               });
+                this.setState(() {
+                  resultAttr = result;
+                });
               }
             },
           ),
@@ -70,7 +74,8 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target:  Text("${resultAttr.cityName ?? '市'}", maxLines: 1,overflow: TextOverflow.ellipsis),
+            target: Text("${resultAttr.cityName ?? '市'}",
+                maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.c,
             initResult: resultAttr,
             onConfirm: (Result result) {
@@ -85,7 +90,8 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target:  Text("${resultAttr.areaName ?? '区'}", maxLines: 1,overflow: TextOverflow.ellipsis),
+            target: Text("${resultAttr.areaName ?? '区'}",
+                maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.a,
             initResult: resultAttr,
             onConfirm: (Result result) {
@@ -103,7 +109,9 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
 
   Widget _buildTheme() {
     return Picker(
-        target: themeAttr != null && themeAttr.name != null ? Text(themeAttr.name) : Text("主题切换"),
+        target: themeAttr != null && themeAttr.name != null
+            ? Text(themeAttr.name)
+            : Text("主题切换"),
         onConfirm: (PickerItem item) {
           setState(() {
             themeAttr = item;
@@ -114,8 +122,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
           PickerItem(name: 'ThemeData.fallback()', value: ThemeData.fallback()),
           PickerItem(name: 'ThemeData.dark()', value: ThemeData.dark()),
           PickerItem(name: 'ThemeData.of(context)', value: null),
-        ]
-    );
+        ]);
   }
 
   Widget _buildCustomerMeta() {
@@ -128,8 +135,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
               customerMeta = !customerMeta;
             });
           },
-        )
-    );
+        ));
   }
 
   @override
@@ -140,39 +146,28 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
       ),
       body: Column(
         children: <Widget>[
+          AttrItemContainer(title: '级联方式', editor: _buildShowTypes()),
+          AttrItemContainer(title: '默认地址', editor: _buildDefaultLocation()),
+          AttrItemContainer(title: '主题选择', editor: _buildTheme()),
+          AttrItemContainer(title: '是否采用自定义数据', editor: _buildCustomerMeta()),
           AttrItemContainer(
-              title: '级联方式',
-              editor: _buildShowTypes()
-          ),
-          AttrItemContainer(
-              title: '默认地址',
-              editor: _buildDefaultLocation()
-          ),
-          AttrItemContainer(
-              title: '主题选择',
-              editor: _buildTheme()
-          ),
-          AttrItemContainer(
-              title: '是否采用自定义数据',
-              editor: _buildCustomerMeta()
-          ),
-          AttrItemContainer(
-              title: '选择结果',
-              editor: Text("${result.toString()}")
-          ),
+              title: '选择结果', editor: Text("${result.toString()}")),
           RaisedButton(
             onPressed: () async {
               print("locationCode $resultAttr");
               Result tempResult = await CityPickers.showFullPageCityPicker(
-                context: context,
-                theme: themeAttr !=null ? themeAttr.value : null,
-                locationCode: resultAttr != null ? resultAttr.areaId ?? resultAttr.cityId ?? resultAttr.provinceId : null,
-                showType: showTypeAttr.value,
-                citiesData: customerMeta ? citiesData : null,
-                provincesData: customerMeta ? provincesData : null
-              );
+                  context: context,
+                  theme: themeAttr != null ? themeAttr.value : null,
+                  locationCode: resultAttr != null
+                      ? resultAttr.areaId ??
+                          resultAttr.cityId ??
+                          resultAttr.provinceId
+                      : null,
+                  showType: showTypeAttr.value,
+                  citiesData: customerMeta ? citiesData : null,
+                  provincesData: customerMeta ? provincesData : null);
               if (tempResult == null) {
-                return ;
+                return;
               }
               this.setState(() {
                 result = tempResult;

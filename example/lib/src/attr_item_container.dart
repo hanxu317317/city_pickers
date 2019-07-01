@@ -12,7 +12,9 @@ import 'package:flutter/material.dart';
 class AttrItemContainer extends StatefulWidget {
   final String title;
   final Widget editor;
+
   AttrItemContainer({this.title, this.editor});
+
   @override
   _AttrItemContainerState createState() => _AttrItemContainerState();
 }
@@ -25,16 +27,15 @@ class _AttrItemContainerState extends State<AttrItemContainer> {
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         decoration: BoxDecoration(
-          border:Border(bottom: BorderSide(width: 1, color: Theme.of(context).dividerColor))
-        ),
+            border: Border(
+                bottom: BorderSide(
+                    width: 1, color: Theme.of(context).dividerColor))),
         child: Row(
           children: <Widget>[
             Text("${widget.title}"),
             Expanded(
-                child: Padding(padding: EdgeInsets.only(left: 30),
-                  child: widget.editor
-                )
-            )
+                child: Padding(
+                    padding: EdgeInsets.only(left: 30), child: widget.editor))
           ],
         ),
       ),

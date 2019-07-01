@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 
 class ItemContainer extends StatefulWidget {
   final List itemList;
+
   ItemContainer({this.itemList});
+
   @override
   _ItemContainerState createState() => _ItemContainerState();
 }
@@ -25,7 +27,7 @@ class _ItemContainerState extends State<ItemContainer> {
           mainAxisSpacing: 10.0, //主轴(竖直)方向间距
           crossAxisSpacing: 0.0, //纵轴(水平)方向间距
           childAspectRatio: 1.0 //纵轴缩放比例
-      ),
+          ),
       itemCount: lists.length,
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
@@ -34,12 +36,16 @@ class _ItemContainerState extends State<ItemContainer> {
           },
           child: Container(
             decoration: new BoxDecoration(
-                border: (index + 1) % 3 != 0 ?  Border(right: BorderSide(color: Theme.of(context).dividerColor, width: 1.0)) : null
-            ),
+                border: (index + 1) % 3 != 0
+                    ? Border(
+                        right: BorderSide(
+                            color: Theme.of(context).dividerColor, width: 1.0))
+                    : null),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(lists[index]['icon'], color: Theme.of(context).primaryColor),
+                Icon(lists[index]['icon'],
+                    color: Theme.of(context).primaryColor),
                 SizedBox(
                   height: 8.0,
                 ),
@@ -51,12 +57,12 @@ class _ItemContainerState extends State<ItemContainer> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Container(
-
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
       child: Stack(
         children: <Widget>[
