@@ -31,6 +31,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
   bool customerMeta = false;
   bool customerItemBuilder = false;
   double customerItemExtent = 40;
+  bool customerButtons = false;
   PickerItem themeAttr;
 
   Widget _buildShowTypes() {
@@ -184,6 +185,18 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
           },
         ));
   }
+  Widget _buildCustomerButtons() {
+    return Container(
+        alignment: Alignment.centerRight,
+        child: CupertinoSwitch(
+          value: customerButtons,
+          onChanged: (bool val) {
+            this.setState(() {
+              customerButtons = !customerButtons;
+            });
+          },
+        ));
+  }
 
   Widget _buildCustomerItem() {
     return Container(
@@ -242,6 +255,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
           AttrItemContainer(
               title: '背景点击关闭', editor: _buildBarrierDismissible()),
           AttrItemContainer(title: '是否采用自定义数据', editor: _buildCustomerMeta()),
+          AttrItemContainer(title: '是否采用自定义的头部按钮', editor: _buildCustomerButtons()),
           AttrItemContainer(title: '自定义item渲染', editor: _buildCustomerItem()),
           AttrItemContainer(title: '主题选择', editor: _buildTheme()),
           AttrItemContainer(
@@ -263,6 +277,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
                   citiesData: customerMeta == true ? citiesData : null,
                   provincesData: customerMeta == true ? provincesData : null,
                   itemExtent: customerItemExtent,
+                  cancelWidget: customerButtons ? Text('cancle') : null,
+                  confirmWidget: customerButtons ? Text('confirm') : null,
                   itemBuilder: this.getItemBuilder());
               if (tempResult == null) {
                 return;
