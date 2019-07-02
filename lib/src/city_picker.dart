@@ -42,6 +42,12 @@ class CityPickers {
   ///
   /// @param barrierDismissible whether user can dismiss the modal by touch background
   ///
+  /// @param cancelWidget customer widget for building cancel button
+  ///
+  /// @param confirmWidget customer widget for building confirm button
+  ///
+  /// @param itemBuilder customer widget for building item
+  ///
   /// @return Result see [Result]
   ///
   static Future<Result> showCityPicker({
@@ -56,7 +62,9 @@ class CityPickers {
     bool barrierDismissible = true,
     double barrierOpacity = 0.5,
     ItemWidgetBuilder itemBuilder,
-    double itemExtent
+    double itemExtent,
+    Widget cancelWidget,
+    Widget confirmWidget,
   }) {
     return Navigator.of(context, rootNavigator: true).push(
       new CityPickerRoute(
@@ -69,6 +77,8 @@ class CityPickers {
               height: height,
               itemExtent: itemExtent,
               itemBuilder:itemBuilder,
+              cancelWidget: cancelWidget,
+              confirmWidget: confirmWidget,
               citiesData: citiesData ?? meta.citiesData,
               provincesData: provincesData ?? meta.provincesData,
               locationCode: locationCode)),

@@ -30,6 +30,14 @@ class BaseView extends StatefulWidget {
   // 容器高度
   final double height;
 
+  /// 取消按钮的Widget
+  /// 当用户设置该属性. 会优先使用用户设置的widget, 否则使用代码中默认的文本, 使用primary主题色
+  final Widget cancelWidget;
+
+  /// 确认按钮的widget
+  /// 当用户设置该属性. 会优先使用用户设置的widget, 否则使用代码中默认的文本, 使用primary主题色
+  final Widget confirmWidget;
+
 
   BaseView({
     this.progress,
@@ -39,7 +47,9 @@ class BaseView extends StatefulWidget {
     this.citiesData,
     this.provincesData,
     this.itemBuilder,
-    this.itemExtent
+    this.itemExtent,
+    this.cancelWidget,
+    this.confirmWidget,
   }) : assert(!(itemBuilder != null && itemExtent == null), "\ritemExtent could't be null if itemBuilder exits");
 
   _BaseView createState() => _BaseView();
@@ -277,7 +287,7 @@ class _BaseView extends State<BaseView> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: new Text(
+                    child: widget.cancelWidget ?? new Text(
                       '取消',
                       style: new TextStyle(
                         color: Theme.of(context).primaryColor,
@@ -288,7 +298,7 @@ class _BaseView extends State<BaseView> {
                     onPressed: () {
                       Navigator.pop(context, _buildResult());
                     },
-                    child: new Text(
+                    child: widget.confirmWidget ?? new Text(
                       '确定',
                       style: new TextStyle(
                         color: Theme.of(context).primaryColor,
