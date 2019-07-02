@@ -13,8 +13,6 @@ import './util.dart';
 import 'mod/picker_popup_route.dart';
 import 'show_types.dart';
 
-
-
 /// ios city pickers
 /// provide config height, initLocation and so on
 ///
@@ -30,8 +28,10 @@ import 'show_types.dart';
 class CityPickers {
   /// static original city data for this plugin
   static Map<String, dynamic> metaCities = meta.citiesData;
+
   /// static original province data for this plugin
   static Map<String, dynamic> metaProvinces = meta.provincesData;
+
   /// use
   /// @param context BuildContext for navigator
   /// @param locationCode initial select, one of province area or city id
@@ -71,12 +71,13 @@ class CityPickers {
           theme: theme ?? Theme.of(context),
           canBarrierDismiss: barrierDismissible,
           barrierOpacity: barrierOpacity,
-          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          barrierLabel:
+              MaterialLocalizations.of(context).modalBarrierDismissLabel,
           child: BaseView(
               showType: showType,
               height: height,
               itemExtent: itemExtent,
-              itemBuilder:itemBuilder,
+              itemBuilder: itemBuilder,
               cancelWidget: cancelWidget,
               confirmWidget: confirmWidget,
               citiesData: citiesData ?? meta.citiesData,
@@ -136,21 +137,20 @@ class CityPickers {
         activeColor: defaultTagActiveBgColor,
         backgroundColor: defaultTagBgColor,
         backgroundActiveColor: defaultTagActiveBgColor);
-    _sideBarStyle =  _sideBarStyle.merge(sideBarStyle);
+    _sideBarStyle = _sideBarStyle.merge(sideBarStyle);
 
     BaseStyle _cityItemStyle = BaseStyle(
-        fontSize: 12,
-        color: Colors.black,
-        activeColor: Colors.red,
+      fontSize: 12,
+      color: Colors.black,
+      activeColor: Colors.red,
     );
     _cityItemStyle = _cityItemStyle.merge(cityItemStyle);
 
     BaseStyle _topStickStyle = BaseStyle(
-      fontSize: 16,
-      height: 40,
-      color: defaultTopIndexFontColor,
-      backgroundColor: defaultTopIndexBgColor
-    );
+        fontSize: 16,
+        height: 40,
+        color: defaultTopIndexFontColor,
+        backgroundColor: defaultTopIndexBgColor);
 
     _topStickStyle = _topStickStyle.merge(topStickStyle);
     return Navigator.push(

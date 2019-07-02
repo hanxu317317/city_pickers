@@ -23,8 +23,6 @@ class Point {
     this.child.add(node);
   }
 
-
-
   @override
   String toString() {
     // TODO: implement toString

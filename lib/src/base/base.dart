@@ -38,7 +38,6 @@ class BaseView extends StatefulWidget {
   /// 当用户设置该属性. 会优先使用用户设置的widget, 否则使用代码中默认的文本, 使用primary主题色
   final Widget confirmWidget;
 
-
   BaseView({
     this.progress,
     this.showType,
@@ -50,7 +49,8 @@ class BaseView extends StatefulWidget {
     this.itemExtent,
     this.cancelWidget,
     this.confirmWidget,
-  }) : assert(!(itemBuilder != null && itemExtent == null), "\ritemExtent could't be null if itemBuilder exits");
+  }) : assert(!(itemBuilder != null && itemExtent == null),
+            "\ritemExtent could't be null if itemBuilder exits");
 
   _BaseView createState() => _BaseView();
 }
@@ -287,23 +287,25 @@ class _BaseView extends State<BaseView> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: widget.cancelWidget ?? new Text(
-                      '取消',
-                      style: new TextStyle(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
+                    child: widget.cancelWidget ??
+                        new Text(
+                          '取消',
+                          style: new TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                   ),
                   FlatButton(
                     onPressed: () {
                       Navigator.pop(context, _buildResult());
                     },
-                    child: widget.confirmWidget ?? new Text(
-                      '确定',
-                      style: new TextStyle(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
+                    child: widget.confirmWidget ??
+                        new Text(
+                          '确定',
+                          style: new TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                   ),
                 ],
                 mainAxisSize: MainAxisSize.max,
@@ -443,8 +445,9 @@ class _MyCityPickerState extends State<_MyCityPicker> {
                 widget.changed(index);
               },
               itemBuilder: (context, index) {
-                if (widget.itemBuilder !=null) {
-                  return widget.itemBuilder(widget.itemList[index], widget.itemList, index);
+                if (widget.itemBuilder != null) {
+                  return widget.itemBuilder(
+                      widget.itemList[index], widget.itemList, index);
                 }
                 return Center(
                   child: Text(
