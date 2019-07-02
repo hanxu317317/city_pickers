@@ -57,3 +57,6 @@ void setTimeout({int milliseconds, callback = VoidCallback}) {
     callback();
   });
 }
+
+
+typedef ItemWidgetBuilder = Widget Function(dynamic item, List<dynamic> list, int index);

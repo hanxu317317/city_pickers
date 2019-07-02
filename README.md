@@ -63,13 +63,17 @@ showCitiesSelector 是在版本:0.1.16中刚封装出的功能. 可能存在不�
 
 |Name|Type|Default|Desc|
 |:---------------|:--------|:----|:----------|
-|context|BuildContext|null|上下文对象|
+|context|BuildContext||上下文对象|
 |theme|ThemeData|Theme.of(context)| 主题, 可以自定义|
 |locationCode|String|110000| 初始化地址信息, 可以是省, 市, 区的地区码|
 |height|double|300| 弹出层的高度, 过高或者过低会导致容器报错|
 |showType|ShowType|ShowType.pca| 三级联动, 显示类型|
 |barrierOpacity|double|0.5|弹出层的背景透明度, 应该是大于0, 小于1|
 |barrierDismissible|bool|true| 是否可以通过点击弹出层背景, 关闭弹出层|
+|cancelWidget|Widget||用户自定义取消按钮|
+|confirmWidget| Widget || 用户自定义确认按钮 |
+|itemExtent|double||目标框高度|
+|itemBuilder|Widget||item生成器, function(String value, List<String> lists, item){}, 当itemBuilder不为空的时候. 必须设置itemExtent|
 |citiesData|Map|[城市数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的城市与区的数据源|
 |provincesData|Map|[省份数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的省份数据源|
 
@@ -83,6 +87,7 @@ showCitiesSelector 是在版本:0.1.16中刚封装出的功能. 可能存在不�
 |theme|ThemeData|Theme.of(context)| 主题, 可以自定义|
 |locationCode|String|110000| 初始化地址信息, 可以是省, 市, 区的地区码|
 |showType|ShowType|ShowType.pca| 三级联动, 显示类型|
+
 |citiesData|Map|[城市数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的城市与区的数据源|
 |provincesData|Map|[省份数据](https://github.com/hanxu317317/city_pickers/blob/master/lib/meta/province.dart)|选择器的省份数据源|
 

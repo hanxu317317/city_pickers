@@ -11,15 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-
 class ColorPickers extends StatefulWidget {
   final Widget target;
   final Color initColor;
   final ValueChanged<Color> onConfirm;
-  ColorPickers({
-    this.initColor,
-    this.onConfirm,
-    @required this.target});
+
+  ColorPickers({this.initColor, this.onConfirm, @required this.target});
 
   @override
   _ColorPickersState createState() => _ColorPickersState();
@@ -29,17 +26,20 @@ class _ColorPickersState extends State<ColorPickers> {
   Color pickerColor = Colors.red;
 
   Color currentColor = Colors.red;
+
   @override
   void initState() {
     super.initState();
     pickerColor = widget.initColor ?? Colors.red;
     currentColor = widget.initColor ?? Colors.red;
   }
+
   onChangeColor(Color color) {
     this.setState(() {
       pickerColor = color;
     });
   }
+
 //  showColorPicker(BuildContext context) async  {
 //    showDialog(
 //      context: context,
@@ -100,7 +100,6 @@ class _ColorPickersState extends State<ColorPickers> {
             widget.onConfirm(color);
           },
           child: widget.target,
-        )
-    );
+        ));
   }
 }

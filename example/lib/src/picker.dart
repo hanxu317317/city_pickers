@@ -9,10 +9,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
 const double _pickerHeight = 400.0;
+
 class PickerItem {
   String name;
   dynamic value;
+
   PickerItem({this.name, this.value});
 }
 
@@ -20,30 +23,31 @@ class Picker extends StatefulWidget {
   final List<PickerItem> items;
   final Widget target;
   final ValueChanged<PickerItem> onConfirm;
-  Picker({
-    this.onConfirm,
-    @required this.target,
-    @required this.items});
+
+  Picker({this.onConfirm, @required this.target, @required this.items});
+
   @override
   _PickerState createState() => _PickerState();
-
-
 }
 
 class _PickerState extends State<Picker> {
-  ScrollController scrollController = new FixedExtentScrollController(initialItem: 0);
+  ScrollController scrollController =
+      new FixedExtentScrollController(initialItem: 0);
   PickerItem result;
+
   @override
   void initState() {
     // TODO: implement initState
     result = widget.items[0];
     super.initState();
   }
+
   onChange(int index) {
     this.setState(() {
       result = widget.items[index];
     });
   }
+
   buildPicker() {
     return CupertinoPicker.builder(
         magnification: 1.0,
@@ -61,9 +65,9 @@ class _PickerState extends State<Picker> {
             ),
           );
         },
-        childCount: widget.items.length
-      );
+        childCount: widget.items.length);
   }
+
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -120,15 +124,13 @@ class _PickerState extends State<Picker> {
                             child: buildPicker(),
                           )
                         ],
-                      )
-                  ),
+                      )),
                 );
               },
             );
             widget.onConfirm(result);
           },
           child: widget.target,
-        )
-    );
+        ));
   }
 }
