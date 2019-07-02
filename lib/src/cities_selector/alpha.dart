@@ -7,7 +7,7 @@
 // tartget:  xxx
 //
 
-import 'dart:async';
+//import 'dart:async';
 
 import 'package:flutter/material.dart';
 
@@ -48,7 +48,7 @@ const List<String> ALPHAS_INDEX = const [
 ];
 
 class Alpha extends StatefulWidget {
-  static List<String> _alphas = ALPHAS_INDEX;
+//  static List<String> _alphas = ALPHAS_INDEX;
 
   /// 单个字母的字体大小
   final double alphaItemSize;
@@ -99,7 +99,7 @@ class Alpha extends StatefulWidget {
 }
 
 class AlphaState extends State<Alpha> {
-  Timer _changeTimer;
+//  Timer _changeTimer;
 
   bool isTouched = false;
 
