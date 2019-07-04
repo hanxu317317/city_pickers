@@ -32,6 +32,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
   bool customerItemBuilder = false;
   double customerItemExtent = 40;
   bool customerButtons = false;
+  bool isSort = false;
+
   PickerItem themeAttr;
 
   Widget _buildShowTypes() {
@@ -185,6 +187,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
           },
         ));
   }
+
   Widget _buildCustomerButtons() {
     return Container(
         alignment: Alignment.centerRight,
@@ -206,6 +209,19 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
           onChanged: (bool val) {
             this.setState(() {
               customerItemBuilder = !customerItemBuilder;
+            });
+          },
+        ));
+  }
+
+  Widget _buildSortItem() {
+    return Container(
+        alignment: Alignment.centerRight,
+        child: CupertinoSwitch(
+          value: isSort,
+          onChanged: (bool val) {
+            this.setState(() {
+              isSort = !isSort;
             });
           },
         ));
@@ -255,8 +271,10 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
           AttrItemContainer(
               title: '背景点击关闭', editor: _buildBarrierDismissible()),
           AttrItemContainer(title: '是否采用自定义数据', editor: _buildCustomerMeta()),
-          AttrItemContainer(title: '是否采用自定义的头部按钮', editor: _buildCustomerButtons()),
+          AttrItemContainer(
+              title: '是否采用自定义的头部按钮', editor: _buildCustomerButtons()),
           AttrItemContainer(title: '自定义item渲染', editor: _buildCustomerItem()),
+          AttrItemContainer(title: '数据是否排序', editor: _buildSortItem()),
           AttrItemContainer(title: '主题选择', editor: _buildTheme()),
           AttrItemContainer(
               title: '选择结果', editor: Text("${result.toString()}")),
@@ -272,6 +290,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
                           resultAttr.provinceId
                       : null,
                   showType: showTypeAttr.value,
+                  isSort: isSort,
                   barrierOpacity: barrierOpacityAttr,
                   barrierDismissible: barrierDismissibleAttr,
                   citiesData: customerMeta == true ? citiesData : null,

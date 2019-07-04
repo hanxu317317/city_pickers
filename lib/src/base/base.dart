@@ -25,9 +25,12 @@ class BaseView extends StatefulWidget {
   final Map<String, dynamic> provincesData;
   final Map<String, dynamic> citiesData;
   final ItemWidgetBuilder itemBuilder;
-  // ios选择框的高度. 配合 itemBuilder中的字体使用.
+
+  /// 是否对数据进行排序
+  final bool isSort;
+  /// ios选择框的高度. 配合 itemBuilder中的字体使用.
   final double itemExtent;
-  // 容器高度
+  /// 容器高度
   final double height;
 
   /// 取消按钮的Widget
@@ -49,6 +52,7 @@ class BaseView extends StatefulWidget {
     this.itemExtent,
     this.cancelWidget,
     this.confirmWidget,
+    this.isSort
   }) : assert(!(itemBuilder != null && itemExtent == null),
             "\ritemExtent could't be null if itemBuilder exits");
 
@@ -74,7 +78,9 @@ class _BaseView extends State<BaseView> {
   @override
   void initState() {
     super.initState();
-    provinces = new Provinces(metaInfo: widget.provincesData).provinces;
+    print("is sort>>> ${widget.isSort}");
+
+    provinces = new Provinces(metaInfo: widget.provincesData, sort: widget.isSort).provinces;
 
     cityTree = new CityTree(
         metaInfo: widget.citiesData, provincesInfo: widget.provincesData);

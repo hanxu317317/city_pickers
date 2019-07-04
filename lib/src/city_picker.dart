@@ -50,22 +50,22 @@ class CityPickers {
   ///
   /// @return Result see [Result]
   ///
-  static Future<Result> showCityPicker({
-    @required BuildContext context,
-    showType = ShowType.pca,
-    double height = 400.0,
-    String locationCode = '110000',
-    ThemeData theme,
-    Map<String, dynamic> citiesData,
-    Map<String, dynamic> provincesData,
-    // CityPickerRoute params
-    bool barrierDismissible = true,
-    double barrierOpacity = 0.5,
-    ItemWidgetBuilder itemBuilder,
-    double itemExtent,
-    Widget cancelWidget,
-    Widget confirmWidget,
-  }) {
+  static Future<Result> showCityPicker(
+      {@required BuildContext context,
+      showType = ShowType.pca,
+      double height = 400.0,
+      String locationCode = '110000',
+      ThemeData theme,
+      Map<String, dynamic> citiesData,
+      Map<String, dynamic> provincesData,
+      // CityPickerRoute params
+      bool barrierDismissible = true,
+      double barrierOpacity = 0.5,
+      ItemWidgetBuilder itemBuilder,
+      double itemExtent,
+      Widget cancelWidget,
+      Widget confirmWidget,
+      bool isSort = false}) {
     return Navigator.of(context, rootNavigator: true).push(
       new CityPickerRoute(
           theme: theme ?? Theme.of(context),
@@ -74,6 +74,7 @@ class CityPickers {
           barrierLabel:
               MaterialLocalizations.of(context).modalBarrierDismissLabel,
           child: BaseView(
+              isSort: isSort,
               showType: showType,
               height: height,
               itemExtent: itemExtent,
