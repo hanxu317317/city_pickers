@@ -28,8 +28,10 @@ class BaseView extends StatefulWidget {
 
   /// 是否对数据进行排序
   final bool isSort;
+
   /// ios选择框的高度. 配合 itemBuilder中的字体使用.
   final double itemExtent;
+
   /// 容器高度
   final double height;
 
@@ -41,19 +43,19 @@ class BaseView extends StatefulWidget {
   /// 当用户设置该属性. 会优先使用用户设置的widget, 否则使用代码中默认的文本, 使用primary主题色
   final Widget confirmWidget;
 
-  BaseView({
-    this.progress,
-    this.showType,
-    this.height,
-    this.locationCode,
-    this.citiesData,
-    this.provincesData,
-    this.itemBuilder,
-    this.itemExtent,
-    this.cancelWidget,
-    this.confirmWidget,
-    this.isSort
-  }) : assert(!(itemBuilder != null && itemExtent == null),
+  BaseView(
+      {this.progress,
+      this.showType,
+      this.height,
+      this.locationCode,
+      this.citiesData,
+      this.provincesData,
+      this.itemBuilder,
+      this.itemExtent,
+      this.cancelWidget,
+      this.confirmWidget,
+      this.isSort})
+      : assert(!(itemBuilder != null && itemExtent == null),
             "\ritemExtent could't be null if itemBuilder exits");
 
   _BaseView createState() => _BaseView();
@@ -78,9 +80,10 @@ class _BaseView extends State<BaseView> {
   @override
   void initState() {
     super.initState();
-    print("is sort>>> ${widget.isSort}");
 
-    provinces = new Provinces(metaInfo: widget.provincesData, sort: widget.isSort).provinces;
+    provinces =
+        new Provinces(metaInfo: widget.provincesData, sort: widget.isSort)
+            .provinces;
 
     cityTree = new CityTree(
         metaInfo: widget.citiesData, provincesInfo: widget.provincesData);
@@ -397,6 +400,7 @@ class _MyCityPicker extends StatefulWidget {
   final ValueChanged<int> changed;
   final double height;
   final ItemWidgetBuilder itemBuilder;
+
   // ios选择框的高度. 配合 itemBuilder中的字体使用.
   final double itemExtent;
 
