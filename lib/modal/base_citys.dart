@@ -140,7 +140,9 @@ class CityTree {
 class Provinces {
   Map<String, String> metaInfo;
 
-  Provinces({this.metaInfo = provincesData});
+  // 是否将省份排序, 进行排序
+  bool sort = true;
+  Provinces({this.metaInfo = provincesData, this.sort});
 
   // 获取省份数据
   get provinces {
@@ -153,9 +155,12 @@ class Provinces {
           letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1),
           name: name));
     }
-    provList.sort((Point a, Point b) {
-      return a.letter.compareTo(b.letter);
-    });
+    if (this.sort == true) {
+      provList.sort((Point a, Point b) {
+        return a.letter.compareTo(b.letter);
+      });
+    }
+
     return provList;
   }
 }
