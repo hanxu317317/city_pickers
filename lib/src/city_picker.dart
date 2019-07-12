@@ -163,6 +163,8 @@ class CityPickers {
               data: theme ?? Theme.of(context),
               child: CitiesSelector(
                   title: title,
+                  provincesData: provincesData,
+                  citiesData: citiesData,
                   locationCode: locationCode,
                   tagBarActiveColor: _sideBarStyle.backgroundActiveColor,
                   tagBarFontActiveColor: _sideBarStyle.activeColor,

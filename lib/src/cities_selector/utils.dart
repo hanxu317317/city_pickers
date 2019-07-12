@@ -30,11 +30,10 @@ class TagCount {
 
 class CitiesUtils {
   /// 获取城市选择器所有的数据
-  static List<Point> getAllCitiesByMeta(
-      Map provinceMeta, Map<String, dynamic> citiesMeta) {
+  static List<Point> getAllCitiesByMeta(Map provinceMeta, Map<String, dynamic> citiesMeta) {
     List<Point> trees = [];
     List<Point> cities = [];
-    CityTree citiesTreeBuilder = new CityTree();
+    CityTree citiesTreeBuilder = new CityTree(metaInfo: citiesMeta, provincesInfo: provinceMeta);
     provinceMeta.forEach((key, value) {
       trees.add(citiesTreeBuilder.initTree(int.parse(key)));
     });
@@ -42,7 +41,6 @@ class CitiesUtils {
       cities.addAll(tree.child);
     });
     cities.sort((Point a, Point b) {
-//      print("${a.name} => ${a.letter} ${a.letter.codeUnitAt(0)}");
       return a.letter.codeUnitAt(0) - b.letter.codeUnitAt(0);
     });
     cities.forEach((Point point) {
