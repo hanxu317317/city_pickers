@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 
 import '../src/attr_item_container.dart';
 import '../src/color_picker.dart';
+import '../meta/province.dart';
 
 //showCitiesSelector
 class WorkInProgress extends StatefulWidget {
@@ -48,6 +49,8 @@ class WorkInProgressState extends State<WorkInProgress> {
 
   Color itemFontColor = Colors.black;
 
+  bool userSelfMeta = false;
+
   Widget _buildTopIndexFontSize() {
     return Row(
       children: <Widget>[
@@ -71,6 +74,19 @@ class WorkInProgressState extends State<WorkInProgress> {
         Text("$topIndexFontSize")
       ],
     );
+  }
+
+  Widget _buildSelfMetaButtons() {
+    return Container(
+        alignment: Alignment.centerRight,
+        child: CupertinoSwitch(
+          value: userSelfMeta,
+          onChanged: (bool val) {
+            this.setState(() {
+              userSelfMeta = !userSelfMeta;
+            });
+          },
+    ));
   }
 
   Widget _buildTopIndexHeight() {
@@ -153,6 +169,8 @@ class WorkInProgressState extends State<WorkInProgress> {
         context: context,
         title: title,
         locationCode: '110100',
+        provincesData: !userSelfMeta ? CityPickers.metaProvinces : provincesData,
+        citiesData: !userSelfMeta ? CityPickers.metaCities : citiesData,
         sideBarStyle: BaseStyle(
             fontSize: tagBarFontSize,
             color: tagFontColor,
@@ -324,6 +342,10 @@ class WorkInProgressState extends State<WorkInProgress> {
                   });
                 },
               ),
+            ),
+            AttrItemContainer(
+              title: '使用自定义数据',
+              editor: _buildSelfMetaButtons(),
             ),
             AttrItemContainer(
                 title: '选择结果', editor: Text("${result.toString()}")),
