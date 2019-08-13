@@ -211,7 +211,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
             _topOffstageTop = 0;
             _tagName = item.tag;
           });
-          return 0;
+          return;
         }
       });
     }
