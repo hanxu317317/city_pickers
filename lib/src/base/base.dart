@@ -289,82 +289,82 @@ class _BaseView extends State<BaseView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Expanded(
-              child: new Row(
-                children: <Widget>[
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: widget.cancelWidget ??
-                        new Text(
-                          '取消',
-                          style: new TextStyle(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.pop(context, _buildResult());
-                    },
-                    child: widget.confirmWidget ??
-                        new Text(
-                          '确定',
-                          style: new TextStyle(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                  ),
-                ],
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              ),
-            ),
             new Row(
               children: <Widget>[
-                new _MyCityPicker(
-                  key: Key('province'),
-                  isShow: widget.showType.contain(ShowType.p),
-                  height: widget.height,
-                  controller: provinceController,
-                  itemBuilder: widget.itemBuilder,
-                  itemExtent: widget.itemExtent,
-                  value: targetProvince.name,
-                  itemList: provinces.toList().map((v) => v.name).toList(),
-                  changed: (index) {
-                    _onProvinceChange(provinces[index]);
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
+                  child: widget.cancelWidget ??
+                      new Text(
+                        '取消',
+                        style: new TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
                 ),
-                new _MyCityPicker(
-                  key: Key('citys $targetProvince'),
-                  // 这个属性是为了强制刷新
-                  isShow: widget.showType.contain(ShowType.c),
-                  controller: cityController,
-                  itemBuilder: widget.itemBuilder,
-                  itemExtent: widget.itemExtent,
-                  height: widget.height,
-                  value: targetCity == null ? null : targetCity.name,
-                  itemList: getCityItemList(),
-                  changed: (index) {
-                    _onCityChange(targetProvince.child[index]);
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context, _buildResult());
                   },
+                  child: widget.confirmWidget ??
+                      new Text(
+                        '确定',
+                        style: new TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
                 ),
-                new _MyCityPicker(
-                  key: Key('towns $targetCity'),
-                  isShow: widget.showType.contain(ShowType.a),
-                  controller: areaController,
-                  itemBuilder: widget.itemBuilder,
-                  itemExtent: widget.itemExtent,
-                  value: targetArea == null ? null : targetArea.name,
-                  height: widget.height,
-                  itemList: getAreaItemList(),
-                  changed: (index) {
-                    _onAreaChange(targetCity.child[index]);
-                  },
-                )
               ],
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            Expanded(
+              child: new Row(
+                children: <Widget>[
+                  new _MyCityPicker(
+                    key: Key('province'),
+                    isShow: widget.showType.contain(ShowType.p),
+                    height: widget.height,
+                    controller: provinceController,
+                    itemBuilder: widget.itemBuilder,
+                    itemExtent: widget.itemExtent,
+                    value: targetProvince.name,
+                    itemList: provinces.toList().map((v) => v.name).toList(),
+                    changed: (index) {
+                      _onProvinceChange(provinces[index]);
+                    },
+                  ),
+                  new _MyCityPicker(
+                    key: Key('citys $targetProvince'),
+                    // 这个属性是为了强制刷新
+                    isShow: widget.showType.contain(ShowType.c),
+                    controller: cityController,
+                    itemBuilder: widget.itemBuilder,
+                    itemExtent: widget.itemExtent,
+                    height: widget.height,
+                    value: targetCity == null ? null : targetCity.name,
+                    itemList: getCityItemList(),
+                    changed: (index) {
+                      _onCityChange(targetProvince.child[index]);
+                    },
+                  ),
+                  new _MyCityPicker(
+                    key: Key('towns $targetCity'),
+                    isShow: widget.showType.contain(ShowType.a),
+                    controller: areaController,
+                    itemBuilder: widget.itemBuilder,
+                    itemExtent: widget.itemExtent,
+                    value: targetArea == null ? null : targetArea.name,
+                    height: widget.height,
+                    itemList: getAreaItemList(),
+                    changed: (index) {
+                      _onAreaChange(targetCity.child[index]);
+                    },
+                  )
+                ],
+              ),
             )
           ],
         ));
@@ -444,7 +444,6 @@ class _MyCityPickerState extends State<_MyCityPicker> {
       child: new Container(
           color: Theme.of(context).scaffoldBackgroundColor,
           padding: const EdgeInsets.all(6.0),
-          height: widget.height - 40,
           alignment: Alignment.center,
           child: CupertinoPicker.builder(
               magnification: 1.0,
