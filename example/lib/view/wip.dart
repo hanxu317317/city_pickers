@@ -171,6 +171,12 @@ class WorkInProgressState extends State<WorkInProgress> {
         locationCode: '110100',
         provincesData: !userSelfMeta ? CityPickers.metaProvinces : provincesData,
         citiesData: !userSelfMeta ? CityPickers.metaCities : citiesData,
+        hotCities: [
+          HotCity(id: 0, name: '123'),
+          HotCity(id: 1, name: '222'),
+          HotCity(id: 2, name: '333'),
+
+        ],
         sideBarStyle: BaseStyle(
             fontSize: tagBarFontSize,
             color: tagFontColor,

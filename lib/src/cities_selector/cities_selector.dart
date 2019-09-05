@@ -31,6 +31,7 @@ class CitiesSelector extends StatefulWidget {
   final String title;
   final Map<String, dynamic> provincesData;
   final Map<String, dynamic> citiesData;
+  final List<HotCity> hotCities;
 
   /// 定义右侧bar的激活与普通状态的颜色
   final Color tagBarBgColor;
@@ -69,6 +70,7 @@ class CitiesSelector extends StatefulWidget {
     this.title = '城市选择器',
     this.locationCode,
     this.citiesData,
+    this.hotCities,
     this.provincesData,
     this.tagBarActiveColor = Colors.yellow,
     this.tagBarFontActiveColor = Colors.red,
@@ -127,11 +129,14 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   /// 用户可定义的, 选项中字体的大小
   double itemFontSize;
 
+
   @override
   void initState() {
     // TODO: implement initState
+    print("hotCities::::: ${widget.hotCities}");
     _cities = CitiesUtils.getAllCitiesByMeta(
         widget.provincesData ?? provincesData, widget.citiesData ?? citiesData);
+    print("_cities::: $_cities");
     _initTargetCity = getInitialCityCode();
 //    print("_cities>>> ${_cities.length}");
 //    print("locationCode ${widget.locationCode}");
@@ -139,6 +144,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
 
     _scrollController = new ScrollController();
 
+    // 向tag 与 city 列表中加入 自定义数据
+    formatHotCities();
     _scrollController.addListener(() {
       _initOffsetRangList();
 //      可以用来强行关闭键盘
@@ -152,6 +159,25 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     itemFontSize = widget.cityItemFontSize;
   }
 
+  void formatHotCities() {
+    if (widget.hotCities != null) {
+      List<Point> hotPoints = [];
+      List<String> hotTags = [];
+      widget.hotCities.forEach((HotCity hotCity) {
+        if (!hotTags.contains(hotCity.tag)) {
+          hotTags.add(hotCity.tag);
+        }
+        hotPoints.add(Point(
+          code: hotCity.id,
+          letter:hotCity.tag,
+          name: hotCity.name,
+          child: []
+        ));
+      });
+      _cities.insertAll(0, hotPoints);
+      _tagList.insertAll(0, hotTags);
+    }
+  }
   Point getInitialCityCode() {
     if (widget.locationCode == null) {
       return null;
@@ -167,7 +193,9 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     if (_offsetTagRangeList.isEmpty) {
       double itemContainerHeight =
           _key0.currentContext.findRenderObject().paintBounds.size.height;
+
       double offstageHeight = topTagHeight;
+
       _offsetTagRangeList = CitiesUtils.getOffsetRangeByCitiesList(
           lists: _cities,
           tagHeight: offstageHeight,
@@ -224,7 +252,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     }
     _changeTimer = new Timer(Duration(milliseconds: 30), () {
       CityOffsetRange cityOffsetRange = _offsetTagRangeList
-          .firstWhere((CityOffsetRange range) => range.tag == alpha);
+          .firstWhere((CityOffsetRange range) => range.tag == alpha, orElse: null);
       if (cityOffsetRange != null) {
         _scrollController.jumpTo(cityOffsetRange.start);
       }
@@ -278,7 +306,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           _tagName = alpha;
         });
         _initOffsetRangList();
-        _onTagChange(alpha.toUpperCase());
+        _onTagChange(alpha);
       },
     );
   }
@@ -316,7 +344,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
                   padding: const EdgeInsets.only(left: 15.0),
                   color: widget.topIndexBgColor,
                   child: Text(
-                    _cities[index].letter.toUpperCase(),
+                    _cities[index].letter,
                     softWrap: true,
                     style: TextStyle(
                         fontSize: widget.topIndexFontSize,
@@ -359,7 +387,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
             padding: const EdgeInsets.only(left: 15.0),
             color: widget.topIndexBgColor,
             child: Text(
-              _tagName ?? _tagList.first.toUpperCase(),
+              _tagName ?? _tagList.first,
               softWrap: true,
               style: TextStyle(
                 fontSize: widget.topIndexFontSize,

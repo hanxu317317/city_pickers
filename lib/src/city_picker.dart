@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:city_pickers/src/base/base.dart';
 import 'package:city_pickers/src/cities_selector/cities_selector.dart';
+import 'package:city_pickers/src/cities_selector/utils.dart';
 import 'package:city_pickers/src/full_page/full_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -128,6 +129,7 @@ class CityPickers {
     String title = '城市选择器',
     Map<String, dynamic> citiesData = meta.citiesData,
     Map<String, dynamic> provincesData = meta.provincesData,
+    List<HotCity> hotCities,
     BaseStyle sideBarStyle,
     BaseStyle cityItemStyle,
     BaseStyle topStickStyle,
@@ -165,6 +167,7 @@ class CityPickers {
                   title: title,
                   provincesData: provincesData,
                   citiesData: citiesData,
+                  hotCities: hotCities,
                   locationCode: locationCode,
                   tagBarActiveColor: _sideBarStyle.backgroundActiveColor,
                   tagBarFontActiveColor: _sideBarStyle.activeColor,
