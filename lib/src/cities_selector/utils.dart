@@ -97,3 +97,11 @@ class CitiesUtils {
     return result;
   }
 }
+
+// 热闹城市对象
+class HotCity {
+  final String name;
+  final int id;
+  final String tag;
+  HotCity({@required this.name, @required this.id, this.tag = "★"});
+}
