@@ -129,7 +129,6 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   /// 用户可定义的, 选项中字体的大小
   double itemFontSize;
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -168,16 +167,16 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           hotTags.add(hotCity.tag);
         }
         hotPoints.add(Point(
-          code: hotCity.id,
-          letter:hotCity.tag,
-          name: hotCity.name,
-          child: []
-        ));
+            code: hotCity.id,
+            letter: hotCity.tag,
+            name: hotCity.name,
+            child: []));
       });
       _cities.insertAll(0, hotPoints);
       _tagList.insertAll(0, hotTags);
     }
   }
+
   Point getInitialCityCode() {
     if (widget.locationCode == null) {
       return null;
@@ -251,8 +250,9 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       _changeTimer.cancel();
     }
     _changeTimer = new Timer(Duration(milliseconds: 30), () {
-      CityOffsetRange cityOffsetRange = _offsetTagRangeList
-          .firstWhere((CityOffsetRange range) => range.tag == alpha, orElse: null);
+      CityOffsetRange cityOffsetRange = _offsetTagRangeList.firstWhere(
+          (CityOffsetRange range) => range.tag == alpha,
+          orElse: null);
       if (cityOffsetRange != null) {
         _scrollController.jumpTo(cityOffsetRange.start);
       }
