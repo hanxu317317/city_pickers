@@ -172,9 +172,9 @@ class WorkInProgressState extends State<WorkInProgress> {
         provincesData: !userSelfMeta ? CityPickers.metaProvinces : provincesData,
         citiesData: !userSelfMeta ? CityPickers.metaCities : citiesData,
         hotCities: [
-          HotCity(id: 0, name: '123'),
-          HotCity(id: 1, name: '222'),
-          HotCity(id: 2, name: '333'),
+          HotCity(id: 0, name: '北京'),
+          HotCity(id: 1, name: '沈阳'),
+          HotCity(id: 2, name: '天津'),
 
         ],
         sideBarStyle: BaseStyle(
