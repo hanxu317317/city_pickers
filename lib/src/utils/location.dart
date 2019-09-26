@@ -6,13 +6,11 @@
 // email: sanfan.hx@alibaba-inc.com
 // target:  处理locationCode相关
 //
-import '../../meta/province.dart';
 import '../../modal/result.dart';
 import '../../modal/point.dart';
 import '../../modal/base_citys.dart';
 
 class Location {
-
   Map<String, dynamic> citiesData;
 
   Map<String, dynamic> provincesData;
@@ -34,11 +32,11 @@ class Location {
 
   Location({this.citiesData, this.provincesData});
 
-
   Result initLocation(String _locationCode) {
 //    print("initLocation >>>> $_locationCode");
 
-    CityTree cityTree = new CityTree(metaInfo: citiesData, provincesInfo: provincesData);
+    CityTree cityTree =
+        new CityTree(metaInfo: citiesData, provincesInfo: provincesData);
 
     int locationCode;
     Result locationInfo = new Result();
@@ -58,11 +56,11 @@ class Location {
     locationInfo.provinceName = provincePoint.name;
     locationInfo.provinceId = provincePoint.code.toString();
 
-
     provincePoint.child.forEach((Point _city) {
       if (_city.code == locationCode) {
         cityPoint = _city;
       }
+
       /// 正常不应该在一个循环中, 如此操作, 但是考虑到地区码的唯一性, 可以在一次双层循环中完成操作. 避免第二层的循环查找
       _city.child.forEach((Point _area) {
         if (_area.code == locationCode) {
@@ -83,5 +81,4 @@ class Location {
 
     return locationInfo;
   }
-
 }

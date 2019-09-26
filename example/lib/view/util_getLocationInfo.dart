@@ -6,7 +6,6 @@
 // email: sanfan.hx@alibaba-inc.com
 // tartget:  xxx
 //
-
 import 'package:flutter/material.dart';
 import 'package:city_pickers/city_pickers.dart';
 
@@ -21,9 +20,8 @@ class _Demo extends State<UtilGetLocationInfo> {
   buttonHandle() {
 
     this.setState(() {
-      result = cityPickerUtils.getAreaResultByCode('110100');
+      result = cityPickerUtils.getAreaResultByCode('aaa');
     });
-    print("result>>>> ${result.toString()}");
   }
   Widget build(BuildContext context) {
     return Scaffold(

@@ -7,7 +7,6 @@
 // target: 开放给city_pickers直接调用的工具方法
 //
 
-
 import 'location.dart';
 import 'package:city_pickers/modal/result.dart';
 
@@ -15,14 +14,13 @@ class CityPickerUtil {
   Map<String, dynamic> citiesData;
   Map<String, dynamic> provincesData;
 
-  CityPickerUtil({
-    this.citiesData,
-    this.provincesData
-  }) : assert(citiesData != null),
-       assert(provincesData != null);
+  CityPickerUtil({this.citiesData, this.provincesData})
+      : assert(citiesData != null),
+        assert(provincesData != null);
 
-  Result getAreaResultByCode (String code) {
-    Location location = new Location(citiesData: citiesData, provincesData: provincesData);
+  Result getAreaResultByCode(String code) {
+    Location location =
+        new Location(citiesData: citiesData, provincesData: provincesData);
     return location.initLocation(code);
   }
 }
