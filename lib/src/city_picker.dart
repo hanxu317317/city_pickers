@@ -7,6 +7,7 @@ import 'package:city_pickers/src/full_page/full_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:city_pickers/src/utils/index.dart';
 
 import '../meta/province.dart' as meta;
 import '../modal/result.dart';
@@ -32,6 +33,14 @@ class CityPickers {
 
   /// static original province data for this plugin
   static Map<String, dynamic> metaProvinces = meta.provincesData;
+
+  static utils(
+      {Map<String, dynamic> provinceData, Map<String, dynamic> citiesData}) {
+    return CityPickerUtil(
+      provincesData: provinceData ?? meta.provincesData,
+      citiesData: citiesData ?? meta.citiesData,
+    );
+  }
 
   /// use
   /// @param context BuildContext for navigator
