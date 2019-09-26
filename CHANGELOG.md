@@ -1,3 +1,5 @@
+## 0.1.26
+- 暴露utils函数接口. 提供 `getAreaResultByCode` 方法
 ## 0.1.25
 - 更新文档, hotTags => hotCities
 

@@ -46,17 +46,16 @@ Result result2 = await CityPickers.showCitiesSelector(
 );
 ```
 
-### 注意事项
 
-showCitiesSelector 是在版本:0.1.16中刚封装出的功能. 可能存在不稳定或者未知的bug. 欢迎大家使用的时候提出反馈与issue.
-
-### CityPickers 静态方法
+## CityPickers 静态方法
 
 |Name|Type|Desc|
 |:---------------|:--------|:----------|
 |showCityPicker|Function|呼出弹出层,显示多级选择器 |
 |showFullPageCityPicker|Function|呼出一层界面, 显示多级选择器|
 |showCitiesSelector |Function|呼出一层, 显示支持字母定位城市选择器|
+|utils|Function|获取utils接口的钩子|
+
 
 
 ### showCityPicker 参数说明
@@ -105,6 +104,25 @@ showCitiesSelector 是在版本:0.1.16中刚封装出的功能. 可能存在不�
 |sideBarStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 右侧字母索引集样式|
 |cityItemStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 城市选项样式|
 |topStickStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 顶部索引吸顶样式|
+
+
+### utils 说明
+utils 是用来封装常用的一些方法, 方便使用者能更好的使用该插件. 使用者通过以下方式声明实例, 可以**获取所有的工具类方法**
+
+```
+// 声明实例
+CityPickerUtil cityPickerUtils = CityPickers.utils();
+```
+
+#### Result getAreaResultByCode(String code)
+
+使用者通过地区ID, 获取所在区域的省市县等相关信息. 当未查询到具体信息. 返回空的Result对象.
+
+```
+print('result>>> ${cityPickerUtils.getAreaResultByCode('100100)}');
+
+// 输出为: result>>>> {"provinceName":"北京市","provinceId":"110000","cityName":"东城区","cityId":"110101"}
+```
 
 
 
