@@ -36,9 +36,10 @@ class CityPickers {
 
   static utils(
       {Map<String, dynamic> provinceData, Map<String, dynamic> citiesData}) {
+    print("CityPickers.metaProvinces::: ${CityPickers.metaCities}");
     return CityPickerUtil(
-      provincesData: provinceData ?? meta.provincesData,
-      citiesData: citiesData ?? meta.citiesData,
+      provincesData: CityPickers.metaProvinces ,
+      citiesData: CityPickers.metaCities,
     );
   }
 
