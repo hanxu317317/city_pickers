@@ -50,6 +50,7 @@ class Location {
       }
     }
     provincePoint = cityTree.initTreeByCode(locationCode);
+
     if (provincePoint == null || provincePoint.isNull) {
       return locationInfo;
     }
@@ -69,14 +70,15 @@ class Location {
         }
       });
     });
+
     if (cityPoint != null && !cityPoint.isNull) {
       locationInfo.cityName = cityPoint.name;
       locationInfo.cityId = cityPoint.code.toString();
     }
 
     if (areaPoint != null && !areaPoint.isNull) {
-      locationInfo.cityName = areaPoint.name;
-      locationInfo.cityId = areaPoint.code.toString();
+      locationInfo.areaName = areaPoint.name;
+      locationInfo.areaId = areaPoint.code.toString();
     }
 
     return locationInfo;
