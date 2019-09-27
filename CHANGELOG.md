@@ -1,3 +1,6 @@
+## 0.1.27
+- 解决 `getAreaResultByCode` 中. 错误赋值导致的bug. #65
+
 ## 0.1.26
 - 暴露utils函数接口. 提供 `getAreaResultByCode` 方法
 ## 0.1.25
