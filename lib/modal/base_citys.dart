@@ -48,9 +48,10 @@ class CityTree {
   /// @return tree
   initTree(int provinceId) {
     String _cacheKey = provinceId.toString();
-    if (_cache.has(_cacheKey)) {
-      return tree = _cache.get(_cacheKey);
-    }
+//    这里为了避免 https://github.com/hanxu317317/city_pickers/issues/68
+//    if (_cache.has(_cacheKey)) {
+//      return tree = _cache.get(_cacheKey);
+//    }
 
     String name = this._provincesData[provinceId.toString()];
     String letter = PinyinHelper.getFirstWordPinyin(name).substring(0, 1);
