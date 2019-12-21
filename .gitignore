@@ -10,4 +10,6 @@ build/
 .metadata
 city_pickers.iml
 lib/meta/_province.dart
+example/ios/Flutter/flutter_export_environment.sh
 android/local.properties
+
