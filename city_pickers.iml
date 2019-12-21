@@ -17,24 +17,11 @@
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/app/intermediates/flutter/debug/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/ios/Debug-iphoneos/Runner.app/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/ios/Debug-iphonesimulator/Runner.app/Frameworks/App.framework/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/ios/Debug-iphonesimulator/Runner.app/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/ios/Profile-iphoneos/Runner.app/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/ios/iphoneos/Runner.app/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/ios/iphonesimulator/Runner.app/Frameworks/App.framework/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build/ios/iphonesimulator/Runner.app/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/ios/Flutter/App.framework/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/ios/Flutter/flutter_assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Flutter/App.framework/flutter_assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Flutter/flutter_assets/packages" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />
     <orderEntry type="library" name="Flutter Plugins" level="project" />
-    <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
 </module>
