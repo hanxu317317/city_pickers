@@ -14,6 +14,9 @@
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/city_pickers/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Flutter/App.framework/flutter_assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Flutter/flutter_assets/packages" />
     </content>
