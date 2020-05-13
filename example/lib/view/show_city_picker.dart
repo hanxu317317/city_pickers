@@ -7,6 +7,7 @@
 // target:  基本用法
 //
 
+import 'package:city_pickers_example/meta/province_nm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:city_pickers/city_pickers.dart';
@@ -23,12 +24,12 @@ class ShowCityPicker extends StatefulWidget {
 }
 
 class _ShowCityPickerState extends State<ShowCityPicker> {
-  PickerItem showTypeAttr = PickerItem(name: '省+市+县', value: ShowType.pca);
+  PickerItem showTypeAttr = PickerItem(name: '省+市+县+乡', value: ShowType.pcav);
   Result resultAttr = new Result();
   Result result = new Result();
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
-  bool customerMeta = false;
+  bool customerMeta = true;
   bool customerItemBuilder = false;
   double customerItemExtent = 40;
   bool customerButtons = false;
@@ -52,7 +53,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         PickerItem(name: '县', value: ShowType.a),
         PickerItem(name: '省+市', value: ShowType.pc),
         PickerItem(name: '省+市+县', value: ShowType.pca),
-        PickerItem(name: '市+县', value: ShowType.ca),
+        PickerItem(name: '省+市+县+乡', value: ShowType.pcav),
+        PickerItem(name: '市+县+乡', value: ShowType.cav),
       ],
     );
   }
@@ -107,7 +109,23 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
               }
             },
           ),
-        )
+        ),
+        Expanded(
+          flex: 1,
+          child: LocationSelector(
+            target: Text("${resultAttr.villageName ?? '乡'}",
+                maxLines: 1, overflow: TextOverflow.ellipsis),
+            showType: ShowType.a,
+            initResult: resultAttr,
+            onConfirm: (Result result) {
+              if (result.villageId != null) {
+                setState(() {
+                  resultAttr = result;
+                });
+              }
+            },
+          ),
+        ),
       ],
     );
   }
@@ -293,8 +311,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
                   isSort: isSort,
                   barrierOpacity: barrierOpacityAttr,
                   barrierDismissible: barrierDismissibleAttr,
-                  citiesData: customerMeta == true ? citiesData : null,
-                  provincesData: customerMeta == true ? provincesData : null,
+                  citiesData: customerMeta == true ? citiesDataNm : null,
+                  provincesData: customerMeta == true ? provincesDataNm : null,
                   itemExtent: customerItemExtent,
                   cancelWidget: customerButtons ? Text('cancle') : null,
                   confirmWidget: customerButtons ? Text('confirm') : null,
