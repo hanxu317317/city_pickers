@@ -129,7 +129,7 @@ print('result>>> ${cityPickerUtils.getAreaResultByCode('100100)}');
 
 # 数据来源
 
- [National Bureau of Statistics](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
+ [National Bureau of Statistics](https://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
 
 
 # 声明

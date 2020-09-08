@@ -17,7 +17,7 @@ class InheritRouteWidget extends InheritedWidget {
       : super(key: key, child: child);
 
   static InheritRouteWidget of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(InheritRouteWidget);
+    return context.dependOnInheritedWidgetOfExactType();
   }
 
   @override

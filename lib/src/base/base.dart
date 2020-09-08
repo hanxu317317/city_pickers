@@ -1,11 +1,3 @@
-/**
- * Created with Android Studio.
- * User: 三帆
- * Date: 28/01/2019
- * Time: 18:20
- * email: sanfan.hx@alibaba-inc.com
- * tartget:  xxx
- */
 import 'dart:async';
 
 import 'package:city_pickers/modal/base_citys.dart';
@@ -537,7 +529,7 @@ class _MyCityPickerState extends State<_MyCityPicker> {
                 }
 
                 String text = widget.itemList[index];
-                
+
                 // TODO 根据字数调整字体大小，不够优雅，可以改为根据函数计算字体大小
                 double fontSize = 13;
                 if (text != null) {
