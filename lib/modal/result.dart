@@ -20,6 +20,8 @@ class Result {
   /// areaId
   String areaId;
 
+  String villageId;// 增加第4级(村/镇)选择
+
   /// provinceName
   String provinceName;
 
@@ -29,13 +31,19 @@ class Result {
   /// areaName
   String areaName;
 
+  String villageName;// 增加第4级(村/镇)选择
+
   Result(
       {this.provinceId,
       this.cityId,
       this.areaId,
+      // 增加第4级(村/镇)选择
+      this.villageId,
       this.provinceName,
       this.cityName,
-      this.areaName});
+      this.areaName,
+      // 增加第4级(村/镇)选择
+      this.villageName});
 
   /// string json
   @override
@@ -45,9 +53,11 @@ class Result {
       'provinceName': provinceName,
       'provinceId': provinceId,
       'cityName': cityName,
+      'villageName': villageName,// 增加第4级(村/镇)选择
       'cityId': cityId,
       'areaName': areaName,
-      'areaId': areaId
+      'areaId': areaId,
+      'villageId': villageId// 增加第4级(村/镇)选择
     };
     obj.removeWhere((key, value) => value == null);
 

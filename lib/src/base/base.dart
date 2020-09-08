@@ -67,6 +67,7 @@ class _BaseView extends State<BaseView> {
   FixedExtentScrollController provinceController;
   FixedExtentScrollController cityController;
   FixedExtentScrollController areaController;
+  FixedExtentScrollController villageController;// 增加第4级(村/镇)选择
 
   // 所有省的列表. 因为性能等综合原因,
   // 没有一次性构建整个以国为根的树. 动态的构建以省为根的树, 效率高.
@@ -76,6 +77,7 @@ class _BaseView extends State<BaseView> {
   Point targetProvince;
   Point targetCity;
   Point targetArea;
+  Point targetVillage;// 增加第4级(村/镇)选择
 
   @override
   void initState() {
@@ -100,6 +102,7 @@ class _BaseView extends State<BaseView> {
     provinceController.dispose();
     cityController.dispose();
     areaController.dispose();
+    villageController.dispose();// 增加第4级(村/镇)选择
     if (_changeTimer != null && _changeTimer.isActive) {
       _changeTimer.cancel();
     }
@@ -119,6 +122,11 @@ class _BaseView extends State<BaseView> {
     areaController = new FixedExtentScrollController(
         initialItem: targetCity.child
             .indexWhere((Point p) => p.code == targetArea.code));
+
+    // 增加第4级(村/镇)选择
+    villageController = new FixedExtentScrollController(
+        initialItem: targetArea.child
+            .indexWhere((Point p) => p.code == targetVillage.code));
   }
 
   // 重置Controller的原因在于, 无法手动去更改initialItem, 也无法通过
@@ -130,6 +138,7 @@ class _BaseView extends State<BaseView> {
 
     cityController = new FixedExtentScrollController(initialItem: 0);
     areaController = new FixedExtentScrollController(initialItem: 0);
+    villageController = new FixedExtentScrollController(initialItem: 0);// 增加第4级(村/镇)选择
     _resetControllerOnce = true;
   }
 
@@ -155,12 +164,24 @@ class _BaseView extends State<BaseView> {
         if (_city.code == _locationCode) {
           targetCity = _city;
           targetArea = _getTargetChildFirst(_city);
+          // 增加第4级(村/镇)选择
+          targetVillage = _getTargetChildFirst(targetArea);
         }
         _city.child.forEach((Point _area) {
           if (_area.code == _locationCode) {
             targetCity = _city;
             targetArea = _area;
+            // 增加第4级(村/镇)选择
+            targetVillage = _getTargetChildFirst(_area);
           }
+          _area.child?.forEach((Point _village) {
+            if (_village.code == _locationCode) {
+              targetCity = _city;
+              targetArea = _area;
+              // 增加第4级(村/镇)选择
+              targetVillage = _village;
+            }
+          });
         });
       });
     } else {
@@ -175,6 +196,11 @@ class _BaseView extends State<BaseView> {
     // 尝试试图匹配到下一个级别的第一个,
     if (targetArea == null) {
       targetArea = _getTargetChildFirst(targetCity);
+    }
+    // 增加第4级(村/镇)选择
+    // 尝试试图匹配到下一个级别的第一个,
+    if (targetVillage == null) {
+      targetVillage = _getTargetChildFirst(targetArea);
     }
   }
 
@@ -206,6 +232,16 @@ class _BaseView extends State<BaseView> {
     return result;
   }
 
+  // 增加第4级(村/镇)选择
+  List<String> getVillageItemList() {
+    List<String> result = [];
+
+    if (targetArea != null) {
+      result.addAll(targetArea.child.toList().map((p) => p.name).toList());
+    }
+    return result;
+  }
+
   // province change handle
   // 加入延时处理, 减少构建树的消耗
   _onProvinceChange(Point _province) {
@@ -219,6 +255,7 @@ class _BaseView extends State<BaseView> {
         targetProvince = _provinceTree;
         targetCity = _getTargetChildFirst(_provinceTree);
         targetArea = _getTargetChildFirst(targetCity);
+        targetVillage = _getTargetChildFirst(targetArea);// 增加第4级(村/镇)选择
         _resetController();
       });
     });
@@ -250,6 +287,19 @@ class _BaseView extends State<BaseView> {
     });
   }
 
+  // 增加第4级(村/镇)选择
+  _onVillageChange(Point _targetVillage) {
+    if (_changeTimer != null && _changeTimer.isActive) {
+      _changeTimer.cancel();
+    }
+    _changeTimer = new Timer(Duration(milliseconds: 500), () {
+      if (!mounted) return;
+      setState(() {
+        targetVillage = _targetVillage;
+      });
+    });
+  }
+
   Result _buildResult() {
     Result result = Result();
     ShowType showType = widget.showType;
@@ -271,12 +321,26 @@ class _BaseView extends State<BaseView> {
       result.areaId = targetArea != null ? targetArea.code.toString() : null;
       result.areaName = targetArea != null ? targetArea.name : null;
     }
+
+    // 增加第4级(村/镇)选择
+    if (showType.contain(ShowType.v)) {
+      result.provinceId = targetProvince.code.toString();
+      result.provinceName = targetProvince.name;
+      result.cityId = targetCity != null ? targetCity.code.toString() : null;
+      result.cityName = targetCity != null ? targetCity.name : null;
+      result.areaId = targetArea != null ? targetArea.code.toString() : null;
+      result.areaName = targetArea != null ? targetArea.name : null;
+      result.villageId = targetVillage != null ? targetVillage.code.toString() : null;
+      result.villageName = targetVillage != null ? targetVillage.name : null;
+    }
     // 台湾异常数据. 需要过滤
     if (result.provinceId == "710000") {
       result.cityId = null;
       result.cityName = null;
       result.areaId = null;
       result.areaName = null;
+      result.villageId = null;
+      result.villageName = null;
     }
     return result;
   }
@@ -361,6 +425,19 @@ class _BaseView extends State<BaseView> {
                     itemList: getAreaItemList(),
                     changed: (index) {
                       _onAreaChange(targetCity.child[index]);
+                    },
+                  ),
+                  new _MyCityPicker(// 增加第4级(村/镇)选择
+                    key: Key('villages $targetArea'),
+                    isShow: widget.showType.contain(ShowType.v),
+                    controller: villageController,
+                    itemBuilder: widget.itemBuilder,
+                    itemExtent: widget.itemExtent,
+                    value: targetVillage == null ? null : targetVillage.name,
+                    height: widget.height,
+                    itemList: getVillageItemList(),
+                    changed: (index) {
+                      _onVillageChange(targetArea.child[index]);
                     },
                   )
                 ],
@@ -458,10 +535,35 @@ class _MyCityPickerState extends State<_MyCityPicker> {
                   return widget.itemBuilder(
                       widget.itemList[index], widget.itemList, index);
                 }
+
+                String text = widget.itemList[index];
+                
+                // TODO 根据字数调整字体大小，不够优雅，可以改为根据函数计算字体大小
+                double fontSize = 13;
+                if (text != null) {
+                  int len = text.length;
+                  if (len >=1 && len<= 3) {
+                    fontSize = 20;
+                  } else if (len > 3 && len <=4) {
+                    fontSize = 18;
+                  } else if(len > 4 && len <=5) {
+                    fontSize = 16;
+                  } else if(len > 5 && len <=6) {
+                    fontSize = 12;
+                  } else if(len > 6 && len <=9) {
+                    fontSize = 10;
+                  } else if(len > 9) {
+                    fontSize = 7;
+                  }
+                }
                 return Center(
                   child: Text(
-                    '${widget.itemList[index]}',
+                    '$text',
+                    overflow: TextOverflow.ellipsis,// 字数过多时显示省略号
                     maxLines: 1,
+                    style: TextStyle(
+                      fontSize: fontSize
+                    ),
                   ),
                 );
               },
