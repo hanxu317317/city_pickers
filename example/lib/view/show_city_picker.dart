@@ -7,6 +7,7 @@
 // target:  基本用法
 //
 
+import 'package:city_pickers_example/meta/province_nm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:city_pickers/city_pickers.dart';
@@ -23,12 +24,12 @@ class ShowCityPicker extends StatefulWidget {
 }
 
 class _ShowCityPickerState extends State<ShowCityPicker> {
-  PickerItem showTypeAttr = PickerItem(name: '省+市+县', value: ShowType.pca);
+  PickerItem showTypeAttr = PickerItem(name: '省+市+县+乡', value: ShowType.pcav);
   Result resultAttr = new Result();
   Result result = new Result();
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
-  bool customerMeta = false;
+  bool customerMeta = true;
   bool customerItemBuilder = false;
   double customerItemExtent = 40;
   bool customerButtons = false;
@@ -52,7 +53,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         PickerItem(name: '县', value: ShowType.a),
         PickerItem(name: '省+市', value: ShowType.pc),
         PickerItem(name: '省+市+县', value: ShowType.pca),
-        PickerItem(name: '市+县', value: ShowType.ca),
+        PickerItem(name: '省+市+县+乡', value: ShowType.pcav),
+        PickerItem(name: '市+县+乡', value: ShowType.cav),
       ],
     );
   }
@@ -107,7 +109,23 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
               }
             },
           ),
-        )
+        ),
+        Expanded(
+          flex: 1,
+          child: LocationSelector(
+            target: Text("${resultAttr.villageName ?? '乡'}",
+                maxLines: 1, overflow: TextOverflow.ellipsis),
+            showType: ShowType.a,
+            initResult: resultAttr,
+            onConfirm: (Result result) {
+              if (result.villageId != null) {
+                setState(() {
+                  resultAttr = result;
+                });
+              }
+            },
+          ),
+        ),
       ],
     );
   }
@@ -262,53 +280,55 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
       appBar: AppBar(
         title: Text("ios风格城市选择器"),
       ),
-      body: Column(
-        children: <Widget>[
-          AttrItemContainer(title: '级联方式', editor: _buildShowTypes()),
-          AttrItemContainer(title: '默认地址', editor: _buildDefaultLocation()),
-          AttrItemContainer(title: '背景透明度', editor: _buildBarrierOpacity()),
-          AttrItemContainer(title: '选中区域高度', editor: _buildItemExtent()),
-          AttrItemContainer(
-              title: '背景点击关闭', editor: _buildBarrierDismissible()),
-          AttrItemContainer(title: '是否采用自定义数据', editor: _buildCustomerMeta()),
-          AttrItemContainer(
-              title: '是否采用自定义的头部按钮', editor: _buildCustomerButtons()),
-          AttrItemContainer(title: '自定义item渲染', editor: _buildCustomerItem()),
-          AttrItemContainer(title: '数据是否排序', editor: _buildSortItem()),
-          AttrItemContainer(title: '主题选择', editor: _buildTheme()),
-          AttrItemContainer(
-              title: '选择结果', editor: Text("${result.toString()}")),
-          RaisedButton(
-            onPressed: () async {
-              print("locationCode $resultAttr");
-              Result tempResult = await CityPickers.showCityPicker(
-                  context: context,
-                  theme: themeAttr != null ? themeAttr.value : null,
-                  locationCode: resultAttr != null
-                      ? resultAttr.areaId ??
-                          resultAttr.cityId ??
-                          resultAttr.provinceId
-                      : null,
-                  showType: showTypeAttr.value,
-                  isSort: isSort,
-                  barrierOpacity: barrierOpacityAttr,
-                  barrierDismissible: barrierDismissibleAttr,
-                  citiesData: customerMeta == true ? citiesData : null,
-                  provincesData: customerMeta == true ? provincesData : null,
-                  itemExtent: customerItemExtent,
-                  cancelWidget: customerButtons ? Text('cancle') : null,
-                  confirmWidget: customerButtons ? Text('confirm') : null,
-                  itemBuilder: this.getItemBuilder());
-              if (tempResult == null) {
-                return;
-              }
-              this.setState(() {
-                result = tempResult;
-              });
-            },
-            child: Text("展示city picker"),
-          )
-        ],
+      body: SingleChildScrollView(// 防止边界超出
+        child: Column(
+          children: <Widget>[
+            AttrItemContainer(title: '级联方式', editor: _buildShowTypes()),
+            AttrItemContainer(title: '默认地址', editor: _buildDefaultLocation()),
+            AttrItemContainer(title: '背景透明度', editor: _buildBarrierOpacity()),
+            AttrItemContainer(title: '选中区域高度', editor: _buildItemExtent()),
+            AttrItemContainer(
+                title: '背景点击关闭', editor: _buildBarrierDismissible()),
+            AttrItemContainer(title: '是否采用自定义数据', editor: _buildCustomerMeta()),
+            AttrItemContainer(
+                title: '是否采用自定义的头部按钮', editor: _buildCustomerButtons()),
+            AttrItemContainer(title: '自定义item渲染', editor: _buildCustomerItem()),
+            AttrItemContainer(title: '数据是否排序', editor: _buildSortItem()),
+            AttrItemContainer(title: '主题选择', editor: _buildTheme()),
+            AttrItemContainer(
+                title: '选择结果', editor: Text("${result.toString()}")),
+            RaisedButton(
+              onPressed: () async {
+                print("locationCode $resultAttr");
+                Result tempResult = await CityPickers.showCityPicker(
+                    context: context,
+                    theme: themeAttr != null ? themeAttr.value : null,
+                    locationCode: resultAttr != null
+                        ? resultAttr.areaId ??
+                        resultAttr.cityId ??
+                        resultAttr.provinceId
+                        : null,
+                    showType: showTypeAttr.value,
+                    isSort: isSort,
+                    barrierOpacity: barrierOpacityAttr,
+                    barrierDismissible: barrierDismissibleAttr,
+                    citiesData: customerMeta == true ? citiesDataNm : null,
+                    provincesData: customerMeta == true ? provincesDataNm : null,
+                    itemExtent: customerItemExtent,
+                    cancelWidget: customerButtons ? Text('cancle') : null,
+                    confirmWidget: customerButtons ? Text('confirm') : null,
+                    itemBuilder: this.getItemBuilder());
+                if (tempResult == null) {
+                  return;
+                }
+                this.setState(() {
+                  result = tempResult;
+                });
+              },
+              child: Text("展示city picker"),
+            )
+          ],
+        ),
       ),
     );
   }
