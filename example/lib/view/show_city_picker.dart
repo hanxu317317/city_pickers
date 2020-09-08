@@ -14,7 +14,6 @@ import 'package:city_pickers/city_pickers.dart';
 import '../src/attr_item_container.dart';
 import '../src/location_selector.dart';
 import '../src/picker.dart';
-import '../meta/province.dart';
 
 var emptyResult = new Result();
 
