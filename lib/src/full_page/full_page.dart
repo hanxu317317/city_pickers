@@ -170,12 +170,12 @@ class _FullPageState extends State<FullPage> {
     }
 
     // 台湾异常数据. 需要过滤
-    if (result.provinceId == "710000") {
-      result.cityId = null;
-      result.cityName = null;
-      result.areaId = null;
-      result.areaName = null;
-    }
+    // if (result.provinceId == "710000") {
+    //   result.cityId = null;
+    //   result.cityName = null;
+    //   result.areaId = null;
+    //   result.areaName = null;
+    // }
     return result;
   }
 

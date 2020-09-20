@@ -326,14 +326,14 @@ class _BaseView extends State<BaseView> {
       result.villageName = targetVillage != null ? targetVillage.name : null;
     }
     // 台湾异常数据. 需要过滤
-    if (result.provinceId == "710000") {
-      result.cityId = null;
-      result.cityName = null;
-      result.areaId = null;
-      result.areaName = null;
-      result.villageId = null;
-      result.villageName = null;
-    }
+    // if (result.provinceId == "710000") {
+    //   result.cityId = null;
+    //   result.cityName = null;
+    //   result.areaId = null;
+    //   result.areaName = null;
+    //   result.villageId = null;
+    //   result.villageName = null;
+    // }
     return result;
   }
 
