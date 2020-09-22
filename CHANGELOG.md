@@ -1,3 +1,8 @@
+# 1.0.0
+- 将plugin 转为 package 包
+- 放开放有兼容的逻辑报错. 比如台湾的特殊处理
+- 删除src/android & src/ios等资源
+
 # 0.2.0
 - 更新四级联动, 更新依赖
 - 更新最新flutter与dart依赖
