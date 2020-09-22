@@ -166,6 +166,7 @@ class _FullPageState extends State<FullPage> {
         result.areaName = targetArea != null ? targetArea.name : null;
       }
     } catch (e) {
+      print('Exception details:\n _buildResult error \n $e');
       // 此处兼容, 部分城市下无地区信息的情况
     }
 
