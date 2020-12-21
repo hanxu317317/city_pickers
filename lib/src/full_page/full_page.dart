@@ -222,7 +222,7 @@ class _FullPageState extends State<FullPage> {
         selectId = targetCity.code;
         break;
       case Status.Area:
-        selectId = targetArea.code;
+        selectId = targetArea?.code;
         break;
       case Status.Over:
         break;
