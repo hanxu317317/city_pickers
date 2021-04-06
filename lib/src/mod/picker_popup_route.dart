@@ -11,15 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:city_pickers/src/mod/inherit_process.dart';
 
 class CityPickerRoute<T> extends PopupRoute<T> {
-  final ThemeData theme;
-  final String barrierLabel;
+  final ThemeData? theme;
+  final String? barrierLabel;
   final bool canBarrierDismiss;
   final Widget child;
   final double barrierOpacity;
 
   CityPickerRoute({
     this.theme,
-    this.child,
+    required this.child,
     this.canBarrierDismiss = true,
     this.barrierOpacity = 0.5,
     this.barrierLabel,
@@ -35,14 +35,14 @@ class CityPickerRoute<T> extends PopupRoute<T> {
   @override
   bool get barrierDismissible => canBarrierDismiss;
 
-  AnimationController _animationController;
+  AnimationController? _animationController;
 
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);
     _animationController =
-        BottomSheet.createAnimationController(navigator.overlay);
-    return _animationController;
+        BottomSheet.createAnimationController(navigator!.overlay!);
+    return _animationController!;
   }
 
   @override
@@ -53,7 +53,7 @@ class CityPickerRoute<T> extends PopupRoute<T> {
         context: context,
         child: InheritRouteWidget(router: this, child: child));
     if (theme != null) {
-      bottomSheet = new Theme(data: theme, child: bottomSheet);
+      bottomSheet = new Theme(data: theme!, child: bottomSheet);
     }
     return bottomSheet;
   }

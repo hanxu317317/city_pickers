@@ -13,19 +13,19 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class ColorPickers extends StatefulWidget {
   final Widget target;
-  final Color initColor;
+  final Color? initColor;
   final ValueChanged<Color> onConfirm;
 
-  ColorPickers({this.initColor, this.onConfirm, @required this.target});
+  ColorPickers({required this.initColor, required this.onConfirm, required this.target});
 
   @override
   _ColorPickersState createState() => _ColorPickersState();
 }
 
 class _ColorPickersState extends State<ColorPickers> {
-  Color pickerColor = Colors.red;
+  late Color pickerColor;
 
-  Color currentColor = Colors.red;
+  late Color currentColor;
 
   @override
   void initState() {
@@ -83,7 +83,6 @@ class _ColorPickersState extends State<ColorPickers> {
                     child: ColorPicker(
                       pickerColor: pickerColor,
                       onColorChanged: onChangeColor,
-                      enableLabel: true,
                       pickerAreaHeightPercent: 0.8,
                     ),
                   ),

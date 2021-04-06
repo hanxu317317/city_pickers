@@ -13,10 +13,10 @@ import 'picker_popup_route.dart';
 class InheritRouteWidget extends InheritedWidget {
   final CityPickerRoute router;
 
-  InheritRouteWidget({Key key, @required this.router, Widget child})
+  InheritRouteWidget({Key? key, required this.router, required Widget child})
       : super(key: key, child: child);
 
-  static InheritRouteWidget of(BuildContext context) {
+  static InheritRouteWidget? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType();
   }
 

@@ -14,24 +14,34 @@ import '../../modal/point.dart';
 
 // 城市列表偏移量结构
 class CityOffsetRange {
-  double start;
-  double end;
-  String tag;
+  late double start;
+  late double end;
+  late String tag;
 
-  CityOffsetRange({this.start, this.end, this.tag});
+  CityOffsetRange({required this.start, required this.end, required this.tag});
+
+  CityOffsetRange.empty() {
+    this.start = -1;
+    this.end = -1;
+    this.tag = "";
+  }
+
+  bool isEmpty() {
+    return start == -1 && end == -1 && tag == "";
+  }
 }
 
 class TagCount {
   int count;
   String letter;
 
-  TagCount({this.count, this.letter});
+  TagCount({required this.count, required this.letter});
 }
 
 class CitiesUtils {
   /// 获取城市选择器所有的数据
   static List<Point> getAllCitiesByMeta(
-      Map provinceMeta, Map<String, dynamic> citiesMeta) {
+      Map<String, String> provinceMeta, Map<String, dynamic> citiesMeta) {
     List<Point> trees = [];
     List<Point> cities = [];
     CityTree citiesTreeBuilder =
@@ -43,10 +53,10 @@ class CitiesUtils {
       cities.addAll(tree.child);
     });
     cities.sort((Point a, Point b) {
-      return a.letter.codeUnitAt(0) - b.letter.codeUnitAt(0);
+      return a.letter!.codeUnitAt(0) - b.letter!.codeUnitAt(0);
     });
     cities.forEach((Point point) {
-      point.letter = point.letter.toUpperCase();
+      point.letter = point.letter!.toUpperCase();
     });
     return cities;
   }
@@ -58,17 +68,17 @@ class CitiesUtils {
     String lastTag = '';
     citiesList.forEach((Point item) {
       if (item.letter != lastTag) {
-        validTags.add(item.letter);
-        lastTag = item.letter;
+        validTags.add(item.letter!);
+        lastTag = item.letter!;
       }
     });
     return validTags;
   }
 
   static List<CityOffsetRange> getOffsetRangeByCitiesList(
-      {@required List<Point> lists,
-      @required double itemHeight,
-      @required double tagHeight}) {
+      {required List<Point> lists,
+      required double itemHeight,
+      required double tagHeight}) {
     List<TagCount> categoriesList = [];
     List<CityOffsetRange> result = [];
 
@@ -76,8 +86,8 @@ class CitiesUtils {
     String lastTag = '';
     lists.forEach((Point item) {
       if (item.letter != lastTag) {
-        categoriesList.add(TagCount(letter: item.letter, count: 0));
-        lastTag = item.letter;
+        categoriesList.add(TagCount(letter: item.letter!, count: 0));
+        lastTag = item.letter!;
       }
     });
     lists.forEach((Point item) {
@@ -103,5 +113,6 @@ class HotCity {
   final String name;
   final int id;
   final String tag;
-  HotCity({@required this.name, @required this.id, this.tag = "★"});
+
+  HotCity({required this.name, required this.id, this.tag = "★"});
 }

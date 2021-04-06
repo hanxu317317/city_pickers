@@ -17,13 +17,17 @@ import 'package:city_pickers/src/util.dart';
 import 'package:flutter/material.dart';
 
 class FullPage extends StatefulWidget {
-  final String locationCode;
+  final String? locationCode;
   final ShowType showType;
-  final Map<String, dynamic> provincesData;
+  final Map<String, String> provincesData;
   final Map<String, dynamic> citiesData;
 
-  FullPage(
-      {this.locationCode, this.showType, this.provincesData, this.citiesData});
+  FullPage({
+    this.locationCode,
+    required this.showType,
+    required this.provincesData,
+    required this.citiesData,
+  });
 
   @override
   _FullPageState createState() => _FullPageState();
@@ -41,37 +45,37 @@ class HistoryPageInfo {
   Status status;
   List<Point> itemList;
 
-  HistoryPageInfo({this.status, this.itemList});
+  HistoryPageInfo({required this.status, required this.itemList});
 }
 
 class _FullPageState extends State<FullPage> {
   /// list scroll control
-  ScrollController scrollController;
+  late ScrollController scrollController;
 
   /// provinces object [Point]
-  List<Point> provinces;
+  late List<Point> provinces;
 
   /// cityTree modal ,for building tree that root is province
-  CityTree cityTree;
+  late CityTree cityTree;
 
   /// page current statue, show p or a or c or over
-  Status pageStatus;
+  late Status pageStatus;
 
   /// show items maybe province city or area;
 
-  List<Point> itemList;
+  late List<Point> itemList;
 
   /// body history, the max length is three
   List<HistoryPageInfo> _history = [];
 
   /// the target province user selected
-  Point targetProvince;
+  late Point targetProvince;
 
   /// the target city user selected
-  Point targetCity;
+  Point? targetCity;
 
   /// the target area user selected
-  Point targetArea;
+  Point? targetArea;
 
   @override
   void initState() {
@@ -91,7 +95,7 @@ class _FullPageState extends State<FullPage> {
   }
 
   Future<bool> back() {
-    HistoryPageInfo last = _history.length > 0 ? _history.last : null;
+    HistoryPageInfo? last = _history.length > 0 ? _history.last : null;
     if (last != null && mounted) {
       this.setState(() {
         pageStatus = last.status;
@@ -103,7 +107,7 @@ class _FullPageState extends State<FullPage> {
     return Future<bool>.value(true);
   }
 
-  void _initLocation(String locationCode) {
+  void _initLocation(String? locationCode) {
     int _locationCode;
     if (locationCode != null) {
       try {
@@ -116,7 +120,7 @@ class _FullPageState extends State<FullPage> {
 
       targetProvince = cityTree.initTreeByCode(_locationCode);
       if (targetProvince.isNull) {
-        targetProvince = cityTree.initTreeByCode(provinces.first.code);
+        targetProvince = cityTree.initTreeByCode(provinces.first.code!);
       }
       targetProvince.child.forEach((Point _city) {
         if (_city.code == _locationCode) {
@@ -139,7 +143,7 @@ class _FullPageState extends State<FullPage> {
       targetCity = _getTargetChildFirst(targetProvince);
     }
     if (targetArea == null) {
-      targetArea = _getTargetChildFirst(targetCity);
+      targetArea = _getTargetChildFirst(targetCity!);
     }
   }
 
@@ -154,16 +158,16 @@ class _FullPageState extends State<FullPage> {
       if (showType.contain(ShowType.c)) {
         result.provinceId = targetProvince.code.toString();
         result.provinceName = targetProvince.name;
-        result.cityId = targetCity != null ? targetCity.code.toString() : null;
-        result.cityName = targetCity != null ? targetCity.name : null;
+        result.cityId = targetCity?.code.toString();
+        result.cityName = targetCity?.name;
       }
       if (showType.contain(ShowType.a)) {
         result.provinceId = targetProvince.code.toString();
         result.provinceName = targetProvince.name;
-        result.cityId = targetCity != null ? targetCity.code.toString() : null;
-        result.cityName = targetCity != null ? targetCity.name : null;
-        result.areaId = targetArea != null ? targetArea.code.toString() : null;
-        result.areaName = targetArea != null ? targetArea.name : null;
+        result.cityId = targetCity?.code.toString();
+        result.cityName = targetCity?.name;
+        result.areaId = targetArea?.code.toString();
+        result.areaName = targetArea?.name;
       }
     } catch (e) {
       print('Exception details:\n _buildResult error \n $e');
@@ -180,7 +184,7 @@ class _FullPageState extends State<FullPage> {
     return result;
   }
 
-  Point _getTargetChildFirst(Point target) {
+  Point? _getTargetChildFirst(Point target) {
     if (target == null) {
       return null;
     }
@@ -196,7 +200,7 @@ class _FullPageState extends State<FullPage> {
 
   _onProvinceSelect(Point province) {
     this.setState(() {
-      targetProvince = cityTree.initTree(province.code);
+      targetProvince = cityTree.initTree(province.code!);
     });
   }
 
@@ -213,29 +217,29 @@ class _FullPageState extends State<FullPage> {
   }
 
   int _getSelectedId() {
-    int selectId;
+    int? selectId;
     switch (pageStatus) {
       case Status.Province:
         selectId = targetProvince.code;
         break;
       case Status.City:
-        selectId = targetCity.code;
+        selectId = targetCity?.code;
         break;
       case Status.Area:
-        selectId = targetArea.code;
+        selectId = targetArea?.code;
         break;
       case Status.Over:
         break;
     }
-    return selectId;
+    return selectId ?? 0;
   }
 
   /// 所有选项的点击事件入口
   /// @param targetPoint 被点击对象的point对象
   _onItemSelect(Point targetPoint) {
     _history.add(HistoryPageInfo(itemList: itemList, status: pageStatus));
-    Status nextStatus;
-    List<Point> nextItemList;
+    Status nextStatus = Status.Over;
+    List<Point>? nextItemList;
     switch (pageStatus) {
       case Status.Province:
         _onProvinceSelect(targetPoint);
@@ -253,11 +257,11 @@ class _FullPageState extends State<FullPage> {
       case Status.City:
         _onCitySelect(targetPoint);
         nextStatus = Status.Area;
-        nextItemList = targetCity.child;
+        nextItemList = targetCity?.child;
         if (!widget.showType.contain(ShowType.a)) {
           nextStatus = Status.Over;
         }
-        if (nextItemList.isEmpty) {
+        if (nextItemList == null || nextItemList.isEmpty) {
           targetArea = null;
           nextStatus = Status.Over;
         }
@@ -278,7 +282,7 @@ class _FullPageState extends State<FullPage> {
           }
           if (mounted) {
             this.setState(() {
-              itemList = nextItemList;
+              itemList = nextItemList!;
               pageStatus = nextStatus;
             });
             scrollController.jumpTo(0.0);
@@ -295,7 +299,7 @@ class _FullPageState extends State<FullPage> {
         title = targetProvince.name;
         break;
       case Status.Area:
-        title = targetCity.name;
+        title = targetCity!.name;
         break;
       case Status.Over:
         break;
@@ -308,18 +312,20 @@ class _FullPageState extends State<FullPage> {
     return WillPopScope(
       onWillPop: back,
       child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: _buildHead(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: _buildHead(),
+        ),
+        body: SafeArea(
+          bottom: true,
+          child: ListWidget(
+            itemList: itemList,
+            controller: scrollController,
+            onSelect: _onItemSelect,
+            selectedId: _getSelectedId(),
           ),
-          body: SafeArea(
-              bottom: true,
-              child: ListWidget(
-                itemList: itemList,
-                controller: scrollController,
-                onSelect: _onItemSelect,
-                selectedId: _getSelectedId(),
-              ))),
+        ),
+      ),
     );
   }
 }
@@ -330,7 +336,11 @@ class ListWidget extends StatelessWidget {
   final int selectedId;
   final ValueChanged<Point> onSelect;
 
-  ListWidget({this.itemList, this.onSelect, this.controller, this.selectedId});
+  ListWidget(
+      {required this.itemList,
+      required this.onSelect,
+      required this.controller,
+      required this.selectedId});
 
   @override
   Widget build(BuildContext context) {

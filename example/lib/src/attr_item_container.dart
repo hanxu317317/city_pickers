@@ -13,7 +13,7 @@ class AttrItemContainer extends StatefulWidget {
   final String title;
   final Widget editor;
 
-  AttrItemContainer({this.title, this.editor});
+  AttrItemContainer({required this.title, required this.editor});
 
   @override
   _AttrItemContainerState createState() => _AttrItemContainerState();

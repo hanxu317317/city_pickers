@@ -27,11 +27,11 @@ const defaultTopIndexFontColor = Color(0xffc0c0c0);
 const defaultTopIndexBgColor = Color(0xfff3f4f5);
 
 class CitiesSelector extends StatefulWidget {
-  final String locationCode;
+  final String? locationCode;
   final String title;
-  final Map<String, dynamic> provincesData;
-  final Map<String, dynamic> citiesData;
-  final List<HotCity> hotCities;
+  final Map<String, String>? provincesData;
+  final Map<String, dynamic>? citiesData;
+  final List<HotCity>? hotCities;
 
   /// 定义右侧bar的激活与普通状态的颜色
   final Color tagBarBgColor;
@@ -59,12 +59,12 @@ class CitiesSelector extends StatefulWidget {
   final Color topIndexFontColor;
   final Color topIndexBgColor;
 
-  final Color itemSelectFontColor;
+  final Color? itemSelectFontColor;
 
 //  暂时无用
 //  final Color itemSelectBgColor;
 
-  final Color itemFontColor;
+  final Color? itemFontColor;
 
   CitiesSelector({
     this.title = '城市选择器',
@@ -93,11 +93,11 @@ class CitiesSelector extends StatefulWidget {
 }
 
 class _CitiesSelectorState extends State<CitiesSelector> {
-  String _tagName;
-  Timer _changeTimer;
+  String? _tagName;
+  Timer? _changeTimer;
 
   /// 进行计算 .获取的初始化的城市code码
-  Point _initTargetCity;
+  Point? _initTargetCity;
   bool _isTouchTagBar = false;
 
   /// 是否显示顶部的tag提示标签
@@ -107,8 +107,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   double _topOffstageTop = 0;
 
   /// 城市列表数组
-  List<Point> _cities = new List();
-  ScrollController _scrollController;
+  List<Point> _cities = [];
+  late ScrollController _scrollController;
 
   /// 用这个key 去标记一个item,用来在初始化后. 获取期高度
   GlobalKey _key0 = new GlobalKey();
@@ -118,16 +118,16 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   List<CityOffsetRange> _offsetTagRangeList = [];
 
   /// 有效的tag标签列表, 对应右侧标签
-  List<String> _tagList;
+  late List<String> _tagList;
 
   /// 每一个顶部标签的高度
-  double topTagHeight;
+  late double topTagHeight;
 
   /// 用户可定义的, 每一个选项的高度
 //  double itemHeight;
 
   /// 用户可定义的, 选项中字体的大小
-  double itemFontSize;
+  double? itemFontSize;
 
   @override
   void initState() {
@@ -162,7 +162,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     if (widget.hotCities != null) {
       List<Point> hotPoints = [];
       List<String> hotTags = [];
-      widget.hotCities.forEach((HotCity hotCity) {
+      widget.hotCities!.forEach((HotCity hotCity) {
         if (!hotTags.contains(hotCity.tag)) {
           hotTags.add(hotCity.tag);
         }
@@ -177,21 +177,22 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     }
   }
 
-  Point getInitialCityCode() {
+  Point? getInitialCityCode() {
     if (widget.locationCode == null) {
       return null;
     }
-    int code = int.parse(widget.locationCode);
+    int code = int.parse(widget.locationCode!);
     return _cities.firstWhere((Point point) {
       return point.code == code;
-    }, orElse: () => null);
+    }, orElse: () => Point.nullPoint());
   }
 
   /// 只有当组件加载后. 才能获取_key0的高度,要保证该函数只会被执行一次
   List<CityOffsetRange> _initOffsetRangList() {
     if (_offsetTagRangeList.isEmpty) {
       double itemContainerHeight =
-          _key0.currentContext.findRenderObject().paintBounds.size.height;
+          _key0.currentContext?.findRenderObject()?.paintBounds.size.height ??
+              0;
 
       double offstageHeight = topTagHeight;
 
@@ -209,8 +210,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     CityOffsetRange tempViewTarget =
         _offsetTagRangeList.firstWhere((CityOffsetRange range) {
       return scrollTopOffset > range.start && scrollTopOffset < range.end;
-    }, orElse: () => null);
-    if (tempViewTarget == null) {
+    }, orElse: () => CityOffsetRange.empty());
+    if (tempViewTarget.isEmpty()) {
       return;
     }
 
@@ -246,8 +247,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
 
   /// 当右侧的类型. 因为触摸而发生改变
   _onTagChange(String alpha) {
-    if (_changeTimer != null && _changeTimer.isActive) {
-      _changeTimer.cancel();
+    if (_changeTimer?.isActive ?? false) {
+      _changeTimer!.cancel();
     }
     _changeTimer = new Timer(Duration(milliseconds: 30), () {
       CityOffsetRange cityOffsetRange = _offsetTagRangeList.firstWhere(
@@ -298,7 +299,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           _isTouchTagBar = false;
         });
       },
-      onAlphaChange: (String alpha) {
+      onAlphaChange: (String? alpha) {
         this.setState(() {
           if (!_isTouchTagBar) {
             _isTouchTagBar = true;
@@ -306,7 +307,9 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           _tagName = alpha;
         });
         _initOffsetRangList();
-        _onTagChange(alpha);
+        if (alpha != null) {
+          _onTagChange(alpha);
+        }
       },
     );
   }
@@ -329,7 +332,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
         itemBuilder: (context, index) {
           bool offstage = false;
           bool selected = _initTargetCity != null &&
-              _initTargetCity.code == _cities[index].code;
+              _initTargetCity!.code == _cities[index].code;
           if (index != 0 &&
               _cities[index - 1].letter == _cities[index].letter) {
             offstage = true;
@@ -344,7 +347,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
                   padding: const EdgeInsets.only(left: 15.0),
                   color: widget.topIndexBgColor,
                   child: Text(
-                    _cities[index].letter,
+                    _cities[index].letter ?? "",
                     softWrap: true,
                     style: TextStyle(
                         fontSize: widget.topIndexFontSize,
@@ -412,7 +415,6 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
             title: Text(
           widget.title,
