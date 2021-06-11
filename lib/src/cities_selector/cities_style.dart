@@ -4,26 +4,28 @@ import 'package:flutter/material.dart';
 class BaseStyle {
   double fontSize;
   Color color;
-  Color activeColor;
-  Color backgroundColor;
-  double height;
-  Color backgroundActiveColor;
+  Color? activeColor;
+  Color? backgroundColor;
+  double? height;
+  Color? backgroundActiveColor;
 
-  BaseStyle(
-      {this.color,
-      this.fontSize,
-      this.height,
-      this.activeColor,
-      this.backgroundActiveColor,
-      this.backgroundColor});
+  BaseStyle({
+    required this.color,
+    required this.fontSize,
+    this.height,
+    this.activeColor,
+    this.backgroundActiveColor,
+    this.backgroundColor,
+  });
 
-  BaseStyle copyWith(
-      {double fontSize,
-      Color color,
-      double height,
-      Color activeColor,
-      Color backgroundColor,
-      Color backgroundActiveColor}) {
+  BaseStyle copyWith({
+    double? fontSize,
+    Color? color,
+    double? height,
+    Color? activeColor,
+    Color? backgroundColor,
+    Color? backgroundActiveColor,
+  }) {
 //    print("copyWidth >>> fontSize: ${fontSize ?? this.fontSize}");
     return BaseStyle(
         fontSize: fontSize ?? this.fontSize,
@@ -35,7 +37,7 @@ class BaseStyle {
             backgroundActiveColor ?? this.backgroundActiveColor);
   }
 
-  BaseStyle merge(BaseStyle other) {
+  BaseStyle merge(BaseStyle? other) {
     if (other == null) return this;
     return copyWith(
         fontSize: other.fontSize,

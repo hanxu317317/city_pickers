@@ -12,11 +12,9 @@ import 'package:city_pickers/modal/result.dart';
 
 class CityPickerUtil {
   Map<String, dynamic> citiesData;
-  Map<String, dynamic> provincesData;
+  Map<String, String> provincesData;
 
-  CityPickerUtil({this.citiesData, this.provincesData})
-      : assert(citiesData != null),
-        assert(provincesData != null);
+  CityPickerUtil({required this.citiesData, required this.provincesData});
 
   Result getAreaResultByCode(String code) {
     Location location =

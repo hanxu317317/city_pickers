@@ -13,24 +13,24 @@ import '../../modal/base_citys.dart';
 class Location {
   Map<String, dynamic> citiesData;
 
-  Map<String, dynamic> provincesData;
+  Map<String, String>? provincesData;
 
   /// the target province user selected
-  Point provincePoint;
+  Point? provincePoint;
 
   /// the target city user selected
-  Point cityPoint;
+  Point? cityPoint;
 
   /// the target area user selected
-  Point areaPoint;
+  Point? areaPoint;
 
   // standby
   // Point village;
 
   // 没有一次性构建整个以国为根的树. 动态的构建以省为根的树, 效率高.
-  List<Point> provinces;
+  // List<Point> provinces;
 
-  Location({this.citiesData, this.provincesData});
+  Location({required this.citiesData, required this.provincesData});
 
   Result initLocation(String _locationCode) {
 //    print("initLocation >>>> $_locationCode");
@@ -40,24 +40,22 @@ class Location {
 
     int locationCode;
     Result locationInfo = new Result();
-    if (_locationCode != null) {
-      try {
-        locationCode = int.parse(_locationCode);
-      } catch (e) {
-        print(ArgumentError(
-            "The Argument locationCode must be valid like: '100000' but get '$_locationCode' "));
-        return locationInfo;
-      }
+    try {
+      locationCode = int.parse(_locationCode);
+    } catch (e) {
+      print(ArgumentError(
+          "The Argument locationCode must be valid like: '100000' but get '$_locationCode' "));
+      return locationInfo;
     }
     provincePoint = cityTree.initTreeByCode(locationCode);
 
-    if (provincePoint == null || provincePoint.isNull) {
+    if (provincePoint?.isNull ?? true) {
       return locationInfo;
     }
-    locationInfo.provinceName = provincePoint.name;
-    locationInfo.provinceId = provincePoint.code.toString();
+    locationInfo.provinceName = provincePoint!.name;
+    locationInfo.provinceId = provincePoint!.code.toString();
 
-    provincePoint.child.forEach((Point _city) {
+    provincePoint!.child.forEach((Point _city) {
       if (_city.code == locationCode) {
         cityPoint = _city;
       }
@@ -71,14 +69,14 @@ class Location {
       });
     });
 
-    if (cityPoint != null && !cityPoint.isNull) {
-      locationInfo.cityName = cityPoint.name;
-      locationInfo.cityId = cityPoint.code.toString();
+    if (cityPoint != null && !cityPoint!.isNull) {
+      locationInfo.cityName = cityPoint!.name;
+      locationInfo.cityId = cityPoint!.code.toString();
     }
 
-    if (areaPoint != null && !areaPoint.isNull) {
-      locationInfo.areaName = areaPoint.name;
-      locationInfo.areaId = areaPoint.code.toString();
+    if (areaPoint != null && !areaPoint!.isNull) {
+      locationInfo.areaName = areaPoint!.name;
+      locationInfo.areaId = areaPoint!.code.toString();
     }
 
     return locationInfo;

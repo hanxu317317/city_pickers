@@ -11,7 +11,7 @@ class CityTree {
   Map<String, dynamic> metaInfo;
 
   /// provData user self-defining data
-  Map<String, String> provincesInfo;
+  Map<String, String>? provincesInfo;
   Cache _cache = new Cache();
 
   /// the tree's modal
@@ -36,7 +36,7 @@ class CityTree {
   ///     ]
   ///   }
   /// ]
-  Point tree;
+  late Point tree;
 
   /// @param metaInfo city and areas meta describe
   CityTree({this.metaInfo = citiesData, this.provincesInfo});
@@ -53,7 +53,7 @@ class CityTree {
 //      return tree = _cache.get(_cacheKey);
 //    }
 
-    String name = this._provincesData[provinceId.toString()];
+    String name = this._provincesData[provinceId.toString()]!;
     String letter = PinyinHelper.getFirstWordPinyin(name).substring(0, 1);
     var root =
         new Point(code: provinceId, letter: letter, child: [], name: name);
@@ -65,7 +65,7 @@ class CityTree {
   /// this is a private function, used the return to get a correct tree contain cities and areas
   /// @param code one of province city or area id;
   /// @return provinceId return id which province's child contain code
-  int _getProvinceByCode(int code) {
+  int? _getProvinceByCode(int code) {
     String _code = code.toString();
     List<String> keys = metaInfo.keys.toList();
     for (int i = 0; i < keys.length; i++) {
@@ -90,17 +90,17 @@ class CityTree {
     if (this._provincesData[_code] != null) {
       return initTree(code);
     }
-    int provinceId = _getProvinceByCode(code);
+    int? provinceId = _getProvinceByCode(code);
     if (provinceId != null) {
       return initTree(provinceId);
     }
-    return Point().nullPoint;
+    return Point.nullPoint();
 //    return Point.nullPoint;
   }
 
   /// private function
   /// recursion to build tree
-  Point _buildTree(Point target, Map citys, Map meta) {
+  Point _buildTree(Point target, Map<String, dynamic>? citys, Map meta) {
     if (citys == null || citys.isEmpty) {
       return target;
     } else {
@@ -142,15 +142,16 @@ class Provinces {
   Map<String, String> metaInfo;
 
   // 是否将省份排序, 进行排序
-  bool sort = true;
-  Provinces({this.metaInfo = provincesData, this.sort});
+  bool sort;
+
+  Provinces({this.metaInfo = provincesData, this.sort = true});
 
   // 获取省份数据
   get provinces {
     List<Point> provList = [];
     List<String> keys = metaInfo.keys.toList();
     for (int i = 0; i < keys.length; i++) {
-      String name = metaInfo[keys[i]];
+      String name = metaInfo[keys[i]]!;
       provList.add(Point(
           code: int.parse(keys[i]),
           letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1),
@@ -158,7 +159,15 @@ class Provinces {
     }
     if (this.sort == true) {
       provList.sort((Point a, Point b) {
-        return a.letter.compareTo(b.letter);
+        if (a.letter == null && b.letter == null) {
+          return 0;
+        }
+
+        if (a.letter == null) {
+          return 1;
+        }
+
+        return a.letter!.compareTo(b.letter!);
       });
     }
 

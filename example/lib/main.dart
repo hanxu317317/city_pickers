@@ -5,6 +5,7 @@ import 'view/show_city_picker.dart';
 import 'view/wip.dart';
 import 'view/show_full_page_picker.dart';
 import 'view/util_getLocationInfo.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,14 +13,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: new ThemeData(
-        primaryColor: Color(0xFFC91B3A),
-        backgroundColor: Color(0xFFEFEFEF),
-        accentColor: Color(0xFF888888),
-        textTheme: TextTheme(
-          //设置Material的默认字体样式
-          body1: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
-        )
-      ),
+          primaryColor: Color(0xFFC91B3A),
+          backgroundColor: Color(0xFFEFEFEF),
+          accentColor: Color(0xFF888888),
+          textTheme: TextTheme(
+            //设置Material的默认字体样式
+            body1: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
+          )),
       title: 'Welcome to Flutt2er',
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
@@ -40,16 +40,8 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   List demoList = [
-    {
-      "icon": Icons.place,
-      "name": "ios选择器",
-      "routerName": '/name'
-    },
-    {
-      "icon": Icons.fullscreen,
-      "name": "三级全屏选择器",
-      "routerName": '/full_page'
-    },
+    {"icon": Icons.place, "name": "ios选择器", "routerName": '/name'},
+    {"icon": Icons.fullscreen, "name": "三级全屏选择器", "routerName": '/full_page'},
     {
       "icon": Icons.location_city,
       "name": "城市选择器",

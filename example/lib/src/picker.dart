@@ -16,7 +16,7 @@ class PickerItem {
   String name;
   dynamic value;
 
-  PickerItem({this.name, this.value});
+  PickerItem({required this.name, this.value});
 }
 
 class Picker extends StatefulWidget {
@@ -24,16 +24,16 @@ class Picker extends StatefulWidget {
   final Widget target;
   final ValueChanged<PickerItem> onConfirm;
 
-  Picker({this.onConfirm, @required this.target, @required this.items});
+  Picker({required this.onConfirm, required this.target, required this.items});
 
   @override
   _PickerState createState() => _PickerState();
 }
 
 class _PickerState extends State<Picker> {
-  ScrollController scrollController =
+  FixedExtentScrollController scrollController =
       new FixedExtentScrollController(initialItem: 0);
-  PickerItem result;
+  late PickerItem result;
 
   @override
   void initState() {
