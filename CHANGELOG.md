@@ -1,5 +1,5 @@
-# 1.0.1-dev1
-- dev包发布
+# 1.0.1
+- unsafe包正式发布
 - 更新unsafe的问题
 - 修正因为更新unsafe导致的null等逻辑问题
 - 更新unsafe导致升级大版本的问题
