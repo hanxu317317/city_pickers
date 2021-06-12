@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 class ItemContainer extends StatefulWidget {
   final List itemList;
 
-  ItemContainer({this.itemList});
+  ItemContainer({required this.itemList});
 
   @override
   _ItemContainerState createState() => _ItemContainerState();

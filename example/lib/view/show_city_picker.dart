@@ -34,7 +34,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
   bool customerButtons = false;
   bool isSort = false;
 
-  PickerItem themeAttr;
+  PickerItem? themeAttr;
 
   Widget _buildShowTypes() {
     return Picker(
@@ -246,9 +246,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
 
   Widget _buildTheme() {
     return Picker(
-        target: themeAttr != null && themeAttr.name != null
-            ? Text(themeAttr.name)
-            : Text("主题切换"),
+        target: Text(themeAttr?.name ?? "主题切换"),
         onConfirm: (PickerItem item) {
           setState(() {
             themeAttr = item;
@@ -279,7 +277,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
       appBar: AppBar(
         title: Text("ios风格城市选择器"),
       ),
-      body: SingleChildScrollView(// 防止边界超出
+      body: SingleChildScrollView(
+        // 防止边界超出
         child: Column(
           children: <Widget>[
             AttrItemContainer(title: '级联方式', editor: _buildShowTypes()),
@@ -299,20 +298,22 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             RaisedButton(
               onPressed: () async {
                 print("locationCode $resultAttr");
-                Result tempResult = await CityPickers.showCityPicker(
+                Result? tempResult = await CityPickers.showCityPicker(
                     context: context,
-                    theme: themeAttr != null ? themeAttr.value : null,
+                    theme: themeAttr?.value,
                     locationCode: resultAttr != null
                         ? resultAttr.areaId ??
-                        resultAttr.cityId ??
-                        resultAttr.provinceId
-                        : null,
+                            resultAttr.cityId ??
+                            resultAttr.provinceId ??
+                            '110000'
+                        : '110000',
                     showType: showTypeAttr.value,
                     isSort: isSort,
                     barrierOpacity: barrierOpacityAttr,
                     barrierDismissible: barrierDismissibleAttr,
                     citiesData: customerMeta == true ? citiesDataNm : null,
-                    provincesData: customerMeta == true ? provincesDataNm : null,
+                    provincesData:
+                        customerMeta == true ? provincesDataNm : null,
                     itemExtent: customerItemExtent,
                     cancelWidget: customerButtons ? Text('cancle') : null,
                     confirmWidget: customerButtons ? Text('confirm') : null,

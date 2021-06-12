@@ -29,7 +29,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
   bool customerMeta = false;
-  PickerItem themeAttr;
+  PickerItem? themeAttr;
 
   Widget _buildShowTypes() {
     return Picker(
@@ -109,9 +109,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
 
   Widget _buildTheme() {
     return Picker(
-        target: themeAttr != null && themeAttr.name != null
-            ? Text(themeAttr.name)
-            : Text("主题切换"),
+        target: Text(themeAttr?.name ?? "主题切换"),
         onConfirm: (PickerItem item) {
           setState(() {
             themeAttr = item;
@@ -155,14 +153,13 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
           RaisedButton(
             onPressed: () async {
               print("locationCode $resultAttr");
-              Result tempResult = await CityPickers.showFullPageCityPicker(
+              Result? tempResult = await CityPickers.showFullPageCityPicker(
                   context: context,
-                  theme: themeAttr != null ? themeAttr.value : null,
-                  locationCode: resultAttr != null
-                      ? resultAttr.areaId ??
-                          resultAttr.cityId ??
-                          resultAttr.provinceId
-                      : null,
+                  theme: themeAttr?.value,
+                  locationCode: resultAttr.areaId ??
+                      resultAttr.cityId ??
+                      resultAttr.provinceId ??
+                      "110000",
                   showType: showTypeAttr.value,
                   citiesData: customerMeta ? citiesData : null,
                   provincesData: customerMeta ? provincesData : null);

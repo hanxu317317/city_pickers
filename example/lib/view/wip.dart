@@ -165,7 +165,7 @@ class WorkInProgressState extends State<WorkInProgress> {
   }
 
   toggle(BuildContext context) async {
-    Result tempResult = await CityPickers.showCitiesSelector(
+    Result? tempResult = await CityPickers.showCitiesSelector(
         context: context,
         title: title,
         locationCode: '110100',

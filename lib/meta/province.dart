@@ -2980,8 +2980,8 @@ const Map<String, dynamic> citiesData = {
     "469030": {"name": "琼中黎族苗族自治县", "alpha": "q"}
   },
   "500000": {
-    "500100": {"name": "市辖区", "alpha": "s"},
-    "500200": {"name": "县", "alpha": "x"}
+    "500100": {"name": "重庆城区", "alpha": "s"},
+    "500200": {"name": "重庆郊县", "alpha": "x"}
   },
   "500100": {
     "500101": {"name": "万州区", "alpha": "w"},
@@ -4024,7 +4024,7 @@ const Map<String, dynamic> citiesData = {
     "640100": {"name": "银川市", "alpha": "y"},
     "640200": {"name": "石嘴山市", "alpha": "s"},
     "640300": {"name": "吴忠市", "alpha": "w"},
-    "360600640400": {"name": "固原市", "alpha": "g"},
+    "640400": {"name": "固原市", "alpha": "g"},
     "640500": {"name": "中卫市", "alpha": "z"}
   },
   "640100": {

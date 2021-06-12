@@ -18,7 +18,7 @@ class Cache {
   }
 
   static Cache get instance => _getInstance();
-  static Cache _instance;
+  static Cache? _instance;
 
   Cache._();
 
@@ -48,11 +48,11 @@ class Cache {
     if (_instance == null) {
       _instance = new Cache._();
     }
-    return _instance;
+    return _instance!;
   }
 }
 
-void setTimeout({int milliseconds, callback = VoidCallback}) {
+void setTimeout({required int milliseconds, callback = VoidCallback}) {
   new Timer(Duration(milliseconds: milliseconds), () {
     callback();
   });
