@@ -57,10 +57,14 @@ class _BaseView extends State<BaseView> {
   Timer? _changeTimer;
   bool _resetControllerOnce = false;
 
-  FixedExtentScrollController provinceController = new FixedExtentScrollController();
-  FixedExtentScrollController cityController = new FixedExtentScrollController();
-  FixedExtentScrollController areaController = new FixedExtentScrollController();
-  FixedExtentScrollController villageController = new FixedExtentScrollController(); // 增加第4级(村/镇)选择
+  FixedExtentScrollController provinceController =
+      new FixedExtentScrollController();
+  FixedExtentScrollController cityController =
+      new FixedExtentScrollController();
+  FixedExtentScrollController areaController =
+      new FixedExtentScrollController();
+  FixedExtentScrollController villageController =
+      new FixedExtentScrollController(); // 增加第4级(村/镇)选择
 
   // 所有省的列表. 因为性能等综合原因,
   // 没有一次性构建整个以国为根的树. 动态的构建以省为根的树, 效率高.
@@ -71,7 +75,6 @@ class _BaseView extends State<BaseView> {
   Point? targetCity;
   Point? targetArea;
   Point? targetVillage; // 增加第4级(村/镇)选择
-
 
   @override
   void initState() {
@@ -209,7 +212,7 @@ class _BaseView extends State<BaseView> {
 
   Point? _getTargetChildFirst(Point target) {
     if (target == Point.nullPoint()) {
-      return  Point.nullPoint();
+      return Point.nullPoint();
     }
     if (target.child.isNotEmpty && target.child.isNotEmpty) {
       return target.child.first;

@@ -33,7 +33,8 @@ class CityPickers {
   /// static original province data for this plugin
   static Map<String, String> metaProvinces = meta.provincesData;
 
-  static utils({Map<String, String>? provinceData, Map<String, dynamic>? citiesData}) {
+  static utils(
+      {Map<String, String>? provinceData, Map<String, dynamic>? citiesData}) {
     print("CityPickers.metaProvinces::: ${CityPickers.metaCities}");
     return CityPickerUtil(
       provincesData: provinceData ?? CityPickers.metaProvinces,

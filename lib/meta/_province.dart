@@ -3920,10 +3920,8 @@ main() {
     result[k] = {};
     Map temp = v;
     temp.forEach((k2, v2) {
-      result[k][k2] = {
-        'name': v2,
-        'alpha': PinyinHelper.getFirstWordPinyin(v2)[0]
-      };
+      result[k]
+          [k2] = {'name': v2, 'alpha': PinyinHelper.getFirstWordPinyin(v2)[0]};
     });
   });
   final filename = 'file.txt';

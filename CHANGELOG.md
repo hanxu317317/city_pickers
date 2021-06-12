@@ -1,3 +1,7 @@
+# 2.0.0
+- 更新unsafe的问题
+- 修正因为更新unsafe导致的null等逻辑问题
+
 # 1.0.0
 - 这是一个beta版本的包.
 - 将plugin 转为 package 包
