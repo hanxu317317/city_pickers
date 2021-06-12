@@ -338,7 +338,7 @@ class _BaseView extends State<BaseView> {
     if (showType.contain(ShowType.v)) {
       result.provinceId = targetProvince.code.toString();
       result.provinceName = targetProvince.name;
-      result.cityId = targetCity?.code.toString();
+      result.cityId = targetCity!.code.toString();
       result.cityName = targetCity?.name;
       result.areaId = targetArea?.code.toString();
       result.areaName = targetArea?.name;
@@ -354,6 +354,7 @@ class _BaseView extends State<BaseView> {
     //   result.villageId = null;
     //   result.villageName = null;
     // }
+
     return result;
   }
 

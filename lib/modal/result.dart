@@ -60,7 +60,7 @@ class Result {
       'areaId': areaId,
       'villageId': villageId // 增加第4级(村/镇)选择
     };
-    obj.removeWhere((key, value) => value == null);
+    obj.removeWhere((key, value) => value == null || value == 'null');
 
     return json.encode(obj);
   }
