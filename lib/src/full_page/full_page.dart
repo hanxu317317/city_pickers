@@ -318,10 +318,11 @@ class _FullPageState extends State<FullPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return WillPopScope(
       onWillPop: back,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.backgroundColor,
         appBar: AppBar(
           title: _buildHead(),
         ),
@@ -359,17 +360,20 @@ class ListWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         Point item = itemList[index];
         return Container(
+
           decoration: BoxDecoration(
+              // color: theme.backgroundColor,
               border: Border(
                   bottom: BorderSide(color: theme.dividerColor, width: 1.0))),
           child: ListTileTheme(
             child: ListTile(
-              title: Text(item.name),
+              title: Text(item.name, style: TextStyle(color: theme.textTheme.bodyText1!.color)),
               // item 标题
               dense: true,
+              // tileColor:theme.textTheme.bodyText1!.color,
               // item 直观感受是整体大小
               trailing: selectedId == item.code
-                  ? Icon(Icons.check, color: theme.primaryColor)
+                  ? Icon(Icons.check, color: theme.textTheme.bodyText1!.color)
                   : null,
               contentPadding: EdgeInsets.fromLTRB(24.0, .0, 24.0, 3.0),
               // item 内容内边距
