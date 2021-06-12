@@ -49,6 +49,10 @@ class HistoryPageInfo {
 }
 
 class _FullPageState extends State<FullPage> {
+  /// if pophome has been called once, this should bee true;
+  /// in initState func shound set false;
+  bool hasPop = false;
+
   /// list scroll control
   late ScrollController scrollController;
 
@@ -80,7 +84,7 @@ class _FullPageState extends State<FullPage> {
   @override
   void initState() {
     super.initState();
-
+    hasPop = false;
     scrollController = new ScrollController();
     provinces = new Provinces(metaInfo: widget.provincesData).provinces;
     cityTree = new CityTree(
@@ -195,7 +199,12 @@ class _FullPageState extends State<FullPage> {
   }
 
   popHome() {
-    Navigator.of(context).pop(_buildResult());
+    if (!hasPop) {
+      setState(() {
+        hasPop = true;
+      });
+      Navigator.of(context).pop(_buildResult());
+    }
   }
 
   _onProvinceSelect(Point province) {
