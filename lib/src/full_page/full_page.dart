@@ -50,7 +50,7 @@ class HistoryPageInfo {
 
 class _FullPageState extends State<FullPage> {
   /// if pophome has been called once, this should bee true;
-  /// in initState func shound set false;
+  /// in initState func shound set false; fixed: https://github.com/hanxu317317/city_pickers/issues/121
   bool hasPop = false;
 
   /// list scroll control
