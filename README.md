@@ -7,6 +7,11 @@ Language: [English](https://github.com/hanxu317317/city_pickers/blob/master/READ
 <image src="https://img.alicdn.com/tfs/TB16H9XGCzqK1RjSZPcXXbTepXa-329-687.gif" style="width: 300px" />
 <image src="https://img.alicdn.com/tfs/TB1CXEhLlLoK1RjSZFuXXXn0XXa-347-705.gif" style="width: 300px" />
 
+# 沟通QQ群
+QQ 群号码: 935915271
+
+![image](https://user-images.githubusercontent.com/8518989/132689722-d9e9a4a0-d3af-44b1-aecc-34cdd36daaa6.png)
+
 
 # 开始
 
