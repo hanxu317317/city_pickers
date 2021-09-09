@@ -33,6 +33,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
   double customerItemExtent = 40;
   bool customerButtons = false;
   bool isSort = false;
+  double borderRadius = 0;
 
   PickerItem? themeAttr;
 
@@ -175,7 +176,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
           child: CupertinoSlider(
             value: customerItemExtent,
             //实际进度的位置
-            min: 40,
+            min: 00,
             max: 100,
             divisions: 60,
             activeColor: Colors.blue,
@@ -188,6 +189,31 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
           ),
         ),
         Text("${customerItemExtent.toStringAsFixed(2)}")
+      ],
+    );
+  }
+
+  Widget _buildItemBorderRadius() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: CupertinoSlider(
+            value: borderRadius,
+            //实际进度的位置
+            min: 00,
+            max: 40,
+            divisions: 60,
+            activeColor: Colors.blue,
+            //进度中活动部分的颜色
+            onChanged: (double) {
+              setState(() {
+                borderRadius = double.toDouble();
+              });
+            },
+          ),
+        ),
+        Text("${borderRadius.toStringAsFixed(2)}")
       ],
     );
   }
@@ -285,6 +311,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             AttrItemContainer(title: '默认地址', editor: _buildDefaultLocation()),
             AttrItemContainer(title: '背景透明度', editor: _buildBarrierOpacity()),
             AttrItemContainer(title: '选中区域高度', editor: _buildItemExtent()),
+            AttrItemContainer(title: '顶部圆角值', editor: _buildItemBorderRadius()),
             AttrItemContainer(
                 title: '背景点击关闭', editor: _buildBarrierDismissible()),
             AttrItemContainer(title: '是否采用自定义数据', editor: _buildCustomerMeta()),
@@ -307,6 +334,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
                             resultAttr.provinceId ??
                             '110000'
                         : '110000',
+                    borderRadius: borderRadius,
                     showType: showTypeAttr.value,
                     isSort: isSort,
                     barrierOpacity: barrierOpacityAttr,

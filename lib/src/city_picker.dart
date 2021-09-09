@@ -58,6 +58,7 @@ class CityPickers {
   ///
   /// @param itemBuilder customer widget for building item
   ///
+  /// @parma borderRadius Container topleft and topRight radius default 0.
   /// @return Result see [Result]
   ///
   static Future<Result?> showCityPicker(
@@ -75,6 +76,7 @@ class CityPickers {
       double? itemExtent,
       Widget? cancelWidget,
       Widget? confirmWidget,
+      double borderRadius = 0,
       bool isSort = false}) {
     return Navigator.of(context, rootNavigator: true).push(
       new CityPickerRoute(
@@ -94,6 +96,7 @@ class CityPickers {
           citiesData: citiesData ?? meta.citiesData,
           provincesData: provincesData ?? meta.provincesData,
           locationCode: locationCode,
+          borderRadius: borderRadius,
         ),
       ),
     );

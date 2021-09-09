@@ -35,6 +35,8 @@ class BaseView extends StatefulWidget {
   /// 当用户设置该属性. 会优先使用用户设置的widget, 否则使用代码中默认的文本, 使用primary主题色
   final Widget? confirmWidget;
 
+  final double borderRadius;
+
   BaseView({
     this.progress,
     required this.showType,
@@ -47,6 +49,7 @@ class BaseView extends StatefulWidget {
     this.cancelWidget,
     this.confirmWidget,
     this.isSort = false,
+    this.borderRadius = 0,
   }) : assert(!(itemBuilder != null && itemExtent == null),
             "\ritemExtent could't be null if itemBuilder exits");
 
@@ -364,7 +367,13 @@ class _BaseView extends State<BaseView> {
   Widget _bottomBuild() {
     return new Container(
         width: double.infinity,
-        color: Theme.of(context).scaffoldBackgroundColor,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(widget.borderRadius),
+            topRight: Radius.circular(widget.borderRadius)
+          ),
+        ),
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
