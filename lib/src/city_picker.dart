@@ -145,10 +145,12 @@ class CityPickers {
     String title = '城市选择器',
     Map<String, dynamic> citiesData = meta.citiesData,
     Map<String, String> provincesData = meta.provincesData,
+    AppBarBuilder? appBarBuilder,
     List<HotCity>? hotCities,
     BaseStyle? sideBarStyle,
     BaseStyle? cityItemStyle,
     BaseStyle? topStickStyle,
+
   }) {
     BaseStyle _sideBarStyle = BaseStyle(
       fontSize: 14,
@@ -203,7 +205,9 @@ class CityPickers {
               topIndexBgColor: _topStickStyle.backgroundColor!,
               itemFontColor: _cityItemStyle.color,
               cityItemFontSize: _cityItemStyle.fontSize,
-              itemSelectFontColor: _cityItemStyle.activeColor),
+              itemSelectFontColor: _cityItemStyle.activeColor,
+              appBarBuilder: appBarBuilder
+          ),
         ),
         transitionsBuilder:
             (_, Animation<double> animation, __, Widget child) =>

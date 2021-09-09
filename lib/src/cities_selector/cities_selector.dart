@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import '../../meta/province.dart';
 import '../../modal/point.dart';
 import '../../modal/result.dart';
+import '../util.dart';
 import 'alpha.dart';
 import 'utils.dart';
 
@@ -60,7 +61,7 @@ class CitiesSelector extends StatefulWidget {
   final Color topIndexBgColor;
 
   final Color? itemSelectFontColor;
-
+  final AppBarBuilder? appBarBuilder;
 //  暂时无用
 //  final Color itemSelectBgColor;
 
@@ -86,6 +87,7 @@ class CitiesSelector extends StatefulWidget {
 //    this.itemSelectBgColor = Colors.white,
     this.itemFontColor = Colors.black,
     this.itemSelectFontColor = Colors.red,
+    this.appBarBuilder
   });
 
   @override
@@ -411,14 +413,23 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     return children;
   }
 
+  AppBar _buildAppBar() {
+    if (widget.appBarBuilder != null ) {
+      return widget.appBarBuilder!(widget.title);
+    }
+    return AppBar(
+      title: Text(
+        widget.title,
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         backgroundColor: Colors.white,
-        appBar: AppBar(
-            title: Text(
-          widget.title,
-        )),
+        appBar: _buildAppBar(),
+
         body: SafeArea(
           bottom: true,
           child: Column(

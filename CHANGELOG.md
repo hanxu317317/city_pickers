@@ -2,6 +2,7 @@
 - 修复全屏下的三级联动中主题样式不正确的问题
     - 适配容器下的背景色: textTheme.bodyText1.color
     - 不同主题下, item字体颜色: textTheme.bodyText1.color
+- 增加showCityPicker下的容器圆角配置.
 # 1.0.1
 - unsafe包正式发布
 - 更新unsafe的问题

@@ -60,3 +60,6 @@ void setTimeout({required int milliseconds, callback = VoidCallback}) {
 
 typedef ItemWidgetBuilder = Widget Function(
     dynamic item, List<dynamic> list, int index);
+
+/// 自定义 城市选择器的头
+typedef AppBarBuilder = AppBar Function(String title);

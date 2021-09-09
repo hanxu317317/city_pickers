@@ -48,6 +48,16 @@ class WorkInProgressState extends State<WorkInProgress> {
   Color itemSelectBgColor = Colors.blueGrey;
 
   Color itemFontColor = Colors.black;
+  AppBarBuilder appBarBuilder = (String title) {
+    return AppBar(
+      title: Text('text'),
+      actions: <Widget>[
+        IconButton(icon: Icon(Icons.add), onPressed: () {}),
+        IconButton(icon: Icon(Icons.dashboard), onPressed: () {}),
+        IconButton(icon: Icon(Icons.cached), onPressed: () {}),
+      ],
+    );
+  };
 
   bool userSelfMeta = false;
 
@@ -175,8 +185,8 @@ class WorkInProgressState extends State<WorkInProgress> {
           HotCity(id: 0, name: '北京'),
           HotCity(id: 1, name: '沈阳'),
           HotCity(id: 2, name: '天津'),
-
         ],
+        appBarBuilder:appBarBuilder,
         sideBarStyle: BaseStyle(
             fontSize: tagBarFontSize,
             color: tagFontColor,
