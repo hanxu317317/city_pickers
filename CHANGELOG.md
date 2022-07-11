@@ -1,8 +1,10 @@
-# 1.0.2
+# 1.1.0
 - 修复全屏下的三级联动中主题样式不正确的问题
-    - 适配容器下的背景色: textTheme.bodyText1.color
-    - 不同主题下, item字体颜色: textTheme.bodyText1.color
+- 城市选择器 增加自定义AppBar
 - 增加showCityPicker下的容器圆角配置.
+- 适配 flutter 3.0
+- 修复快速点击. 导致页面黑屏挂掉的bug.
+- 省市县三级选择器 增加
 # 1.0.1
 - unsafe包正式发布
 - 更新unsafe的问题

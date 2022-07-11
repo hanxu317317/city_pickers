@@ -367,13 +367,15 @@ class ListWidget extends StatelessWidget {
                   bottom: BorderSide(color: theme.dividerColor, width: 1.0))),
           child: ListTileTheme(
             child: ListTile(
-              title: Text(item.name, style: TextStyle(color: theme.textTheme.bodyText1!.color)),
+              title: Text(item.name),
+              // 这里还是不敢放开.  容易引发兼容问题
+              // title: Text(item.name, style: TextStyle(color: theme.textTheme.bodyText1!.color)),
               // item 标题
               dense: true,
               // tileColor:theme.textTheme.bodyText1!.color,
               // item 直观感受是整体大小
               trailing: selectedId == item.code
-                  ? Icon(Icons.check, color: theme.textTheme.bodyText1!.color)
+                  ? Icon(Icons.check, color: theme.primaryColor)
                   : null,
               contentPadding: EdgeInsets.fromLTRB(24.0, .0, 24.0, 3.0),
               // item 内容内边距

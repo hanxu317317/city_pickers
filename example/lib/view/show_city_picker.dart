@@ -337,6 +337,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
                     borderRadius: borderRadius,
                     showType: showTypeAttr.value,
                     isSort: isSort,
+
                     barrierOpacity: barrierOpacityAttr,
                     barrierDismissible: barrierDismissibleAttr,
                     citiesData: customerMeta == true ? citiesDataNm : null,

@@ -26,7 +26,9 @@ class WorkInProgress extends StatefulWidget {
 class WorkInProgressState extends State<WorkInProgress> {
   String title = '城市选择';
   Result result = Result();
-  Color tagBgColor = Color.fromRGBO(255, 255, 255, 0);
+  Color tagBgColor = Color.fromRGBO(255, 255, 255, 1);
+  Color pageBgColor = Color.fromRGBO(123, 123, 241, 1);
+
   Color tagBgActiveColor = Color(0xffeeeeee);
   Color tagFontColor = Color(0xff666666);
   Color tagFontActiveColor = Color(0xff242424);
@@ -50,7 +52,7 @@ class WorkInProgressState extends State<WorkInProgress> {
   Color itemFontColor = Colors.black;
   AppBarBuilder appBarBuilder = (String title) {
     return AppBar(
-      title: Text('text'),
+      title: Text('用户自定义AppBar'),
       actions: <Widget>[
         IconButton(icon: Icon(Icons.add), onPressed: () {}),
         IconButton(icon: Icon(Icons.dashboard), onPressed: () {}),
@@ -179,6 +181,7 @@ class WorkInProgressState extends State<WorkInProgress> {
         context: context,
         title: title,
         locationCode: '110100',
+        scaffoldBackgroundColor: pageBgColor,
         provincesData: !userSelfMeta ? CityPickers.metaProvinces : provincesData,
         citiesData: !userSelfMeta ? CityPickers.metaCities : citiesData,
         hotCities: [
@@ -245,6 +248,19 @@ class WorkInProgressState extends State<WorkInProgress> {
                 onConfirm: (Color color) {
                   this.setState(() {
                     tagBgColor = color;
+                  });
+                },
+              ),
+            ),
+            AttrItemContainer(
+              title: '页面背景色',
+              editor: ColorPickers(
+                target: Text('选择颜色', style: TextStyle(color: pageBgColor)),
+                initColor: pageBgColor,
+                onConfirm: (Color color) {
+                  print("color::: $color");
+                  this.setState(() {
+                    pageBgColor = color;
                   });
                 },
               ),
@@ -365,7 +381,7 @@ class WorkInProgressState extends State<WorkInProgress> {
             ),
             AttrItemContainer(
                 title: '选择结果', editor: Text("${result.toString()}")),
-            RaisedButton(
+            ElevatedButton(
               child: Text('呼出'),
               onPressed: () {
                 toggle(context);
