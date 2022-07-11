@@ -20,7 +20,7 @@ dev_dependencies:
 
   city_pickers:
     path: ../
-  flutter_colorpicker: ^0.4.0
+  flutter_colorpicker: ^1.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
