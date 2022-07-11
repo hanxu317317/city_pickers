@@ -109,6 +109,7 @@ Result result2 = await CityPickers.showCitiesSelector(
 |sideBarStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 右侧字母索引集样式|
 |cityItemStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 城市选项样式|
 |topStickStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 顶部索引吸顶样式|
+|scaffoldBackgroundColor|Colores|Colors.white| 页面背景色|
 
 
 ### utils 说明

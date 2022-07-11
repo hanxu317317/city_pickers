@@ -49,6 +49,10 @@ class HistoryPageInfo {
 }
 
 class _FullPageState extends State<FullPage> {
+  /// if pophome has been called once, this should bee true;
+  /// in initState func shound set false; fixed: https://github.com/hanxu317317/city_pickers/issues/121
+  bool hasPop = false;
+
   /// list scroll control
   late ScrollController scrollController;
 
@@ -80,7 +84,7 @@ class _FullPageState extends State<FullPage> {
   @override
   void initState() {
     super.initState();
-
+    hasPop = false;
     scrollController = new ScrollController();
     provinces = new Provinces(metaInfo: widget.provincesData).provinces;
     cityTree = new CityTree(
@@ -195,7 +199,12 @@ class _FullPageState extends State<FullPage> {
   }
 
   popHome() {
-    Navigator.of(context).pop(_buildResult());
+    if (!hasPop) {
+      setState(() {
+        hasPop = true;
+      });
+      Navigator.of(context).pop(_buildResult());
+    }
   }
 
   _onProvinceSelect(Point province) {
@@ -309,10 +318,11 @@ class _FullPageState extends State<FullPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return WillPopScope(
       onWillPop: back,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.backgroundColor,
         appBar: AppBar(
           title: _buildHead(),
         ),
@@ -350,14 +360,19 @@ class ListWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         Point item = itemList[index];
         return Container(
+
           decoration: BoxDecoration(
+              // color: theme.backgroundColor,
               border: Border(
                   bottom: BorderSide(color: theme.dividerColor, width: 1.0))),
           child: ListTileTheme(
             child: ListTile(
               title: Text(item.name),
+              // 这里还是不敢放开.  容易引发兼容问题
+              // title: Text(item.name, style: TextStyle(color: theme.textTheme.bodyText1!.color)),
               // item 标题
               dense: true,
+              // tileColor:theme.textTheme.bodyText1!.color,
               // item 直观感受是整体大小
               trailing: selectedId == item.code
                   ? Icon(Icons.check, color: theme.primaryColor)

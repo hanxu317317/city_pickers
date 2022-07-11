@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import '../../meta/province.dart';
 import '../../modal/point.dart';
 import '../../modal/result.dart';
+import '../util.dart';
 import 'alpha.dart';
 import 'utils.dart';
 
@@ -25,6 +26,7 @@ const defaultTagActiveFontColor = Color(0xff242424);
 const defaultTagFontColor = Color(0xff666666);
 const defaultTopIndexFontColor = Color(0xffc0c0c0);
 const defaultTopIndexBgColor = Color(0xfff3f4f5);
+const defaultScaffoldBackgroundColor = Colors.white;
 
 class CitiesSelector extends StatefulWidget {
   final String? locationCode;
@@ -60,11 +62,13 @@ class CitiesSelector extends StatefulWidget {
   final Color topIndexBgColor;
 
   final Color? itemSelectFontColor;
-
+  final AppBarBuilder? appBarBuilder;
 //  暂时无用
 //  final Color itemSelectBgColor;
 
   final Color? itemFontColor;
+
+  final Color? scaffoldBackgroundColor;
 
   CitiesSelector({
     this.title = '城市选择器',
@@ -86,6 +90,8 @@ class CitiesSelector extends StatefulWidget {
 //    this.itemSelectBgColor = Colors.white,
     this.itemFontColor = Colors.black,
     this.itemSelectFontColor = Colors.red,
+    this.appBarBuilder,
+    this.scaffoldBackgroundColor,
   });
 
   @override
@@ -411,14 +417,22 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     return children;
   }
 
+  AppBar _buildAppBar() {
+    if (widget.appBarBuilder != null) {
+      return widget.appBarBuilder!(widget.title);
+    }
+    return AppBar(
+      title: Text(
+        widget.title,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-            title: Text(
-          widget.title,
-        )),
+        backgroundColor: widget.scaffoldBackgroundColor,
+        appBar: _buildAppBar(),
         body: SafeArea(
           bottom: true,
           child: Column(

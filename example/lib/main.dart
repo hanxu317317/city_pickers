@@ -18,8 +18,12 @@ class MyApp extends StatelessWidget {
           accentColor: Color(0xFF888888),
           textTheme: TextTheme(
             //设置Material的默认字体样式
-            body1: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
+            bodyMedium: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
           )),
+      darkTheme: ThemeData.dark().copyWith(
+        primaryColor: Color(0xFFC91B3A),
+      ),
+      themeMode: ThemeMode.system,
       title: 'Welcome to Flutt2er',
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
