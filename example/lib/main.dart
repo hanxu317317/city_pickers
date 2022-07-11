@@ -6,40 +6,44 @@ import 'view/wip.dart';
 import 'view/show_full_page_picker.dart';
 import 'view/util_getLocationInfo.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: new ThemeData(
-          primaryColor: Color(0xFFC91B3A),
-          backgroundColor: Color(0xFFEFEFEF),
-          accentColor: Color(0xFF888888),
-          textTheme: TextTheme(
+      theme: ThemeData(
+          primaryColor: const Color(0xFFC91B3A),
+          backgroundColor: const Color(0xFFEFEFEF),
+          accentColor: const Color(0xFF888888),
+          textTheme: const TextTheme(
             //设置Material的默认字体样式
             bodyMedium: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
           )),
       darkTheme: ThemeData.dark().copyWith(
-        primaryColor: Color(0xFFC91B3A),
+        primaryColor: const Color(0xFFC91B3A),
       ),
       themeMode: ThemeMode.system,
       title: 'Welcome to Flutt2er',
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/name': (_) => new ShowCityPicker(),
-        '/full_page': (_) => new ShowFullPageCityPicker(),
-        '/city_select': (_) => new WorkInProgress(),
-        '/util_getLocationInfo': (_) => new UtilGetLocationInfo()
+        '/name': (_) => const ShowCityPicker(),
+        '/full_page': (_) => const ShowFullPageCityPicker(),
+        '/city_select': (_) => const WorkInProgress(),
+        '/util_getLocationInfo': (_) => const UtilGetLocationInfo()
       },
-      home: Body(),
+      home: const Body(),
     );
   }
 }
 
 class Body extends StatefulWidget {
+  const Body({Key? key}) : super(key: key);
+
   @override
-  _BodyState createState() => _BodyState();
+  State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {

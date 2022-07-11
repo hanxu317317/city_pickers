@@ -16,10 +16,15 @@ class ColorPickers extends StatefulWidget {
   final Color? initColor;
   final ValueChanged<Color> onConfirm;
 
-  ColorPickers({required this.initColor, required this.onConfirm, required this.target});
+  const ColorPickers({
+    Key? key,
+    required this.initColor,
+    required this.onConfirm,
+    required this.target,
+  }) : super(key: key);
 
   @override
-  _ColorPickersState createState() => _ColorPickersState();
+  State<ColorPickers> createState() => _ColorPickersState();
 }
 
 class _ColorPickersState extends State<ColorPickers> {
@@ -35,7 +40,7 @@ class _ColorPickersState extends State<ColorPickers> {
   }
 
   onChangeColor(Color color) {
-    this.setState(() {
+    setState(() {
       pickerColor = color;
     });
   }
@@ -68,36 +73,35 @@ class _ColorPickersState extends State<ColorPickers> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return Container(
         color: Colors.white,
         padding: const EdgeInsets.all(6.0),
         alignment: Alignment.center,
         child: GestureDetector(
           onTap: () async {
             Color color = await showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Pick a color!'),
-                  content: SingleChildScrollView(
-                    child: ColorPicker(
-                      pickerColor: pickerColor,
-                      onColorChanged: onChangeColor,
-                      pickerAreaHeightPercent: 0.8,
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Pick a color!'),
+                    content: SingleChildScrollView(
+                      child: ColorPicker(
+                        pickerColor: pickerColor,
+                        onColorChanged: onChangeColor,
+                        pickerAreaHeightPercent: 0.8,
+                      ),
                     ),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: const Text('Got it'),
-                      onPressed: () {
-                        setState(() => currentColor = pickerColor);
-                        Navigator.of(context).pop(currentColor);
-                      },
-                    ),
-                  ],
-                );
-              }
-            );
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Got it'),
+                        onPressed: () {
+                          setState(() => currentColor = pickerColor);
+                          Navigator.of(context).pop(currentColor);
+                        },
+                      ),
+                    ],
+                  );
+                });
             widget.onConfirm(color);
           },
           child: widget.target,

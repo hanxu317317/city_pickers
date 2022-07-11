@@ -17,21 +17,23 @@ import '../meta/province.dart';
 
 //showCitiesSelector
 class WorkInProgress extends StatefulWidget {
+  const WorkInProgress({Key? key}) : super(key: key);
+
   @override
   WorkInProgressState createState() {
-    return new WorkInProgressState();
+    return WorkInProgressState();
   }
 }
 
 class WorkInProgressState extends State<WorkInProgress> {
   String title = '城市选择';
   Result result = Result();
-  Color tagBgColor = Color.fromRGBO(255, 255, 255, 1);
-  Color pageBgColor = Color.fromRGBO(123, 123, 241, 1);
+  Color tagBgColor = const Color.fromRGBO(255, 255, 255, 1);
+  Color pageBgColor = const Color.fromRGBO(123, 123, 241, 1);
 
-  Color tagBgActiveColor = Color(0xffeeeeee);
-  Color tagFontColor = Color(0xff666666);
-  Color tagFontActiveColor = Color(0xff242424);
+  Color tagBgActiveColor = const Color(0xffeeeeee);
+  Color tagFontColor = const Color(0xff666666);
+  Color tagFontActiveColor = const Color(0xff242424);
 
   double tagBarFontSize = 12;
 
@@ -41,9 +43,9 @@ class WorkInProgressState extends State<WorkInProgress> {
 
   double topIndexFontSize = 13;
 
-  Color topIndexFontColor = Color(0xffc0c0c0);
+  Color topIndexFontColor = const Color(0xffc0c0c0);
 
-  Color topIndexBgColor = Color(0xfff3f4f5);
+  Color topIndexBgColor = const Color(0xfff3f4f5);
 
   Color itemSelectFontColor = Colors.cyan;
 
@@ -52,11 +54,11 @@ class WorkInProgressState extends State<WorkInProgress> {
   Color itemFontColor = Colors.black;
   AppBarBuilder appBarBuilder = (String title) {
     return AppBar(
-      title: Text('用户自定义AppBar'),
+      title: const Text('用户自定义AppBar'),
       actions: <Widget>[
-        IconButton(icon: Icon(Icons.add), onPressed: () {}),
-        IconButton(icon: Icon(Icons.dashboard), onPressed: () {}),
-        IconButton(icon: Icon(Icons.cached), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.add), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.dashboard), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.cached), onPressed: () {}),
       ],
     );
   };
@@ -76,9 +78,9 @@ class WorkInProgressState extends State<WorkInProgress> {
             divisions: 20,
             activeColor: Colors.blue,
             //进度中活动部分的颜色
-            onChanged: (double) {
+            onChanged: (value) {
               setState(() {
-                topIndexFontSize = double;
+                topIndexFontSize = value;
               });
             },
           ),
@@ -94,11 +96,11 @@ class WorkInProgressState extends State<WorkInProgress> {
         child: CupertinoSwitch(
           value: userSelfMeta,
           onChanged: (bool val) {
-            this.setState(() {
+            setState(() {
               userSelfMeta = !userSelfMeta;
             });
           },
-    ));
+        ));
   }
 
   Widget _buildTopIndexHeight() {
@@ -114,9 +116,9 @@ class WorkInProgressState extends State<WorkInProgress> {
             divisions: 60,
             activeColor: Colors.blue,
             //进度中活动部分的颜色
-            onChanged: (double) {
+            onChanged: (value) {
               setState(() {
-                topIndexHeight = double;
+                topIndexHeight = value;
               });
             },
           ),
@@ -139,9 +141,9 @@ class WorkInProgressState extends State<WorkInProgress> {
             divisions: 28,
             activeColor: Colors.blue,
             //进度中活动部分的颜色
-            onChanged: (double) {
+            onChanged: (value) {
               setState(() {
-                tagBarFontSize = double;
+                tagBarFontSize = value;
               });
             },
           ),
@@ -164,9 +166,9 @@ class WorkInProgressState extends State<WorkInProgress> {
             divisions: 38,
             activeColor: Colors.blue,
             //进度中活动部分的颜色
-            onChanged: (double) {
+            onChanged: (value) {
               setState(() {
-                cityItemFontSize = double;
+                cityItemFontSize = value;
               });
             },
           ),
@@ -182,14 +184,15 @@ class WorkInProgressState extends State<WorkInProgress> {
         title: title,
         locationCode: '110100',
         scaffoldBackgroundColor: pageBgColor,
-        provincesData: !userSelfMeta ? CityPickers.metaProvinces : provincesData,
+        provincesData:
+            !userSelfMeta ? CityPickers.metaProvinces : provincesData,
         citiesData: !userSelfMeta ? CityPickers.metaCities : citiesData,
         hotCities: [
           HotCity(id: '0', name: '北京'),
           HotCity(id: '1', name: '沈阳'),
           HotCity(id: '2', name: '天津'),
         ],
-        appBarBuilder:appBarBuilder,
+        appBarBuilder: appBarBuilder,
         sideBarStyle: BaseStyle(
             fontSize: tagBarFontSize,
             color: tagFontColor,
@@ -209,13 +212,13 @@ class WorkInProgressState extends State<WorkInProgress> {
     if (tempResult == null) {
       return;
     }
-    this.setState(() {
+    setState(() {
       result = tempResult;
     });
   }
 
   handleOnTitleChanged(String value) {
-    this.setState(() {
+    setState(() {
       title = value;
     });
   }
@@ -224,7 +227,7 @@ class WorkInProgressState extends State<WorkInProgress> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("省市县三级全屏联动"),
+        title: const Text("省市县三级全屏联动"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -234,7 +237,7 @@ class WorkInProgressState extends State<WorkInProgress> {
               editor: TextField(
                 controller: TextEditingController(text: title),
                 onChanged: (String value) {
-                  this.setState(() {
+                  setState(() {
                     title = value;
                   });
                 },
@@ -246,7 +249,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                 target: Text('选择颜色', style: TextStyle(color: tagBgColor)),
                 initColor: tagBgColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     tagBgColor = color;
                   });
                 },
@@ -259,7 +262,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                 initColor: pageBgColor,
                 onConfirm: (Color color) {
                   print("color::: $color");
-                  this.setState(() {
+                  setState(() {
                     pageBgColor = color;
                   });
                 },
@@ -271,7 +274,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                 target: Text('选择颜色', style: TextStyle(color: tagBgActiveColor)),
                 initColor: tagBgActiveColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     tagBgActiveColor = color;
                   });
                 },
@@ -283,7 +286,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                 target: Text('选择颜色', style: TextStyle(color: tagFontColor)),
                 initColor: tagFontColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     tagFontColor = color;
                   });
                 },
@@ -296,7 +299,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                     Text('选择颜色', style: TextStyle(color: tagFontActiveColor)),
                 initColor: tagFontActiveColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     tagFontActiveColor = color;
                   });
                 },
@@ -319,7 +322,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                     Text('选择颜色', style: TextStyle(color: topIndexFontColor)),
                 initColor: topIndexFontColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     topIndexFontColor = color;
                   });
                 },
@@ -331,7 +334,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                 target: Text('选择颜色', style: TextStyle(color: topIndexBgColor)),
                 initColor: topIndexBgColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     topIndexBgColor = color;
                   });
                 },
@@ -343,7 +346,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                 target: Text('选择颜色', style: TextStyle(color: itemFontColor)),
                 initColor: itemFontColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     itemFontColor = color;
                   });
                 },
@@ -356,7 +359,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                     Text('选择颜色', style: TextStyle(color: itemSelectFontColor)),
                 initColor: itemSelectFontColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     itemSelectFontColor = color;
                   });
                 },
@@ -369,7 +372,7 @@ class WorkInProgressState extends State<WorkInProgress> {
                     Text('选择颜色', style: TextStyle(color: itemSelectBgColor)),
                 initColor: itemSelectBgColor,
                 onConfirm: (Color color) {
-                  this.setState(() {
+                  setState(() {
                     itemSelectBgColor = color;
                   });
                 },
@@ -382,7 +385,7 @@ class WorkInProgressState extends State<WorkInProgress> {
             AttrItemContainer(
                 title: '选择结果', editor: Text("${result.toString()}")),
             ElevatedButton(
-              child: Text('呼出'),
+              child: const Text('呼出'),
               onPressed: () {
                 toggle(context);
               },

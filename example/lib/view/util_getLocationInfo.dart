@@ -12,44 +12,50 @@ import 'package:city_pickers/city_pickers.dart';
 import '../src/attr_item_container.dart';
 
 class UtilGetLocationInfo extends StatefulWidget {
-  _Demo createState() => _Demo();
+  const UtilGetLocationInfo({Key? key}) : super(key: key);
+
+  @override
+  State<UtilGetLocationInfo> createState() => _Demo();
 }
 
 class _Demo extends State<UtilGetLocationInfo> {
   CityPickerUtil cityPickerUtils = CityPickers.utils();
-  Result result = new Result();
+  Result result = Result();
   String code = '110101';
 
   buttonHandle() {
     print("code::: $code");
-    this.setState(() {
+    setState(() {
       result = cityPickerUtils.getAreaResultByCode(code);
       print("result>>>> ${result.toString()}");
     });
   }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        title: Text("解析locationCode"),
-    ),
-    body: Column(
-      children: <Widget>[
-        AttrItemContainer(
-          title: '标题1111',
-          editor: TextField(
-            keyboardType: TextInputType.number,
-            autofocus: false,
-            controller: TextEditingController(text: code),
-            onChanged: (String value) {
-              this.setState(() {
-                code = value;
-              });
-            },
-          ),
+          title: const Text("解析locationCode"),
         ),
-        Text("地址信息为: ${result.toString()}"),
-        RaisedButton(child: Text('touch me 解析 $code '),onPressed: this.buttonHandle)
-      ],
-    ));
+        body: Column(
+          children: <Widget>[
+            AttrItemContainer(
+              title: '标题1111',
+              editor: TextField(
+                keyboardType: TextInputType.number,
+                autofocus: false,
+                controller: TextEditingController(text: code),
+                onChanged: (String value) {
+                  setState(() {
+                    code = value;
+                  });
+                },
+              ),
+            ),
+            Text("地址信息为: ${result.toString()}"),
+            ElevatedButton(
+                child: Text('touch me 解析 $code '), onPressed: buttonHandle)
+          ],
+        ));
   }
 }
