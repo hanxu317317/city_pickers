@@ -26,6 +26,7 @@ const defaultTagActiveFontColor = Color(0xff242424);
 const defaultTagFontColor = Color(0xff666666);
 const defaultTopIndexFontColor = Color(0xffc0c0c0);
 const defaultTopIndexBgColor = Color(0xfff3f4f5);
+const defaultScaffoldBackgroundColor = Colors.white;
 
 class CitiesSelector extends StatefulWidget {
   final String? locationCode;
@@ -67,6 +68,8 @@ class CitiesSelector extends StatefulWidget {
 
   final Color? itemFontColor;
 
+  final Color? scaffoldBackgroundColor;
+
   CitiesSelector({
     this.title = '城市选择器',
     this.locationCode,
@@ -87,7 +90,8 @@ class CitiesSelector extends StatefulWidget {
 //    this.itemSelectBgColor = Colors.white,
     this.itemFontColor = Colors.black,
     this.itemSelectFontColor = Colors.red,
-    this.appBarBuilder
+    this.appBarBuilder,
+    this.scaffoldBackgroundColor,
   });
 
   @override
@@ -414,7 +418,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   }
 
   AppBar _buildAppBar() {
-    if (widget.appBarBuilder != null ) {
+    if (widget.appBarBuilder != null) {
       return widget.appBarBuilder!(widget.title);
     }
     return AppBar(
@@ -423,13 +427,12 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-        backgroundColor: Colors.white,
+        backgroundColor: widget.scaffoldBackgroundColor,
         appBar: _buildAppBar(),
-
         body: SafeArea(
           bottom: true,
           child: Column(
