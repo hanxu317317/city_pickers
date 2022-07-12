@@ -37,7 +37,7 @@ import 'package:city_pickers/city_pickers.dart';
 
 ```
 ...
-Future<Result?> _incrementCounter () async {
+Future<Result?> getResult () async {
     Result? result = await CityPickers.showFullPageCityPicker(
       context: context
     );
