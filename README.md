@@ -37,18 +37,26 @@ import 'package:city_pickers/city_pickers.dart';
 
 ```
 ...
-// type 1
-Result result = await CityPickers.showCityPicker(
-  context: context,
-);
-// type 2
-Result result2 = await CityPickers.showFullPageCityPicker(
-  context: context,
-);
-// type 3
-Result result2 = await CityPickers.showCitiesSelector(
-  context: context,
-);
+Future<Result?> _incrementCounter () async {
+    Result? result = await CityPickers.showFullPageCityPicker(
+      context: context
+    );
+    print('result $a');
+    return a;
+    // type 1
+    Result? result = await CityPickers.showCityPicker(
+      context: context,
+    );
+    // type 2
+    Result? result2 = await CityPickers.showFullPageCityPicker(
+      context: context,
+    );
+    // type 3
+    Result? result2 = await CityPickers.showCitiesSelector(
+      context: context,
+    );
+    return result;
+}
 ```
 
 
