@@ -27,22 +27,18 @@ dependencies:
 
 # 使用方法
 
-Import city_pickers.dart
-
-```
-import 'package:city_pickers/city_pickers.dart';
-```
-
 简单使用方法
 
 ```
+import 'package:city_pickers/city_pickers.dart';
 ...
+// 通过钩子事件, 主动唤起浮层. 
 Future<Result?> getResult () async {
     Result? result = await CityPickers.showFullPageCityPicker(
       context: context
     );
     print('result $a');
-    return a;
+   
     // type 1
     Result? result = await CityPickers.showCityPicker(
       context: context,
@@ -51,6 +47,7 @@ Future<Result?> getResult () async {
     Result? result2 = await CityPickers.showFullPageCityPicker(
       context: context,
     );
+    
     // type 3
     Result? result2 = await CityPickers.showCitiesSelector(
       context: context,
