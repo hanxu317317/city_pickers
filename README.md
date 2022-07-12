@@ -20,7 +20,7 @@ QQ 群号码: 935915271
 ```
 dependencies:
   ...
-    city_pickers:^0.0.1
+    city_pickers:^1.1.0
 ```
 
 关于如何运行flutter项目, 参考官方文档[documentation](https://flutter.io/).
