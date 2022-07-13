@@ -5,6 +5,7 @@ Language: [English](https://github.com/hanxu317317/city_pickers/blob/master/READ
 
 # Demo
 demo: https://pmbee.alicdn.com/flutter/city_pickers/index.html
+
 <image src="https://img.alicdn.com/tfs/TB16H9XGCzqK1RjSZPcXXbTepXa-329-687.gif" style="width: 300px" />
 <image src="https://img.alicdn.com/tfs/TB1CXEhLlLoK1RjSZFuXXXn0XXa-347-705.gif" style="width: 300px" />
 
