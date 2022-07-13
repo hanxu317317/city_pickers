@@ -4,6 +4,8 @@ Language: [English](https://github.com/hanxu317317/city_pickers/blob/master/READ
 中国的城市三级联动选择器
 
 # Demo
+demo: https://pmbee.alicdn.com/flutter/city_pickers/index.html
+
 <image src="https://img.alicdn.com/tfs/TB16H9XGCzqK1RjSZPcXXbTepXa-329-687.gif" style="width: 300px" />
 <image src="https://img.alicdn.com/tfs/TB1CXEhLlLoK1RjSZFuXXXn0XXa-347-705.gif" style="width: 300px" />
 
@@ -20,35 +22,40 @@ QQ 群号码: 935915271
 ```
 dependencies:
   ...
-    city_pickers:^0.0.1
+    city_pickers:^1.1.0
 ```
 
 关于如何运行flutter项目, 参考官方文档[documentation](https://flutter.io/).
 
 # 使用方法
 
-Import city_pickers.dart
-
-```
-import 'package:city_pickers/city_pickers.dart';
-```
-
 简单使用方法
 
 ```
+import 'package:city_pickers/city_pickers.dart';
 ...
-// type 1
-Result result = await CityPickers.showCityPicker(
-  context: context,
-);
-// type 2
-Result result2 = await CityPickers.showFullPageCityPicker(
-  context: context,
-);
-// type 3
-Result result2 = await CityPickers.showCitiesSelector(
-  context: context,
-);
+// 通过钩子事件, 主动唤起浮层. 
+Future<Result?> getResult () async {
+    Result? result = await CityPickers.showFullPageCityPicker(
+      context: context
+    );
+    print('result $a');
+   
+    // type 1
+    Result? result = await CityPickers.showCityPicker(
+      context: context,
+    );
+    // type 2
+    Result? result2 = await CityPickers.showFullPageCityPicker(
+      context: context,
+    );
+    
+    // type 3
+    Result? result2 = await CityPickers.showCitiesSelector(
+      context: context,
+    );
+    return result;
+}
 ```
 
 
