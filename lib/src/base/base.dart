@@ -10,6 +10,7 @@ import '../mod/inherit_process.dart';
 import '../show_types.dart';
 import '../util.dart';
 import './pickers.dart';
+import './tab.dart';
 
 class BaseView extends StatefulWidget {
   final double? progress;
@@ -278,7 +279,6 @@ class _BaseView extends State<BaseView> {
   }
 
   _onCityChange(Point _targetCity) {
-    print('_onCityChange');
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
@@ -417,7 +417,7 @@ class _BaseView extends State<BaseView> {
     if (widget.showType.contain(ShowType.v)) {
       pickerRows.add(new ScrollPicker(
         // 增加第4级(村/镇)选择
-        // key: Key('villages'),
+        key: Key('villages'),
         isShow: widget.showType.contain(ShowType.v),
         controller: villageController,
         itemBuilder: widget.itemBuilder,
@@ -441,6 +441,7 @@ class _BaseView extends State<BaseView> {
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
+
           children: <Widget>[
             new Row(
               children: <Widget>[
@@ -473,6 +474,7 @@ class _BaseView extends State<BaseView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
+            CountryTabPicker(),
             Expanded(
               child: new Row(
                 children: pickerRows,
