@@ -2,7 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../util.dart';
 
+/// config = [
+///   {"name": "中国", "value": "china"},
+///   {"name": "海外", "value: "other""},
+/// ]
 class CountryTabPicker extends StatelessWidget {
+  /// tab内容
+  final List<Map<String, String>>? config;
+
+  /// 默认选中内容
+  final int? defaultIndex;
+
+  final ValueChanged<int>? changed;
+
+  CountryTabPicker({
+    required this.config,
+    this.defaultIndex,
+    this.changed
+  });
+
   @override
   Widget build(BuildContext context) {
     return new Row(
@@ -11,7 +29,7 @@ class CountryTabPicker extends StatelessWidget {
           children: [
             RichText(
                 text: TextSpan(
-                  text: "this is a",
+                  text: "中国",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.red,

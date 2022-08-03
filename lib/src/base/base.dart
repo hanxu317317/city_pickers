@@ -474,7 +474,7 @@ class _BaseView extends State<BaseView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
-            CountryTabPicker(),
+            CountryTabPicker(config: [],defaultIndex: 0),
             Expanded(
               child: new Row(
                 children: pickerRows,
