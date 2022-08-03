@@ -413,7 +413,7 @@ class _BaseView extends State<BaseView> {
               child: new Row(
                 children: <Widget>[
                   new _MyCityPicker(
-                    key: Key('province'),
+                    // key: Key('province'),
                     isShow: widget.showType.contain(ShowType.p),
                     controller: provinceController,
                     itemBuilder: widget.itemBuilder,
@@ -425,7 +425,7 @@ class _BaseView extends State<BaseView> {
                     },
                   ),
                   new _MyCityPicker(
-                    key: Key('citys $targetProvince'),
+                    // key: Key('citys'),
                     // 这个属性是为了强制刷新
                     isShow: widget.showType.contain(ShowType.c),
                     controller: cityController,
@@ -438,7 +438,7 @@ class _BaseView extends State<BaseView> {
                     },
                   ),
                   new _MyCityPicker(
-                    key: Key('towns $targetCity'),
+                    // key: Key('towns'),
                     isShow: widget.showType.contain(ShowType.a),
                     controller: areaController,
                     itemBuilder: widget.itemBuilder,
@@ -451,7 +451,7 @@ class _BaseView extends State<BaseView> {
                   ),
                   new _MyCityPicker(
                     // 增加第4级(村/镇)选择
-                    key: Key('villages $targetArea'),
+                    // key: Key('villages'),
                     isShow: widget.showType.contain(ShowType.v),
                     controller: villageController,
                     itemBuilder: widget.itemBuilder,
