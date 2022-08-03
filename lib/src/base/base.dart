@@ -9,6 +9,7 @@ import '../../modal/result.dart';
 import '../mod/inherit_process.dart';
 import '../show_types.dart';
 import '../util.dart';
+import './pickers.dart';
 
 class BaseView extends StatefulWidget {
   final double? progress;
@@ -258,7 +259,7 @@ class _BaseView extends State<BaseView> {
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
-    _changeTimer = new Timer(Duration(milliseconds: 500), () {
+    _changeTimer = new Timer(Duration(milliseconds: 100), () {
       Point _provinceTree =
           cityTree.initTree(_province.code.toString());
       setState(() {
@@ -277,10 +278,11 @@ class _BaseView extends State<BaseView> {
   }
 
   _onCityChange(Point _targetCity) {
+    print('_onCityChange');
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
-    _changeTimer = new Timer(Duration(milliseconds: 500), () {
+    _changeTimer = new Timer(Duration(milliseconds: 100), () {
       if (!mounted) return;
       setState(() {
         targetCity = _targetCity;
@@ -299,7 +301,7 @@ class _BaseView extends State<BaseView> {
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
-    _changeTimer = new Timer(Duration(milliseconds: 500), () {
+    _changeTimer = new Timer(Duration(milliseconds: 100), () {
       if (!mounted) return;
       setState(() {
         targetArea = _targetArea;
@@ -313,7 +315,7 @@ class _BaseView extends State<BaseView> {
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
-    _changeTimer = new Timer(Duration(milliseconds: 500), () {
+    _changeTimer = new Timer(Duration(milliseconds: 100), () {
       if (!mounted) return;
       setState(() {
         targetVillage = _targetVillage;
@@ -368,6 +370,65 @@ class _BaseView extends State<BaseView> {
   }
 
   Widget _bottomBuild() {
+    List<Widget> pickerRows = [];
+    if (widget.showType.contain(ShowType.p)) {
+      pickerRows.add(new ScrollPicker(
+        key: Key('province'),
+        isShow: widget.showType.contain(ShowType.p),
+        controller: provinceController,
+        itemBuilder: widget.itemBuilder,
+        itemExtent: widget.itemExtent,
+        value: targetProvince.name,
+        itemList: provinces.toList().map((v) => v.name).toList(),
+        changed: (index) {
+          _onProvinceChange(provinces[index]);
+        },
+      ));
+    }
+    if (widget.showType.contain(ShowType.c)) {
+      pickerRows.add(new ScrollPicker(
+        key: Key('citys'),
+        // 这个属性是为了强制刷新
+        isShow: widget.showType.contain(ShowType.c),
+        controller: cityController,
+        itemBuilder: widget.itemBuilder,
+        itemExtent: widget.itemExtent,
+        value: targetCity?.name,
+        itemList: getCityItemList(),
+        changed: (index) {
+          _onCityChange(targetProvince.child[index]);
+        },
+      ));
+    }
+    if (widget.showType.contain(ShowType.a)) {
+      pickerRows.add(new ScrollPicker(
+        key: Key('towns'),
+        isShow: widget.showType.contain(ShowType.a),
+        controller: areaController,
+        itemBuilder: widget.itemBuilder,
+        itemExtent: widget.itemExtent,
+        value: targetArea?.name,
+        itemList: getAreaItemList(),
+        changed: (index) {
+          _onAreaChange(targetCity!.child[index]);
+        },
+      ));
+    }
+    if (widget.showType.contain(ShowType.v)) {
+      pickerRows.add(new ScrollPicker(
+        // 增加第4级(村/镇)选择
+        // key: Key('villages'),
+        isShow: widget.showType.contain(ShowType.v),
+        controller: villageController,
+        itemBuilder: widget.itemBuilder,
+        itemExtent: widget.itemExtent,
+        value: targetVillage?.name,
+        itemList: getVillageItemList(),
+        changed: (index) {
+          _onVillageChange(targetArea!.child[index]);
+        },
+      ));
+    }
     return new Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -414,58 +475,7 @@ class _BaseView extends State<BaseView> {
             ),
             Expanded(
               child: new Row(
-                children: <Widget>[
-                  new _MyCityPicker(
-                    // key: Key('province'),
-                    isShow: widget.showType.contain(ShowType.p),
-                    controller: provinceController,
-                    itemBuilder: widget.itemBuilder,
-                    itemExtent: widget.itemExtent,
-                    value: targetProvince.name,
-                    itemList: provinces.toList().map((v) => v.name).toList(),
-                    changed: (index) {
-                      _onProvinceChange(provinces[index]);
-                    },
-                  ),
-                  new _MyCityPicker(
-                    // key: Key('citys'),
-                    // 这个属性是为了强制刷新
-                    isShow: widget.showType.contain(ShowType.c),
-                    controller: cityController,
-                    itemBuilder: widget.itemBuilder,
-                    itemExtent: widget.itemExtent,
-                    value: targetCity?.name,
-                    itemList: getCityItemList(),
-                    changed: (index) {
-                      _onCityChange(targetProvince.child[index]);
-                    },
-                  ),
-                  new _MyCityPicker(
-                    // key: Key('towns'),
-                    isShow: widget.showType.contain(ShowType.a),
-                    controller: areaController,
-                    itemBuilder: widget.itemBuilder,
-                    itemExtent: widget.itemExtent,
-                    value: targetArea?.name,
-                    itemList: getAreaItemList(),
-                    changed: (index) {
-                      _onAreaChange(targetCity!.child[index]);
-                    },
-                  ),
-                  new _MyCityPicker(
-                    // 增加第4级(村/镇)选择
-                    // key: Key('villages'),
-                    isShow: widget.showType.contain(ShowType.v),
-                    controller: villageController,
-                    itemBuilder: widget.itemBuilder,
-                    itemExtent: widget.itemExtent,
-                    value: targetVillage?.name,
-                    itemList: getVillageItemList(),
-                    changed: (index) {
-                      _onVillageChange(targetArea!.child[index]);
-                    },
-                  )
-                ],
+                children: pickerRows,
               ),
             )
           ],
@@ -493,104 +503,7 @@ class _BaseView extends State<BaseView> {
   }
 }
 
-class _MyCityPicker extends StatefulWidget {
-  final List<String>? itemList;
-  final Key? key;
-  final String? value;
-  final bool isShow;
-  final FixedExtentScrollController? controller;
-  final ValueChanged<int> changed;
-  final ItemWidgetBuilder? itemBuilder;
 
-  // ios选择框的高度. 配合 itemBuilder中的字体使用.
-  final double? itemExtent;
-
-  _MyCityPicker(
-      {this.key,
-      this.controller,
-      this.isShow = false,
-      required this.changed,
-      this.itemList,
-      this.itemExtent,
-      this.itemBuilder,
-      this.value});
-
-  @override
-  State createState() {
-    return new _MyCityPickerState();
-  }
-}
-
-class _MyCityPickerState extends State<_MyCityPicker> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.isShow) {
-      return Container();
-    }
-    if (widget.itemList == null || widget.itemList!.isEmpty) {
-      return new Expanded(
-        child: Container(),
-      );
-    }
-    return new Expanded(
-      child: new Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          padding: const EdgeInsets.all(6.0),
-          alignment: Alignment.center,
-          child: CupertinoPicker.builder(
-              magnification: 1.0,
-              itemExtent: widget.itemExtent ?? 40.0,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              scrollController: widget.controller,
-              onSelectedItemChanged: (index) {
-                widget.changed(index);
-              },
-              itemBuilder: (context, index) {
-                if (widget.itemBuilder != null) {
-                  return widget.itemBuilder!(
-                      widget.itemList![index], widget.itemList!, index);
-                }
-
-                String text = widget.itemList![index];
-
-                // TODO 根据字数调整字体大小，不够优雅，可以改为根据函数计算字体大小
-                double fontSize = 13;
-                if (text != '') {
-                  int len = text.length;
-                  if (len >= 1 && len <= 3) {
-                    fontSize = 20;
-                  } else if (len > 3 && len <= 4) {
-                    fontSize = 18;
-                  } else if (len > 4 && len <= 5) {
-                    fontSize = 16;
-                  } else if (len > 5 && len <= 6) {
-                    fontSize = 12;
-                  } else if (len > 6 && len <= 9) {
-                    fontSize = 10;
-                  } else if (len > 9) {
-                    fontSize = 7;
-                  }
-                }
-                return Center(
-                  child: Text(
-                    '$text',
-                    overflow: TextOverflow.ellipsis, // 字数过多时显示省略号
-                    maxLines: 1,
-                    style: TextStyle(fontSize: fontSize),
-                  ),
-                );
-              },
-              childCount: widget.itemList!.length)),
-      flex: 1,
-    );
-  }
-}
 
 class _WrapLayout extends SingleChildLayoutDelegate {
   _WrapLayout({
