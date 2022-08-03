@@ -208,7 +208,8 @@ class CityPickers {
               scaffoldBackgroundColor:
                   scaffoldBackgroundColor ?? defaultScaffoldBackgroundColor,
               itemSelectFontColor: _cityItemStyle.activeColor,
-              appBarBuilder: appBarBuilder),
+              appBarBuilder: appBarBuilder
+          ),
         ),
         transitionsBuilder:
             (_, Animation<double> animation, __, Widget child) =>

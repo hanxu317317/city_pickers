@@ -4,7 +4,7 @@ const NoName = "";
 ///  use National Bureau of Statistics's data, build tree, the [point] is trees's node
 class Point {
 //  Point get nullPoint = () => {};
-  int? code;
+  String? code;
   late List<Point> child;
   int? depth;
   String? letter;
@@ -18,7 +18,7 @@ class Point {
   bool get isNull => this.code == null;
 
   Point({
-    this.code = 0,
+    this.code = '0',
     this.child = EmptyArray,
     this.depth,
     this.letter,

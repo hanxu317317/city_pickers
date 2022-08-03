@@ -112,10 +112,10 @@ class _FullPageState extends State<FullPage> {
   }
 
   void _initLocation(String? locationCode) {
-    int _locationCode;
+    String _locationCode;
     if (locationCode != null) {
       try {
-        _locationCode = int.parse(locationCode);
+        _locationCode = locationCode;
       } catch (e) {
         print(ArgumentError(
             "The Argument locationCode must be valid like: '100000' but get '$locationCode' "));
@@ -140,7 +140,7 @@ class _FullPageState extends State<FullPage> {
       });
     } else {
       targetProvince =
-          cityTree.initTreeByCode(int.parse(widget.provincesData.keys.first));
+          cityTree.initTreeByCode(widget.provincesData.keys.first);
     }
 
     if (targetCity == null) {
@@ -225,8 +225,8 @@ class _FullPageState extends State<FullPage> {
     });
   }
 
-  int _getSelectedId() {
-    int? selectId;
+  String _getSelectedId() {
+    String? selectId;
     switch (pageStatus) {
       case Status.Province:
         selectId = targetProvince.code;
@@ -240,7 +240,7 @@ class _FullPageState extends State<FullPage> {
       case Status.Over:
         break;
     }
-    return selectId ?? 0;
+    return selectId ?? '0';
   }
 
   /// 所有选项的点击事件入口
@@ -343,7 +343,7 @@ class _FullPageState extends State<FullPage> {
 class ListWidget extends StatelessWidget {
   final List<Point> itemList;
   final ScrollController controller;
-  final int selectedId;
+  final String selectedId;
   final ValueChanged<Point> onSelect;
 
   ListWidget(

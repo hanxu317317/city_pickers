@@ -38,10 +38,10 @@ class Location {
     CityTree cityTree =
         new CityTree(metaInfo: citiesData, provincesInfo: provincesData);
 
-    int locationCode;
+    String locationCode;
     Result locationInfo = new Result();
     try {
-      locationCode = int.parse(_locationCode);
+      locationCode = _locationCode;
     } catch (e) {
       print(ArgumentError(
           "The Argument locationCode must be valid like: '100000' but get '$_locationCode' "));

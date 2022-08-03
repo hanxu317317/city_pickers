@@ -1,3 +1,4 @@
+/// 中国省份信息
 const Map<String, String> provincesData = {
   "110000": "北京市",
   "120000": "天津市",
@@ -35,6 +36,7 @@ const Map<String, String> provincesData = {
   "820000": "澳门特别行政区"
 };
 
+/// 中国城市信息
 const Map<String, dynamic> citiesData = {
   "110000": {
     "110100": {"name": "北京城区", "alpha": "b"}
@@ -4247,3 +4249,5 @@ const Map<String, dynamic> citiesData = {
     "820108": {"name": "圣方济各堂区", "alpha": "s"}
   }
 };
+
+

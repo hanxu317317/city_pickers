@@ -36,6 +36,8 @@ class BaseView extends StatefulWidget {
   final Widget? confirmWidget;
 
   final double borderRadius;
+  /// 是否开启全球化数据
+  final bool? global;
 
   BaseView({
     this.progress,
@@ -50,6 +52,7 @@ class BaseView extends StatefulWidget {
     this.confirmWidget,
     this.isSort = false,
     this.borderRadius = 0,
+    this.global = false,
   }) : assert(!(itemBuilder != null && itemExtent == null),
             "\ritemExtent could't be null if itemBuilder exits");
 
@@ -153,10 +156,10 @@ class _BaseView extends State<BaseView> {
 
   // initialize tree by locationCode
   void _initLocation(String? locationCode) {
-    int _locationCode;
+    String _locationCode;
     if (locationCode != null) {
       try {
-        _locationCode = int.parse(locationCode);
+        _locationCode = locationCode;
       } catch (e) {
         print(ArgumentError(
             "The Argument locationCode must be valid like: '100000' but get '$locationCode' "));
@@ -196,7 +199,7 @@ class _BaseView extends State<BaseView> {
     } else {
       /// 本来默认想定在北京, 但是由于有可能出现用户的省份数据为不包含北京, 所以采用第一个省份做为初始
       targetProvince =
-          cityTree.initTreeByCode(int.parse(widget.provincesData.keys.first));
+          cityTree.initTreeByCode(widget.provincesData.keys.first);
     }
     // 尝试试图匹配到下一个级别的第一个,
     if (targetCity == null) {
@@ -257,7 +260,7 @@ class _BaseView extends State<BaseView> {
     }
     _changeTimer = new Timer(Duration(milliseconds: 500), () {
       Point _provinceTree =
-          cityTree.initTree(int.parse(_province.code.toString()));
+          cityTree.initTree(_province.code.toString());
       setState(() {
         targetProvince = _provinceTree;
         targetCity = _getTargetChildFirst(_provinceTree);
@@ -558,7 +561,7 @@ class _MyCityPickerState extends State<_MyCityPicker> {
 
                 // TODO 根据字数调整字体大小，不够优雅，可以改为根据函数计算字体大小
                 double fontSize = 13;
-                if (text != null) {
+                if (text != '') {
                   int len = text.length;
                   if (len >= 1 && len <= 3) {
                     fontSize = 20;

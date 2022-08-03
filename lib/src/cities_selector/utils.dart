@@ -47,7 +47,7 @@ class CitiesUtils {
     CityTree citiesTreeBuilder =
         new CityTree(metaInfo: citiesMeta, provincesInfo: provinceMeta);
     provinceMeta.forEach((key, value) {
-      trees.add(citiesTreeBuilder.initTree(int.parse(key)));
+      trees.add(citiesTreeBuilder.initTree(key));
     });
     trees.forEach((Point tree) {
       cities.addAll(tree.child);
@@ -111,7 +111,7 @@ class CitiesUtils {
 // 热闹城市对象
 class HotCity {
   final String name;
-  final int id;
+  final String id;
   final String tag;
 
   HotCity({required this.name, required this.id, this.tag = "★"});
