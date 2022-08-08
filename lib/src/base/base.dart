@@ -38,8 +38,9 @@ class BaseView extends StatefulWidget {
   final Widget? confirmWidget;
 
   final double borderRadius;
+
   /// 是否开启全球化数据
-  final bool? global;
+  final bool? enableGlobal;
 
   BaseView({
     this.progress,
@@ -54,7 +55,7 @@ class BaseView extends StatefulWidget {
     this.confirmWidget,
     this.isSort = false,
     this.borderRadius = 0,
-    this.global = false,
+    this.enableGlobal = false,
   }) : assert(!(itemBuilder != null && itemExtent == null),
             "\ritemExtent could't be null if itemBuilder exits");
 
@@ -64,7 +65,7 @@ class BaseView extends StatefulWidget {
 class _BaseView extends State<BaseView> {
   Timer? _changeTimer;
   bool _resetControllerOnce = false;
-
+  bool _oversea = false;
   FixedExtentScrollController provinceController =
       new FixedExtentScrollController();
   FixedExtentScrollController cityController =
@@ -326,6 +327,7 @@ class _BaseView extends State<BaseView> {
   Result _buildResult() {
     Result result = Result();
     ShowType showType = widget.showType;
+
     if (showType.contain(ShowType.p)) {
       result.provinceId = targetProvince.code.toString();
       result.provinceName = targetProvince.name;
@@ -356,15 +358,6 @@ class _BaseView extends State<BaseView> {
       result.villageId = targetVillage?.code.toString();
       result.villageName = targetVillage?.name;
     }
-    // 台湾异常数据. 需要过滤
-    // if (result.provinceId == "710000") {
-    //   result.cityId = null;
-    //   result.cityName = null;
-    //   result.areaId = null;
-    //   result.areaName = null;
-    //   result.villageId = null;
-    //   result.villageName = null;
-    // }
 
     return result;
   }
@@ -474,9 +467,23 @@ class _BaseView extends State<BaseView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
-            CountryTabPicker(config: [],defaultIndex: 0),
+            CountryTabPicker(
+                config: [{"name": "中国"}, {"name": "海外"}],
+                index: _oversea == true ? 1 : 0,
+                changed: (int index) {
+                  setState(() {
+                    if (index == 1) {
+                      _oversea = true;
+                    }
+                    if (index == 0) {
+                      _oversea = false;
+                    }
+                  });
+                },
+            ),
             Expanded(
               child: new Row(
+                // children: pickerRows,
                 children: pickerRows,
               ),
             )
