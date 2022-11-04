@@ -182,7 +182,7 @@ class WorkInProgressState extends State<WorkInProgress> {
     Result? tempResult = await CityPickers.showCitiesSelector(
         context: context,
         title: title,
-        locationCode: '110100',
+        locationCode: result.cityId,
         scaffoldBackgroundColor: pageBgColor,
         provincesData:
             !userSelfMeta ? CityPickers.metaProvinces : provincesData,

@@ -184,10 +184,10 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   }
 
   Point? getInitialCityCode() {
-    if (widget.locationCode == null) {
+    final code = widget.locationCode;
+    if (code == null) {
       return null;
     }
-    int code = int.parse(widget.locationCode!);
     return _cities.firstWhere((Point point) {
       return point.code == code;
     }, orElse: () => Point.nullPoint());
