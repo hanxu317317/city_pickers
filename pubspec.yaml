@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  known_extents_list_view_builder: ^1.1.0
+  collection: any
   lpinyin: ^2.0.3
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

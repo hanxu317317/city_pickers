@@ -10,6 +10,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:known_extents_list_view_builder/known_extents_list_view_builder.dart';
 
 import '../../meta/province.dart';
 import '../../modal/point.dart';
@@ -332,57 +333,59 @@ class _CitiesSelectorState extends State<CitiesSelector> {
 //    print("_initTargetCity.code ${_initTargetCity}");
     List<Widget> children = [];
     ThemeData theme = Theme.of(context);
-    children.add(ListView.builder(
-        controller: _scrollController,
-        itemCount: _cities.length,
-        itemBuilder: (context, index) {
-          bool offstage = false;
-          bool selected = _initTargetCity != null &&
-              _initTargetCity!.code == _cities[index].code;
-          if (index != 0 &&
-              _cities[index - 1].letter == _cities[index].letter) {
-            offstage = true;
-          }
-          return Column(
-            children: <Widget>[
-              Offstage(
-                offstage: offstage,
-                child: Container(
-                  height: topTagHeight,
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 15.0),
-                  color: widget.topIndexBgColor,
-                  child: Text(
-                    _cities[index].letter ?? "",
-                    softWrap: true,
-                    style: TextStyle(
-                        fontSize: widget.topIndexFontSize,
-                        color: widget.topIndexFontColor),
+
+    bool hideTag(int index) =>
+        index != 0 && _cities[index - 1].letter == _cities[index].letter;
+
+    children.add(KnownExtentsListView.builder(
+      controller: _scrollController,
+      itemCount: _cities.length,
+      itemExtents: List.generate(_cities.length,
+          (index) => (hideTag(index) ? 0 : topTagHeight) + 56.0),
+      itemBuilder: (context, index) {
+        bool selected = _initTargetCity != null &&
+            _initTargetCity!.code == _cities[index].code;
+        return Column(
+          children: <Widget>[
+            Offstage(
+              offstage: hideTag(index),
+              child: Container(
+                height: topTagHeight,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: 15.0),
+                color: widget.topIndexBgColor,
+                child: Text(
+                  _cities[index].letter ?? "",
+                  softWrap: true,
+                  style: TextStyle(
+                      fontSize: widget.topIndexFontSize,
+                      color: widget.topIndexFontColor),
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              key: index == 0 ? _key0 : null,
+              child: Center(
+                child: ListTileTheme(
+                  selectedColor:
+                      widget.itemSelectFontColor ?? theme.primaryColor,
+                  textColor: widget.itemFontColor ?? theme.accentColor,
+                  child: ListTile(
+                    selected: selected,
+                    title: Text(_cities[index].name,
+                        style: TextStyle(fontSize: itemFontSize)),
+                    onTap: () {
+                      Navigator.pop(context, _buildResult(_cities[index]));
+                    },
                   ),
                 ),
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                key: index == 0 ? _key0 : null,
-                child: Center(
-                  child: ListTileTheme(
-                    selectedColor:
-                        widget.itemSelectFontColor ?? theme.primaryColor,
-                    textColor: widget.itemFontColor ?? theme.accentColor,
-                    child: ListTile(
-                      selected: selected,
-                      title: Text(_cities[index].name,
-                          style: TextStyle(fontSize: itemFontSize)),
-                      onTap: () {
-                        Navigator.pop(context, _buildResult(_cities[index]));
-                      },
-                    ),
-                  ),
-                ),
-              )
-            ],
-          );
-        }));
+            )
+          ],
+        );
+      },
+    ));
     if (_showTopOffstage) {
       children.add(Positioned(
         top: _topOffstageTop,
