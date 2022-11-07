@@ -9,10 +9,11 @@
 
 import 'dart:async';
 
+import 'dart:math' as math;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:known_extents_list_view_builder/known_extents_list_view_builder.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../meta/province.dart';
 import '../../modal/point.dart';
@@ -102,29 +103,21 @@ class CitiesSelector extends StatefulWidget {
 }
 
 class _CitiesSelectorState extends State<CitiesSelector> {
-  String? _tagName;
+  String? _touchedTagName;
   Timer? _changeTimer;
 
-  /// 进行计算 .获取的初始化的城市code码
-  Point? _initTargetCity;
+  int _initialScrollIndex = -1;
   bool _isTouchTagBar = false;
 
   /// 是否显示顶部的tag提示标签
   bool _showTopOffstage = true;
 
-  /// 顶部tag标签的动态高度
-  double _topOffstageTop = 0;
-
   /// 城市列表数组
   List<Point> _cities = [];
-  late ScrollController _scrollController;
+  late ItemScrollController _scrollController;
+  late ItemPositionsListener _positionsListener;
 
-  /// 用这个key 去标记一个item,用来在初始化后. 获取期高度
-  GlobalKey _key0 = new GlobalKey();
-
-  /// 计算每一个letter or tag的列表区间范围
-  /// 存放每个tag集的偏移start 与 end . 通过计算Alpha的位置, 判定滚动
-  List<CityOffsetRange> _offsetTagRangeList = [];
+  late Map<String, int> _tagToIndexMap;
 
   /// 有效的tag标签列表, 对应右侧标签
   late List<String> _tagList;
@@ -132,126 +125,59 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   /// 每一个顶部标签的高度
   late double topTagHeight;
 
-  /// 用户可定义的, 每一个选项的高度
-//  double itemHeight;
-
   /// 用户可定义的, 选项中字体的大小
   double? itemFontSize;
 
   @override
   void initState() {
-    // TODO: implement initState
-    print("hotCities::::: ${widget.hotCities}");
     _cities = CitiesUtils.getAllCitiesByMeta(
         widget.provincesData ?? provincesData, widget.citiesData ?? citiesData);
-    print("_cities::: $_cities");
-    _initTargetCity = getInitialCityCode();
-//    print("_cities>>> ${_cities.length}");
-//    print("locationCode ${widget.locationCode}");
+    if (widget.hotCities != null) {
+      _cities.insertAll(
+        0,
+        widget.hotCities!.map((e) => Point(
+              code: e.id,
+              letter: e.tag,
+              name: e.name,
+              child: [],
+            )),
+      );
+    }
+
+    _tagToIndexMap = _generateTagToIndexMap(_cities);
+    _initialScrollIndex = getInitialCityCodeIndex();
     _tagList = CitiesUtils.getValidTagsByCityList(_cities);
 
-    _scrollController = new ScrollController();
+    _scrollController = new ItemScrollController();
+    _positionsListener = ItemPositionsListener.create();
 
-    // 向tag 与 city 列表中加入 自定义数据
-    formatHotCities();
-    _scrollController.addListener(() {
-      _initOffsetRangList();
-//      可以用来强行关闭键盘
-//      FocusScope.of(context).requestFocus(FocusNode());
-      _dynamicChangeTopStagePosition(_scrollController.offset.toDouble());
-    });
     super.initState();
 
     topTagHeight = widget.topIndexHeight;
-//    itemHeight = widget.cityItemHeight;
     itemFontSize = widget.cityItemFontSize;
   }
 
-  void formatHotCities() {
-    if (widget.hotCities != null) {
-      List<Point> hotPoints = [];
-      List<String> hotTags = [];
-      widget.hotCities!.forEach((HotCity hotCity) {
-        if (!hotTags.contains(hotCity.tag)) {
-          hotTags.add(hotCity.tag);
-        }
-        hotPoints.add(Point(
-            code: hotCity.id,
-            letter: hotCity.tag,
-            name: hotCity.name,
-            child: []));
-      });
-      _cities.insertAll(0, hotPoints);
-      _tagList.insertAll(0, hotTags);
-    }
-  }
-
-  Point? getInitialCityCode() {
+  int getInitialCityCodeIndex() {
     final code = widget.locationCode;
     if (code == null) {
-      return null;
+      return -1;
     }
-    return _cities.firstWhere((Point point) {
+    return _cities.indexWhere((Point point) {
       return point.code == code;
-    }, orElse: () => Point.nullPoint());
+    });
   }
 
-  /// 只有当组件加载后. 才能获取_key0的高度,要保证该函数只会被执行一次
-  List<CityOffsetRange> _initOffsetRangList() {
-    if (_offsetTagRangeList.isEmpty) {
-      double itemContainerHeight =
-          _key0.currentContext?.findRenderObject()?.paintBounds.size.height ??
-              0;
-
-      double offstageHeight = topTagHeight;
-
-      _offsetTagRangeList = CitiesUtils.getOffsetRangeByCitiesList(
-          lists: _cities,
-          tagHeight: offstageHeight,
-          itemHeight: itemContainerHeight);
+  Map<String, int> _generateTagToIndexMap(List<Point> cities) {
+    final map = <String, int>{};
+    String? prevLetter;
+    for (var i = 0; i < cities.length; i++) {
+      var letter = cities[i].letter;
+      if (letter != prevLetter) {
+        map[letter ?? ''] = i;
+        prevLetter = letter;
+      }
     }
-    return _offsetTagRangeList;
-  }
-
-  /// 动态计算顶部topStage标题的位置
-  _dynamicChangeTopStagePosition(double scrollTopOffset) {
-    // 应该显示标签的视觉窗口中的对象
-    CityOffsetRange tempViewTarget =
-        _offsetTagRangeList.firstWhere((CityOffsetRange range) {
-      return scrollTopOffset > range.start && scrollTopOffset < range.end;
-    }, orElse: () => CityOffsetRange.empty());
-    if (tempViewTarget.isEmpty()) {
-      return;
-    }
-
-    // 跟随滚动, 因为滚动精度问题. 实际上很难到让_topOffstageTop=0;
-    if (scrollTopOffset + topTagHeight >= tempViewTarget.end) {
-      return this.setState(() {
-        _tagName = tempViewTarget.tag;
-        _topOffstageTop =
-            -(scrollTopOffset + topTagHeight - tempViewTarget.end);
-      });
-    }
-
-    // 修正topStage的位置, 分二种情况将期归0
-    // 第一种情况, 是当上方动态跟随. 精度达到预期时._topOffstageTop 被置0
-    // 第二种. 当则是补偿以上的运行
-    if (_topOffstageTop < -topTagHeight && _topOffstageTop != 0) {
-      this.setState(() {
-        _topOffstageTop = 0;
-      });
-    } else if (_topOffstageTop != 0) {
-//      print("补偿运算");
-      _offsetTagRangeList.forEach((CityOffsetRange item) {
-        if (scrollTopOffset > item.start && scrollTopOffset < item.end) {
-          this.setState(() {
-            _topOffstageTop = 0;
-            _tagName = item.tag;
-          });
-          return;
-        }
-      });
-    }
+    return map;
   }
 
   /// 当右侧的类型. 因为触摸而发生改变
@@ -261,10 +187,9 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     }
     HapticFeedback.selectionClick();
     _changeTimer = new Timer(Duration(milliseconds: 30), () {
-      final cityOffsetRange = _offsetTagRangeList
-          .firstWhereOrNull((CityOffsetRange range) => range.tag == alpha);
-      if (cityOffsetRange != null) {
-        _scrollController.jumpTo(cityOffsetRange.start);
+      final index = _tagToIndexMap[alpha];
+      if (index != null) {
+        _scrollController.jumpTo(index: index);
       }
     });
   }
@@ -279,7 +204,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           width: 80.0,
           height: 80.0,
           child: Text(
-            _tagName ?? '',
+            _touchedTagName ?? _tagList.first,
             style: TextStyle(
               fontSize: 32.0,
               color: Colors.white,
@@ -314,9 +239,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           if (!_isTouchTagBar) {
             _isTouchTagBar = true;
           }
-          _tagName = alpha;
+          _touchedTagName = alpha;
         });
-        _initOffsetRangList();
         if (alpha != null) {
           _onTagChange(alpha);
         }
@@ -324,34 +248,36 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     );
   }
 
-  Result _buildResult(Point city) {
+  Result _createResult(Point city) {
     Result result = Result();
-    result.cityId = city.code.toString();
+    result.cityId = city.code;
     result.cityName = city.name;
-//    print('result $result');
     return result;
   }
 
-  List<Widget> _buildChildren(BuildContext context) {
-//    print("_initTargetCity.code ${_initTargetCity}");
+  List<Widget> _buildChildren(BuildContext context, double height) {
     List<Widget> children = [];
     ThemeData theme = Theme.of(context);
 
     bool hideTag(int index) =>
         index != 0 && _cities[index - 1].letter == _cities[index].letter;
 
-    children.add(KnownExtentsListView.builder(
-      controller: _scrollController,
+    children.add(ScrollablePositionedList.builder(
+      initialScrollIndex: math.max(0, _initialScrollIndex),
+      initialAlignment: _initialScrollIndex > 0 &&
+              _showTopOffstage &&
+              !_tagToIndexMap.containsValue(_initialScrollIndex)
+          // 不显示tag的item, 顶部会被常显的topTag挡住, 需要往下偏移
+          ? topTagHeight / height
+          : 0,
+      itemScrollController: _scrollController,
+      itemPositionsListener: _positionsListener,
       itemCount: _cities.length,
-      itemExtents: List.generate(
-          _cities.length,
-          (index) =>
-              (hideTag(index) ? 0 : topTagHeight) +
-              // height of ListTile
-              56.0),
       itemBuilder: (context, index) {
-        bool selected = _initTargetCity != null &&
-            _initTargetCity!.code == _cities[index].code;
+        // 这里使用code判断是否选择, 因为[widget.hotCities]和[widget.citiesData]有可能有相同code的城市
+        // 此时他们应该都是选中状态
+        bool selected = widget.locationCode != null &&
+            widget.locationCode == _cities[index].code;
         return Column(
           children: <Widget>[
             Offstage(
@@ -372,7 +298,6 @@ class _CitiesSelectorState extends State<CitiesSelector> {
             ),
             Container(
               alignment: Alignment.centerLeft,
-              key: index == 0 ? _key0 : null,
               child: Center(
                 child: ListTileTheme(
                   selectedColor:
@@ -383,7 +308,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
                     title: Text(_cities[index].name,
                         style: TextStyle(fontSize: itemFontSize)),
                     onTap: () {
-                      widget.onSelected(_buildResult(_cities[index]));
+                      widget.onSelected(_createResult(_cities[index]));
                     },
                   ),
                 ),
@@ -394,27 +319,43 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       },
     ));
     if (_showTopOffstage) {
-      children.add(Positioned(
-        top: _topOffstageTop,
-        left: 0,
-        right: 0,
-        child: Offstage(
-          offstage: false,
-          child: Container(
-            height: topTagHeight,
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.only(left: 15.0),
-            color: widget.topIndexBgColor,
-            child: Text(
-              _tagName ?? _tagList.first,
-              softWrap: true,
-              style: TextStyle(
-                fontSize: widget.topIndexFontSize,
-                color: widget.topIndexFontColor,
+      children.add(ValueListenableBuilder<Iterable<ItemPosition>>(
+        valueListenable: _positionsListener.itemPositions,
+        builder: (context, value, child) {
+          var positions = value.toList();
+
+          final firstPosition = positions.firstOrNull;
+          final tagName = firstPosition == null
+              ? null
+              : _cities[firstPosition.index].letter;
+
+          final tagPosition = positions.firstWhereOrNull((it) =>
+              it.itemLeadingEdge > 0 && _tagToIndexMap.containsValue(it.index));
+          final top = tagPosition != null
+              ? math.min(
+                  0.0, tagPosition.itemLeadingEdge * height - topTagHeight)
+              : 0.0;
+
+          return Positioned(
+            top: top,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: topTagHeight,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.only(left: 15.0),
+              color: widget.topIndexBgColor,
+              child: Text(
+                tagName ?? _tagList.first,
+                softWrap: true,
+                style: TextStyle(
+                  fontSize: widget.topIndexFontSize,
+                  color: widget.topIndexFontColor,
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ));
     }
     children.add(Offstage(
@@ -430,7 +371,11 @@ class _CitiesSelectorState extends State<CitiesSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: _buildChildren(context));
+    return LayoutBuilder(
+      builder: (context, c) => Stack(
+        children: _buildChildren(context, c.maxHeight),
+      ),
+    );
   }
 }
 

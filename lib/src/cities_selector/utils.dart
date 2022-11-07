@@ -12,25 +12,6 @@ import 'package:flutter/material.dart';
 import '../../modal/base_citys.dart';
 import '../../modal/point.dart';
 
-// 城市列表偏移量结构
-class CityOffsetRange {
-  late double start;
-  late double end;
-  late String tag;
-
-  CityOffsetRange({required this.start, required this.end, required this.tag});
-
-  CityOffsetRange.empty() {
-    this.start = -1;
-    this.end = -1;
-    this.tag = "";
-  }
-
-  bool isEmpty() {
-    return start == -1 && end == -1 && tag == "";
-  }
-}
-
 class TagCount {
   int count;
   String letter;
@@ -73,38 +54,6 @@ class CitiesUtils {
       }
     });
     return validTags;
-  }
-
-  static List<CityOffsetRange> getOffsetRangeByCitiesList(
-      {required List<Point> lists,
-      required double itemHeight,
-      required double tagHeight}) {
-    List<TagCount> categoriesList = [];
-    List<CityOffsetRange> result = [];
-
-    /// 先分类
-    String lastTag = '';
-    lists.forEach((Point item) {
-      if (item.letter != lastTag) {
-        categoriesList.add(TagCount(letter: item.letter!, count: 0));
-        lastTag = item.letter!;
-      }
-    });
-    lists.forEach((Point item) {
-      TagCount target = categoriesList.firstWhere((TagCount tagCount) {
-        return tagCount.letter == item.letter;
-      });
-      target.count += 1;
-    });
-    categoriesList.forEach((TagCount item) {
-//      print("item: ${item.letter}, ${item.count}");
-      double start = result.isNotEmpty ? result.last.end : 0;
-      result.add(CityOffsetRange(
-          start: start,
-          end: start + item.count * itemHeight + tagHeight,
-          tag: item.letter.toUpperCase()));
-    });
-    return result;
   }
 }
 

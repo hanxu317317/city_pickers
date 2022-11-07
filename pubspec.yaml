@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  known_extents_list_view_builder: ^1.1.0
+  scrollable_positioned_list: ^0.3.5
   collection: any
   lpinyin: ^2.0.3
 # For information on the generic Dart part of this file, see the
