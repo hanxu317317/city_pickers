@@ -322,7 +322,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       children.add(ValueListenableBuilder<Iterable<ItemPosition>>(
         valueListenable: _positionsListener.itemPositions,
         builder: (context, value, child) {
-          var positions = value.toList();
+          // value不是有序的, 需要排序
+          final positions = value.sortedBy<num>((it) => it.index);
 
           final firstPosition = positions.firstOrNull;
           final tagName = firstPosition == null
