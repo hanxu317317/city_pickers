@@ -9,7 +9,9 @@
 
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:known_extents_list_view_builder/known_extents_list_view_builder.dart';
 
 import '../../meta/province.dart';
@@ -257,10 +259,10 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     if (_changeTimer?.isActive ?? false) {
       _changeTimer!.cancel();
     }
+    HapticFeedback.selectionClick();
     _changeTimer = new Timer(Duration(milliseconds: 30), () {
-      CityOffsetRange cityOffsetRange = _offsetTagRangeList.firstWhere(
-          (CityOffsetRange range) => range.tag == alpha,
-          orElse: null);
+      final cityOffsetRange = _offsetTagRangeList
+          .firstWhereOrNull((CityOffsetRange range) => range.tag == alpha);
       if (cityOffsetRange != null) {
         _scrollController.jumpTo(cityOffsetRange.start);
       }
@@ -410,9 +412,10 @@ class _CitiesSelectorState extends State<CitiesSelector> {
         ),
       ));
     }
-    if (_isTouchTagBar) {
-      children.add(_buildCenterModal());
-    }
+    children.add(Offstage(
+      offstage: !_isTouchTagBar,
+      child: _buildCenterModal(),
+    ));
 
     /// 加入字母
     children.add(
