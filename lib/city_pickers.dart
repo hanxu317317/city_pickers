@@ -3,6 +3,7 @@
 library city_pickers;
 
 export 'modal/point.dart';
+export 'src/cities_selector/cities_selector.dart' show CitiesSelector;
 export 'src/cities_selector/cities_style.dart';
 export 'src/cities_selector/utils.dart';
 export 'modal/result.dart';
