@@ -29,7 +29,7 @@ class WorkInProgressState extends State<WorkInProgress> {
   String title = '城市选择';
   Result result = Result();
   Color tagBgColor = const Color.fromRGBO(255, 255, 255, 1);
-  Color pageBgColor = const Color.fromRGBO(123, 123, 241, 1);
+  Color pageBgColor = Colors.white;
 
   Color tagBgActiveColor = const Color(0xffeeeeee);
   Color tagFontColor = const Color(0xff666666);
@@ -192,6 +192,10 @@ class WorkInProgressState extends State<WorkInProgress> {
           HotCity(id: '1', name: '沈阳'),
           HotCity(id: '2', name: '天津'),
         ],
+        tagBarTextPadding: const EdgeInsets.symmetric(
+          horizontal: 4.0,
+          vertical: 2.0,
+        ),
         appBarBuilder: appBarBuilder,
         sideBarStyle: BaseStyle(
             fontSize: tagBarFontSize,

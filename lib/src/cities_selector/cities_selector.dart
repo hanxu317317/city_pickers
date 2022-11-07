@@ -33,7 +33,6 @@ const defaultScaffoldBackgroundColor = Colors.white;
 
 class CitiesSelector extends StatefulWidget {
   final String? locationCode;
-  final String title;
   final Map<String, String>? provincesData;
   final Map<String, dynamic>? citiesData;
   final List<HotCity>? hotCities;
@@ -48,6 +47,9 @@ class CitiesSelector extends StatefulWidget {
 
   /// 右侧Bar字体的大小
   final double tagBarFontSize;
+
+  /// 右侧Bar文字的Padding
+  final EdgeInsetsGeometry tagBarTextPadding;
 
   /// 城市列表每一个Item的高度
 //  final double cityItemHeight;
@@ -65,16 +67,14 @@ class CitiesSelector extends StatefulWidget {
   final Color topIndexBgColor;
 
   final Color? itemSelectFontColor;
-  final AppBarBuilder? appBarBuilder;
 //  暂时无用
 //  final Color itemSelectBgColor;
 
   final Color? itemFontColor;
 
-  final Color? scaffoldBackgroundColor;
+  final ValueSetter<Result> onSelected;
 
   CitiesSelector({
-    this.title = '城市选择器',
     this.locationCode,
     this.citiesData,
     this.hotCities,
@@ -84,6 +84,7 @@ class CitiesSelector extends StatefulWidget {
     this.tagBarBgColor = Colors.cyanAccent,
     this.tagBarFontColor = Colors.white,
     this.tagBarFontSize = 14.0,
+    this.tagBarTextPadding = const EdgeInsets.symmetric(horizontal: 4.0),
     this.cityItemFontSize = 12.0,
 //    this.cityItemHeight = 100,
     this.topIndexFontSize = 16,
@@ -93,8 +94,7 @@ class CitiesSelector extends StatefulWidget {
 //    this.itemSelectBgColor = Colors.white,
     this.itemFontColor = Colors.black,
     this.itemSelectFontColor = Colors.red,
-    this.appBarBuilder,
-    this.scaffoldBackgroundColor,
+    required this.onSelected,
   });
 
   @override
@@ -297,7 +297,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       bgColor: widget.tagBarBgColor,
       fontColor: widget.tagBarFontColor,
       fontActiveColor: widget.tagBarFontActiveColor,
-      alphaItemSize: widget.tagBarFontSize,
+      alphaFontSize: widget.tagBarFontSize,
+      alphaPadding: widget.tagBarTextPadding,
       onTouchStart: () {
         this.setState(() {
           _isTouchTagBar = true;
@@ -342,8 +343,12 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     children.add(KnownExtentsListView.builder(
       controller: _scrollController,
       itemCount: _cities.length,
-      itemExtents: List.generate(_cities.length,
-          (index) => (hideTag(index) ? 0 : topTagHeight) + 56.0),
+      itemExtents: List.generate(
+          _cities.length,
+          (index) =>
+              (hideTag(index) ? 0 : topTagHeight) +
+              // height of ListTile
+              56.0),
       itemBuilder: (context, index) {
         bool selected = _initTargetCity != null &&
             _initTargetCity!.code == _cities[index].code;
@@ -378,7 +383,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
                     title: Text(_cities[index].name,
                         style: TextStyle(fontSize: itemFontSize)),
                     onTap: () {
-                      Navigator.pop(context, _buildResult(_cities[index]));
+                      widget.onSelected(_buildResult(_cities[index]));
                     },
                   ),
                 ),
@@ -423,30 +428,41 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     return children;
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: _buildChildren(context));
+  }
+}
+
+class CitiesSelectorPage extends StatelessWidget {
+  const CitiesSelectorPage({
+    Key? key,
+    required this.citiesSelector,
+    this.title = '城市选择器',
+    this.scaffoldBackgroundColor,
+    this.appBarBuilder,
+  }) : super(key: key);
+  final Widget citiesSelector;
+  final Color? scaffoldBackgroundColor;
+  final String title;
+  final AppBarBuilder? appBarBuilder;
+
   AppBar _buildAppBar() {
-    if (widget.appBarBuilder != null) {
-      return widget.appBarBuilder!(widget.title);
+    if (appBarBuilder != null) {
+      return appBarBuilder!(title);
     }
-    return AppBar(
-      title: Text(
-        widget.title,
-      ),
-    );
+    return AppBar(title: Text(title));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: widget.scaffoldBackgroundColor,
-        appBar: _buildAppBar(),
-        body: SafeArea(
-          bottom: true,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                  flex: 1, child: Stack(children: _buildChildren(context))),
-            ],
-          ),
-        ));
+      backgroundColor: scaffoldBackgroundColor,
+      appBar: _buildAppBar(),
+      body: SafeArea(
+        bottom: true,
+        child: citiesSelector,
+      ),
+    );
   }
 }

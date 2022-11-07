@@ -151,6 +151,8 @@ class CityPickers {
     BaseStyle? cityItemStyle,
     BaseStyle? topStickStyle,
     Color? scaffoldBackgroundColor,
+    EdgeInsetsGeometry tagBarTextPadding =
+        const EdgeInsets.symmetric(horizontal: 4.0),
   }) {
     BaseStyle _sideBarStyle = BaseStyle(
       fontSize: 14,
@@ -188,8 +190,12 @@ class CityPickers {
         transitionDuration: const Duration(milliseconds: 250),
         pageBuilder: (context, _, __) => new Theme(
           data: theme ?? Theme.of(context),
-          child: CitiesSelector(
-              title: title,
+          child: CitiesSelectorPage(
+            title: title,
+            appBarBuilder: appBarBuilder,
+            scaffoldBackgroundColor:
+                scaffoldBackgroundColor ?? defaultScaffoldBackgroundColor,
+            citiesSelector: CitiesSelector(
               provincesData: provincesData,
               citiesData: citiesData,
               hotCities: hotCities,
@@ -199,16 +205,16 @@ class CityPickers {
               tagBarBgColor: _sideBarStyle.backgroundColor!,
               tagBarFontColor: _sideBarStyle.color,
               tagBarFontSize: _sideBarStyle.fontSize,
+              tagBarTextPadding: tagBarTextPadding,
               topIndexFontSize: _topStickStyle.fontSize,
               topIndexHeight: _topStickStyle.height!,
               topIndexFontColor: _topStickStyle.color,
               topIndexBgColor: _topStickStyle.backgroundColor!,
               itemFontColor: _cityItemStyle.color,
               cityItemFontSize: _cityItemStyle.fontSize,
-              scaffoldBackgroundColor:
-                  scaffoldBackgroundColor ?? defaultScaffoldBackgroundColor,
               itemSelectFontColor: _cityItemStyle.activeColor,
-              appBarBuilder: appBarBuilder
+              onSelected: (value) => Navigator.pop(context, value),
+            ),
           ),
         ),
         transitionsBuilder:
