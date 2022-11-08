@@ -32,7 +32,6 @@ class Point {
 
   @override
   String toString() {
-    // TODO: implement toString
-    return "{code: $code, name: $name, letter: $letter, child: Array & length = ${child.length}";
+    return "Point {code: $code, name: $name, letter: $letter, child: Array & length = ${child.length}";
   }
 }

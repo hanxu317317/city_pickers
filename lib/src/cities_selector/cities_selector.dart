@@ -52,10 +52,8 @@ class CitiesSelector extends StatefulWidget {
   /// 右侧Bar文字的Padding
   final EdgeInsetsGeometry tagBarTextPadding;
 
-  /// 城市列表每一个Item的高度
-//  final double cityItemHeight;
-  /// 城市列表每一个Item的字体大小
-  final double cityItemFontSize;
+  /// 是否显示顶部的tag提示标签
+  final bool showTopIndex;
 
   /// 每一个类别的城市顶部的标题的高度
   final double topIndexHeight;
@@ -67,9 +65,10 @@ class CitiesSelector extends StatefulWidget {
   final Color topIndexFontColor;
   final Color topIndexBgColor;
 
+  /// 城市列表每一个Item的字体大小
+  final double itemFontSize;
+
   final Color? itemSelectFontColor;
-//  暂时无用
-//  final Color itemSelectBgColor;
 
   final Color? itemFontColor;
 
@@ -86,13 +85,12 @@ class CitiesSelector extends StatefulWidget {
     this.tagBarFontColor = Colors.white,
     this.tagBarFontSize = 14.0,
     this.tagBarTextPadding = const EdgeInsets.symmetric(horizontal: 4.0),
-    this.cityItemFontSize = 12.0,
-//    this.cityItemHeight = 100,
+    this.showTopIndex = true,
     this.topIndexFontSize = 16,
     this.topIndexHeight = 40,
     this.topIndexFontColor = Colors.green,
     this.topIndexBgColor = Colors.blueGrey,
-//    this.itemSelectBgColor = Colors.white,
+    this.itemFontSize = 12.0,
     this.itemFontColor = Colors.black,
     this.itemSelectFontColor = Colors.red,
     required this.onSelected,
@@ -109,9 +107,6 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   int _initialScrollIndex = -1;
   bool _isTouchTagBar = false;
 
-  /// 是否显示顶部的tag提示标签
-  bool _showTopOffstage = true;
-
   /// 城市列表数组
   List<Point> _cities = [];
   late ItemScrollController _scrollController;
@@ -122,14 +117,9 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   /// 有效的tag标签列表, 对应右侧标签
   late List<String> _tagList;
 
-  /// 每一个顶部标签的高度
-  late double topTagHeight;
-
-  /// 用户可定义的, 选项中字体的大小
-  double? itemFontSize;
-
   @override
   void initState() {
+    super.initState();
     _cities = CitiesUtils.getAllCitiesByMeta(
         widget.provincesData ?? provincesData, widget.citiesData ?? citiesData);
     if (widget.hotCities != null) {
@@ -150,11 +140,12 @@ class _CitiesSelectorState extends State<CitiesSelector> {
 
     _scrollController = new ItemScrollController();
     _positionsListener = ItemPositionsListener.create();
+  }
 
-    super.initState();
-
-    topTagHeight = widget.topIndexHeight;
-    itemFontSize = widget.cityItemFontSize;
+  @override
+  void dispose() {
+    _changeTimer?.cancel();
+    super.dispose();
   }
 
   int getInitialCityCodeIndex() {
@@ -265,10 +256,10 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     children.add(ScrollablePositionedList.builder(
       initialScrollIndex: math.max(0, _initialScrollIndex),
       initialAlignment: _initialScrollIndex > 0 &&
-              _showTopOffstage &&
+              widget.showTopIndex &&
               !_tagToIndexMap.containsValue(_initialScrollIndex)
           // 不显示tag的item, 顶部会被常显的topTag挡住, 需要往下偏移
-          ? topTagHeight / height
+          ? widget.topIndexHeight / height
           : 0,
       itemScrollController: _scrollController,
       itemPositionsListener: _positionsListener,
@@ -283,7 +274,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
             Offstage(
               offstage: hideTag(index),
               child: Container(
-                height: topTagHeight,
+                height: widget.topIndexHeight,
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 15.0),
                 color: widget.topIndexBgColor,
@@ -306,7 +297,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
                   child: ListTile(
                     selected: selected,
                     title: Text(_cities[index].name,
-                        style: TextStyle(fontSize: itemFontSize)),
+                        style: TextStyle(fontSize: widget.itemFontSize)),
                     onTap: () {
                       widget.onSelected(_createResult(_cities[index]));
                     },
@@ -318,7 +309,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
         );
       },
     ));
-    if (_showTopOffstage) {
+    if (widget.showTopIndex) {
       children.add(ValueListenableBuilder<Iterable<ItemPosition>>(
         valueListenable: _positionsListener.itemPositions,
         builder: (context, value, child) {
@@ -333,8 +324,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           final tagPosition = positions.firstWhereOrNull((it) =>
               it.itemLeadingEdge > 0 && _tagToIndexMap.containsValue(it.index));
           final top = tagPosition != null
-              ? math.min(
-                  0.0, tagPosition.itemLeadingEdge * height - topTagHeight)
+              ? math.min(0.0,
+                  tagPosition.itemLeadingEdge * height - widget.topIndexHeight)
               : 0.0;
 
           return Positioned(
@@ -342,7 +333,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
             left: 0,
             right: 0,
             child: Container(
-              height: topTagHeight,
+              height: widget.topIndexHeight,
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 15.0),
               color: widget.topIndexBgColor,
@@ -365,8 +356,12 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     ));
 
     /// 加入字母
-    children.add(
-        Positioned(right: 0, top: 0, bottom: 0, child: _buildAlphaAndTags()));
+    children.add(Positioned(
+      right: 0,
+      top: 0,
+      bottom: 0,
+      child: _buildAlphaAndTags(),
+    ));
     return children;
   }
 

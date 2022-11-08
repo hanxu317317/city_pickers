@@ -211,7 +211,7 @@ class CityPickers {
               topIndexFontColor: _topStickStyle.color,
               topIndexBgColor: _topStickStyle.backgroundColor!,
               itemFontColor: _cityItemStyle.color,
-              cityItemFontSize: _cityItemStyle.fontSize,
+              itemFontSize: _cityItemStyle.fontSize,
               itemSelectFontColor: _cityItemStyle.activeColor,
               onSelected: (value) => Navigator.pop(context, value),
             ),
