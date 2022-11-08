@@ -197,7 +197,7 @@ class CityPickers {
             scaffoldBackgroundColor:
                 scaffoldBackgroundColor ?? defaultScaffoldBackgroundColor,
             useSearchAppBar: useSearchAppBar,
-            builder: (context, query) => CitiesSelector(
+            builder: (context, query, layoutBuilder) => CitiesSelector(
               query: query,
               provincesData: provincesData,
               citiesData: citiesData,
@@ -219,6 +219,7 @@ class CityPickers {
               keyboardDismissBehavior: useSearchAppBar
                   ? ScrollViewKeyboardDismissBehavior.onDrag
                   : ScrollViewKeyboardDismissBehavior.manual,
+              layoutBuilder: layoutBuilder,
               onSelected: (value) => Navigator.pop(context, value),
             ),
           ),

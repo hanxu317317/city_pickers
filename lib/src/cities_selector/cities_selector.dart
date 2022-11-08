@@ -34,6 +34,16 @@ const defaultTopIndexFontColor = Color(0xffc0c0c0);
 const defaultTopIndexBgColor = Color(0xfff3f4f5);
 const defaultScaffoldBackgroundColor = Colors.white;
 
+/// [CitiesSelector]的布局, 包含两部分:
+/// - [cities], 城市列表
+/// - [queryResult], 查询结果; [CitiesSelector.query]为空时, 会为null
+///
+typedef CitiesSelectorLayoutBuilder = Widget Function(
+  BuildContext context, {
+  required Widget cities,
+  Widget? queryResult,
+});
+
 class CitiesSelector extends StatefulWidget {
   final String? locationCode;
   final Map<String, String>? provincesData;
@@ -76,6 +86,8 @@ class CitiesSelector extends StatefulWidget {
 
   final String query;
 
+  final CitiesSelectorLayoutBuilder layoutBuilder;
+
   /// [ScrollView.keyboardDismissBehavior]
   final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
 
@@ -102,6 +114,7 @@ class CitiesSelector extends StatefulWidget {
     this.itemSelectFontColor = Colors.red,
     this.query = '',
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.onDrag,
+    required this.layoutBuilder,
     required this.onSelected,
   });
 
@@ -255,16 +268,20 @@ class _CitiesSelectorState extends State<CitiesSelector> {
               child: _build(context),
             )
           : _build(context);
+
   Widget _build(BuildContext context) {
-    if (widget.query.trim().isNotEmpty) {
-      return _buildQueryResult(
-        cities: queryCitiesBy(widget.query),
-      );
-    }
-    return LayoutBuilder(
-      builder: (context, c) => Stack(
-        children: _buildChildren(context, c.maxHeight),
+    return widget.layoutBuilder(
+      context,
+      cities: LayoutBuilder(
+        builder: (context, c) => Stack(
+          children: _buildChildren(context, c.maxHeight),
+        ),
       ),
+      queryResult: widget.query.trim().isNotEmpty
+          ? _buildQueryResult(
+              cities: queryCitiesBy(widget.query),
+            )
+          : null,
     );
   }
 
@@ -462,7 +479,11 @@ class CitiesSelectorPage extends StatefulWidget {
     this.useSearchAppBar = false,
   })  : assert(!(useSearchAppBar && appBarBuilder != null)),
         super(key: key);
-  final Widget Function(BuildContext context, String query) builder;
+  final Widget Function(
+    BuildContext context,
+    String query,
+    CitiesSelectorLayoutBuilder layoutBuilder,
+  ) builder;
   final Color? scaffoldBackgroundColor;
   final String title;
   final AppBarBuilder? appBarBuilder;
@@ -515,8 +536,29 @@ class _CitiesSelectorPageState extends State<CitiesSelectorPage> {
       resizeToAvoidBottomInset: !widget.useSearchAppBar,
       body: SafeArea(
         bottom: true,
-        child: widget.builder(context, _query),
+        child: widget.builder(
+          context,
+          _query,
+          _buildCitiesSelectorLayout,
+        ),
       ),
     );
   }
+
+  Widget _buildCitiesSelectorLayout(
+    BuildContext context, {
+    required Widget cities,
+    Widget? queryResult,
+  }) =>
+      Stack(
+        children: [
+          cities,
+          if (queryResult != null)
+            ColoredBox(
+              color: widget.scaffoldBackgroundColor ??
+                  Theme.of(context).scaffoldBackgroundColor,
+              child: queryResult,
+            ),
+        ],
+      );
 }

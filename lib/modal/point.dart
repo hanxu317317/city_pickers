@@ -56,6 +56,7 @@ class Point {
 
 class Pinyin {
   static Pinyin? tryParse(String text) {
+    // TODO: 2022/11/8 ipcjs 处理搜索英文首字母...
     if (text.isEmpty || !ChineseHelper.containsChinese(text)) {
       return null;
     }
