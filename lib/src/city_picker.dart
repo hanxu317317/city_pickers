@@ -151,6 +151,7 @@ class CityPickers {
     BaseStyle? cityItemStyle,
     BaseStyle? topStickStyle,
     Color? scaffoldBackgroundColor,
+    bool useSearchAppBar = false,
     EdgeInsetsGeometry tagBarTextPadding =
         const EdgeInsets.symmetric(horizontal: 4.0),
   }) {
@@ -195,7 +196,9 @@ class CityPickers {
             appBarBuilder: appBarBuilder,
             scaffoldBackgroundColor:
                 scaffoldBackgroundColor ?? defaultScaffoldBackgroundColor,
-            citiesSelector: CitiesSelector(
+            useSearchAppBar: useSearchAppBar,
+            builder: (context, query) => CitiesSelector(
+              query: query,
               provincesData: provincesData,
               citiesData: citiesData,
               hotCities: hotCities,
@@ -213,6 +216,9 @@ class CityPickers {
               itemFontColor: _cityItemStyle.color,
               itemFontSize: _cityItemStyle.fontSize,
               itemSelectFontColor: _cityItemStyle.activeColor,
+              keyboardDismissBehavior: useSearchAppBar
+                  ? ScrollViewKeyboardDismissBehavior.onDrag
+                  : ScrollViewKeyboardDismissBehavior.manual,
               onSelected: (value) => Navigator.pop(context, value),
             ),
           ),

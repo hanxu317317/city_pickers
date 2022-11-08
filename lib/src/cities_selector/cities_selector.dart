@@ -11,8 +11,10 @@ import 'dart:async';
 
 import 'dart:math' as math;
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lpinyin/lpinyin.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../meta/province.dart';
@@ -72,6 +74,11 @@ class CitiesSelector extends StatefulWidget {
 
   final Color? itemFontColor;
 
+  final String query;
+
+  /// [ScrollView.keyboardDismissBehavior]
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+
   final ValueSetter<Result> onSelected;
 
   CitiesSelector({
@@ -93,6 +100,8 @@ class CitiesSelector extends StatefulWidget {
     this.itemFontSize = 12.0,
     this.itemFontColor = Colors.black,
     this.itemSelectFontColor = Colors.red,
+    this.query = '',
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.onDrag,
     required this.onSelected,
   });
 
@@ -129,7 +138,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
               code: e.id,
               letter: e.tag,
               name: e.name,
-              child: [],
+              children: [],
             )),
       );
     }
@@ -171,6 +180,44 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     return map;
   }
 
+  String _prevQuery = '';
+  late List<Point> _prevQueryResult = _cities;
+  List<Point> queryCitiesBy(String text) {
+    final query = text.trim().toLowerCase();
+    if (query == _prevQuery) {
+      // 查询条件相同, 结果相同
+      return _prevQueryResult;
+    }
+
+    final cities = query.startsWith(_prevQuery)
+        // 查询条件范围变窄, 可以直接在上次的查询结果基础上过滤
+        ? _prevQueryResult
+        : _cities;
+
+    final result = <Point>[];
+    final queryPinyin = ChineseHelper.containsChinese(query)
+        ? null
+        : query.replaceAll(RegExp(r'\s'), '');
+
+    for (final city in cities) {
+      if (queryPinyin != null) {
+        final pinyin = city.pinyin;
+        if (pinyin != null) {
+          if (pinyin.short.startsWith(queryPinyin) ||
+              pinyin.full.startsWith(queryPinyin)) {
+            result.add(city);
+            continue;
+          }
+        }
+      }
+      if ((city.letter?.toLowerCase().startsWith(query) == true) ||
+          city.lowerCaseName.contains(query)) {
+        result.add(city);
+      }
+    }
+    return result;
+  }
+
   /// 当右侧的类型. 因为触摸而发生改变
   _onTagChange(String alpha) {
     if (_changeTimer?.isActive ?? false) {
@@ -183,6 +230,42 @@ class _CitiesSelectorState extends State<CitiesSelector> {
         _scrollController.jumpTo(index: index);
       }
     });
+  }
+
+  Result _createResult(Point city) {
+    Result result = Result();
+    result.cityId = city.code;
+    result.cityName = city.name;
+    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      widget.keyboardDismissBehavior == ScrollViewKeyboardDismissBehavior.onDrag
+          ? NotificationListener<ScrollNotification>(
+              onNotification: (notification) {
+                final focusScope = FocusScope.of(context);
+                if ((notification is OverscrollNotification ||
+                        notification is ScrollUpdateNotification) &&
+                    focusScope.hasFocus) {
+                  focusScope.unfocus();
+                }
+                return false;
+              },
+              child: _build(context),
+            )
+          : _build(context);
+  Widget _build(BuildContext context) {
+    if (widget.query.trim().isNotEmpty) {
+      return _buildQueryResult(
+        cities: queryCitiesBy(widget.query),
+      );
+    }
+    return LayoutBuilder(
+      builder: (context, c) => Stack(
+        children: _buildChildren(context, c.maxHeight),
+      ),
+    );
   }
 
   /// 生成中间的字母提示Modal
@@ -239,16 +322,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     );
   }
 
-  Result _createResult(Point city) {
-    Result result = Result();
-    result.cityId = city.code;
-    result.cityName = city.name;
-    return result;
-  }
-
   List<Widget> _buildChildren(BuildContext context, double height) {
     List<Widget> children = [];
-    ThemeData theme = Theme.of(context);
 
     bool hideTag(int index) =>
         index != 0 && _cities[index - 1].letter == _cities[index].letter;
@@ -265,10 +340,6 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       itemPositionsListener: _positionsListener,
       itemCount: _cities.length,
       itemBuilder: (context, index) {
-        // 这里使用code判断是否选择, 因为[widget.hotCities]和[widget.citiesData]有可能有相同code的城市
-        // 此时他们应该都是选中状态
-        bool selected = widget.locationCode != null &&
-            widget.locationCode == _cities[index].code;
         return Column(
           children: <Widget>[
             Offstage(
@@ -290,19 +361,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
             Container(
               alignment: Alignment.centerLeft,
               child: Center(
-                child: ListTileTheme(
-                  selectedColor:
-                      widget.itemSelectFontColor ?? theme.primaryColor,
-                  textColor: widget.itemFontColor ?? theme.accentColor,
-                  child: ListTile(
-                    selected: selected,
-                    title: Text(_cities[index].name,
-                        style: TextStyle(fontSize: widget.itemFontSize)),
-                    onTap: () {
-                      widget.onSelected(_createResult(_cities[index]));
-                    },
-                  ),
-                ),
+                child: _buildCityItem(context, _cities[index]),
               ),
             )
           ],
@@ -365,44 +424,98 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     return children;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, c) => Stack(
-        children: _buildChildren(context, c.maxHeight),
+  Widget _buildCityItem(BuildContext context, Point city) {
+    // 这里使用code判断是否选择, 因为[widget.hotCities]和[widget.citiesData]有可能有相同code的城市
+    // 此时他们应该都是选中状态
+    bool selected =
+        widget.locationCode != null && widget.locationCode == city.code;
+    final theme = Theme.of(context);
+
+    return ListTileTheme(
+      selectedColor: widget.itemSelectFontColor ?? theme.primaryColor,
+      textColor: widget.itemFontColor ?? theme.accentColor,
+      child: ListTile(
+        selected: selected,
+        title: Text(city.name, style: TextStyle(fontSize: widget.itemFontSize)),
+        onTap: () {
+          widget.onSelected(_createResult(city));
+        },
       ),
+    );
+  }
+
+  Widget _buildQueryResult({required List<Point> cities}) {
+    return ListView.builder(
+      itemCount: cities.length,
+      itemBuilder: (context, index) => _buildCityItem(context, cities[index]),
     );
   }
 }
 
-class CitiesSelectorPage extends StatelessWidget {
+class CitiesSelectorPage extends StatefulWidget {
   const CitiesSelectorPage({
     Key? key,
-    required this.citiesSelector,
+    required this.builder,
     this.title = '城市选择器',
     this.scaffoldBackgroundColor,
     this.appBarBuilder,
-  }) : super(key: key);
-  final Widget citiesSelector;
+    this.useSearchAppBar = false,
+  })  : assert(!(useSearchAppBar && appBarBuilder != null)),
+        super(key: key);
+  final Widget Function(BuildContext context, String query) builder;
   final Color? scaffoldBackgroundColor;
   final String title;
   final AppBarBuilder? appBarBuilder;
+  final bool useSearchAppBar;
 
+  @override
+  State<CitiesSelectorPage> createState() => _CitiesSelectorPageState();
+}
+
+class _CitiesSelectorPageState extends State<CitiesSelectorPage> {
+  String _query = '';
   AppBar _buildAppBar() {
-    if (appBarBuilder != null) {
-      return appBarBuilder!(title);
+    if (widget.appBarBuilder != null) {
+      return widget.appBarBuilder!(widget.title);
     }
-    return AppBar(title: Text(title));
+    return AppBar(
+      title: Text(widget.title),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: scaffoldBackgroundColor,
-      appBar: _buildAppBar(),
+      backgroundColor: widget.scaffoldBackgroundColor,
+      appBar: widget.useSearchAppBar
+          ? AppBar(
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              titleSpacing: 0,
+              title: Padding(
+                padding: EdgeInsetsDirectional.only(start: 16.0),
+                child: CupertinoSearchTextField(
+                  prefixInsets: EdgeInsetsDirectional.only(start: 6),
+                  onChanged: (value) {
+                    setState(() {
+                      _query = value;
+                    });
+                  },
+                ),
+              ),
+              actions: [
+                CupertinoButton(
+                  child: Text('取消'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            )
+          : _buildAppBar(),
+      resizeToAvoidBottomInset: !widget.useSearchAppBar,
       body: SafeArea(
         bottom: true,
-        child: citiesSelector,
+        child: widget.builder(context, _query),
       ),
     );
   }

@@ -52,6 +52,7 @@ class WorkInProgressState extends State<WorkInProgress> {
   Color itemSelectBgColor = Colors.blueGrey;
 
   Color itemFontColor = Colors.black;
+  bool useSearchBar = false;
   AppBarBuilder appBarBuilder = (String title) {
     return AppBar(
       title: const Text('用户自定义AppBar'),
@@ -90,16 +91,15 @@ class WorkInProgressState extends State<WorkInProgress> {
     );
   }
 
-  Widget _buildSelfMetaButtons() {
+  Widget _buildSwitch({
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
     return Container(
         alignment: Alignment.centerRight,
         child: CupertinoSwitch(
-          value: userSelfMeta,
-          onChanged: (bool val) {
-            setState(() {
-              userSelfMeta = !userSelfMeta;
-            });
-          },
+          value: value,
+          onChanged: onChanged,
         ));
   }
 
@@ -196,7 +196,8 @@ class WorkInProgressState extends State<WorkInProgress> {
           horizontal: 4.0,
           vertical: 2.0,
         ),
-        appBarBuilder: appBarBuilder,
+        appBarBuilder: useSearchBar ? null : appBarBuilder,
+        useSearchAppBar: useSearchBar,
         sideBarStyle: BaseStyle(
             fontSize: tagBarFontSize,
             color: tagFontColor,
@@ -384,7 +385,21 @@ class WorkInProgressState extends State<WorkInProgress> {
             ),
             AttrItemContainer(
               title: '使用自定义数据',
-              editor: _buildSelfMetaButtons(),
+              editor: _buildSwitch(
+                value: true,
+                onChanged: (bool val) => setState(() {
+                  userSelfMeta = val;
+                }),
+              ),
+            ),
+            AttrItemContainer(
+              title: '使用搜索栏',
+              editor: _buildSwitch(
+                value: useSearchBar,
+                onChanged: (value) => setState(() {
+                  useSearchBar = value;
+                }),
+              ),
             ),
             AttrItemContainer(
                 title: '选择结果', editor: Text("${result.toString()}")),

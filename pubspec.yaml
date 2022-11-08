@@ -5,6 +5,8 @@ homepage: https://github.com/hanxu317317/city_pickers
 
 dev_dependencies:
   flutter_colorpicker: ^0.4.0
+  flutter_test:
+    sdk: flutter
 
 dependencies:
   flutter:

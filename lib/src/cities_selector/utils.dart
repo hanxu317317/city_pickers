@@ -31,13 +31,10 @@ class CitiesUtils {
       trees.add(citiesTreeBuilder.initTree(key));
     });
     trees.forEach((Point tree) {
-      cities.addAll(tree.child);
+      cities.addAll(tree.children);
     });
     cities.sort((Point a, Point b) {
       return a.letter!.codeUnitAt(0) - b.letter!.codeUnitAt(0);
-    });
-    cities.forEach((Point point) {
-      point.letter = point.letter!.toUpperCase();
     });
     return cities;
   }
