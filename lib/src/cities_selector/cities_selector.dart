@@ -33,16 +33,6 @@ const defaultTopIndexFontColor = Color(0xffc0c0c0);
 const defaultTopIndexBgColor = Color(0xfff3f4f5);
 const defaultScaffoldBackgroundColor = Colors.white;
 
-/// [CitiesSelector]的布局, 包含两部分:
-/// - [cities], 城市列表
-/// - [queryResult], 查询结果; [CitiesSelector.query]为空时, 会为null
-///
-typedef CitiesSelectorLayoutBuilder = Widget Function(
-  BuildContext context, {
-  required Widget cities,
-  Widget? queryResult,
-});
-
 class CitiesSelector extends StatefulWidget {
   static Result _createResult(Point city) {
     Result result = Result();

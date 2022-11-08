@@ -13,13 +13,6 @@ import 'package:lpinyin/lpinyin.dart';
 import '../../modal/base_citys.dart';
 import '../../modal/point.dart';
 
-class TagCount {
-  int count;
-  String letter;
-
-  TagCount({required this.count, required this.letter});
-}
-
 class CitiesSearcher {
   final List<Point> _cities;
   CitiesSearcher(this._cities);
@@ -110,7 +103,7 @@ class CitiesUtils {
   }
 }
 
-// 热闹城市对象
+/// 热闹城市对象
 class HotCity {
   final String name;
   final String id;
