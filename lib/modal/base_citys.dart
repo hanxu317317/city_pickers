@@ -46,7 +46,7 @@ class CityTree {
   /// build tree by int provinceId,
   /// @param provinceId this is province id
   /// @return tree
-  initTree(String provinceId) {
+  Point initTree(String provinceId) {
     String _cacheKey = provinceId.toString();
 //    这里为了避免 https://github.com/hanxu317317/city_pickers/issues/68
 //    if (_cache.has(_cacheKey)) {
@@ -114,6 +114,7 @@ class CityTree {
           letter: value['alpha'],
           children: [],
           name: value['name'],
+          isClassificationNode: value['isClassificationNode'] ?? false,
         );
 
         // for avoid the data  error that such as

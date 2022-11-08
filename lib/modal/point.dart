@@ -10,9 +10,13 @@ class Point {
   final String? letter;
   final String name;
 
+  /// Just a classification node, not corresponding to the actual region.
+  final bool isClassificationNode;
+
   Point.nullPoint()
       : children = [],
         name = '',
+        isClassificationNode = false,
         code = null,
         depth = null,
         letter = null;
@@ -25,6 +29,7 @@ class Point {
     this.depth,
     String? letter,
     this.name = '',
+    this.isClassificationNode = false,
   }) : letter = letter?.toUpperCase();
 
   String? _lowerCaseName;

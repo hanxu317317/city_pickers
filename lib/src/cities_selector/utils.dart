@@ -7,6 +7,7 @@
 // tartget:  xxx
 //
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../modal/base_citys.dart';
@@ -22,21 +23,32 @@ class TagCount {
 class CitiesUtils {
   /// 获取城市选择器所有的数据
   static List<Point> getAllCitiesByMeta(
-      Map<String, String> provinceMeta, Map<String, dynamic> citiesMeta) {
-    List<Point> trees = [];
+    Map<String, String> provinceMeta,
+    Map<String, dynamic> citiesMeta,
+  ) {
+    CityTree citiesTreeBuilder = new CityTree(
+      metaInfo: citiesMeta,
+      provincesInfo: provinceMeta,
+    );
+
+    final provinces = provinceMeta.keys
+        .map((provinceId) => citiesTreeBuilder.initTree(provinceId))
+        .toList();
+
     List<Point> cities = [];
-    CityTree citiesTreeBuilder =
-        new CityTree(metaInfo: citiesMeta, provincesInfo: provinceMeta);
-    provinceMeta.forEach((key, value) {
-      trees.add(citiesTreeBuilder.initTree(key));
-    });
-    trees.forEach((Point tree) {
-      cities.addAll(tree.children);
-    });
-    cities.sort((Point a, Point b) {
-      return a.letter!.codeUnitAt(0) - b.letter!.codeUnitAt(0);
-    });
-    return cities;
+    for (final province in provinces) {
+      for (final city in province.children) {
+        if (city.isClassificationNode) {
+          // city级的"分类节点", 下面是"省直辖县级行政区", 这里也把他们看作是一个city
+          cities.addAll(city.children);
+        } else {
+          cities.add(city);
+        }
+      }
+    }
+
+    return cities //
+      ..sortBy<num>((it) => it.letter!.codeUnitAt(0));
   }
 
   static List<String> getValidTagsByCityList(List<Point> citiesList) {
