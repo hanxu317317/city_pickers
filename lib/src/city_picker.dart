@@ -197,10 +197,10 @@ class CityPickers {
             scaffoldBackgroundColor:
                 scaffoldBackgroundColor ?? defaultScaffoldBackgroundColor,
             useSearchAppBar: useSearchAppBar,
-            builder: (context, query, layoutBuilder) => CitiesSelector(
-              query: query,
-              provincesData: provincesData,
-              citiesData: citiesData,
+            provincesData: provincesData,
+            citiesData: citiesData,
+            buildCitiesSelector: (context, cities) => CitiesSelector(
+              cities: cities,
               hotCities: hotCities,
               locationCode: locationCode,
               tagBarActiveColor: _sideBarStyle.backgroundActiveColor!,
@@ -216,10 +216,6 @@ class CityPickers {
               itemFontColor: _cityItemStyle.color,
               itemFontSize: _cityItemStyle.fontSize,
               itemSelectFontColor: _cityItemStyle.activeColor,
-              keyboardDismissBehavior: useSearchAppBar
-                  ? ScrollViewKeyboardDismissBehavior.onDrag
-                  : ScrollViewKeyboardDismissBehavior.manual,
-              layoutBuilder: layoutBuilder,
               onSelected: (value) => Navigator.pop(context, value),
             ),
           ),

@@ -8,7 +8,7 @@
 //
 
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
+import 'package:lpinyin/lpinyin.dart';
 
 import '../../modal/base_citys.dart';
 import '../../modal/point.dart';
@@ -18,6 +18,50 @@ class TagCount {
   String letter;
 
   TagCount({required this.count, required this.letter});
+}
+
+class CitiesSearcher {
+  final List<Point> _cities;
+  CitiesSearcher(this._cities);
+
+  String _prevQuery = '';
+  late List<Point> _prevQueryResult = _cities;
+
+  List<Point> search(String text) {
+    final query = text.trim().toLowerCase();
+    if (query == _prevQuery) {
+      // 查询条件相同, 结果相同
+      return _prevQueryResult;
+    }
+
+    final cities = query.startsWith(_prevQuery)
+        // 查询条件范围变窄, 可以直接在上次的查询结果基础上过滤
+        ? _prevQueryResult
+        : _cities;
+
+    final result = <Point>[];
+    final queryPinyin = ChineseHelper.containsChinese(query)
+        ? null
+        : query.replaceAll(RegExp(r'\s'), '');
+
+    for (final city in cities) {
+      if (queryPinyin != null) {
+        final pinyin = city.pinyin;
+        if (pinyin != null) {
+          if (pinyin.short.startsWith(queryPinyin) ||
+              pinyin.full.startsWith(queryPinyin)) {
+            result.add(city);
+            continue;
+          }
+        }
+      }
+      if ((city.letter?.toLowerCase().startsWith(query) == true) ||
+          city.lowerCaseName.contains(query)) {
+        result.add(city);
+      }
+    }
+    return result;
+  }
 }
 
 class CitiesUtils {

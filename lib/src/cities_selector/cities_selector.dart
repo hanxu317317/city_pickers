@@ -14,7 +14,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lpinyin/lpinyin.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../meta/province.dart';
@@ -45,9 +44,16 @@ typedef CitiesSelectorLayoutBuilder = Widget Function(
 });
 
 class CitiesSelector extends StatefulWidget {
+  static Result _createResult(Point city) {
+    Result result = Result();
+    result.cityId = city.code;
+    result.cityName = city.name;
+    return result;
+  }
+
   final String? locationCode;
-  final Map<String, String>? provincesData;
-  final Map<String, dynamic>? citiesData;
+  final List<Point> cities;
+
   final List<HotCity>? hotCities;
 
   /// 定义右侧bar的激活与普通状态的颜色
@@ -84,20 +90,12 @@ class CitiesSelector extends StatefulWidget {
 
   final Color? itemFontColor;
 
-  final String query;
-
-  final CitiesSelectorLayoutBuilder layoutBuilder;
-
-  /// [ScrollView.keyboardDismissBehavior]
-  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
-
   final ValueSetter<Result> onSelected;
 
   CitiesSelector({
     this.locationCode,
-    this.citiesData,
+    required this.cities,
     this.hotCities,
-    this.provincesData,
     this.tagBarActiveColor = Colors.yellow,
     this.tagBarFontActiveColor = Colors.red,
     this.tagBarBgColor = Colors.cyanAccent,
@@ -112,11 +110,29 @@ class CitiesSelector extends StatefulWidget {
     this.itemFontSize = 12.0,
     this.itemFontColor = Colors.black,
     this.itemSelectFontColor = Colors.red,
-    this.query = '',
-    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.onDrag,
-    required this.layoutBuilder,
     required this.onSelected,
   });
+
+  Widget buildCityItem(BuildContext context, Point city) {
+    CitiesSelector widget = this;
+    // 这里使用code判断是否选择, 因为[widget.hotCities]和[widget.citiesData]有可能有相同code的城市
+    // 此时他们应该都是选中状态
+    bool selected =
+        widget.locationCode != null && widget.locationCode == city.code;
+    final theme = Theme.of(context);
+
+    return ListTileTheme(
+      selectedColor: widget.itemSelectFontColor ?? theme.primaryColor,
+      textColor: widget.itemFontColor ?? theme.accentColor,
+      child: ListTile(
+        selected: selected,
+        title: Text(city.name, style: TextStyle(fontSize: widget.itemFontSize)),
+        onTap: () {
+          widget.onSelected(_createResult(city));
+        },
+      ),
+    );
+  }
 
   @override
   _CitiesSelectorState createState() => _CitiesSelectorState();
@@ -142,19 +158,16 @@ class _CitiesSelectorState extends State<CitiesSelector> {
   @override
   void initState() {
     super.initState();
-    _cities = CitiesUtils.getAllCitiesByMeta(
-        widget.provincesData ?? provincesData, widget.citiesData ?? citiesData);
-    if (widget.hotCities != null) {
-      _cities.insertAll(
-        0,
-        widget.hotCities!.map((e) => Point(
+    _cities = [
+      if (widget.hotCities != null)
+        ...widget.hotCities!.map((e) => Point(
               code: e.id,
               letter: e.tag,
               name: e.name,
               children: [],
             )),
-      );
-    }
+      ...widget.cities,
+    ];
 
     _tagToIndexMap = _generateTagToIndexMap(_cities);
     _initialScrollIndex = getInitialCityCodeIndex();
@@ -193,44 +206,6 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     return map;
   }
 
-  String _prevQuery = '';
-  late List<Point> _prevQueryResult = _cities;
-  List<Point> queryCitiesBy(String text) {
-    final query = text.trim().toLowerCase();
-    if (query == _prevQuery) {
-      // 查询条件相同, 结果相同
-      return _prevQueryResult;
-    }
-
-    final cities = query.startsWith(_prevQuery)
-        // 查询条件范围变窄, 可以直接在上次的查询结果基础上过滤
-        ? _prevQueryResult
-        : _cities;
-
-    final result = <Point>[];
-    final queryPinyin = ChineseHelper.containsChinese(query)
-        ? null
-        : query.replaceAll(RegExp(r'\s'), '');
-
-    for (final city in cities) {
-      if (queryPinyin != null) {
-        final pinyin = city.pinyin;
-        if (pinyin != null) {
-          if (pinyin.short.startsWith(queryPinyin) ||
-              pinyin.full.startsWith(queryPinyin)) {
-            result.add(city);
-            continue;
-          }
-        }
-      }
-      if ((city.letter?.toLowerCase().startsWith(query) == true) ||
-          city.lowerCaseName.contains(query)) {
-        result.add(city);
-      }
-    }
-    return result;
-  }
-
   /// 当右侧的类型. 因为触摸而发生改变
   _onTagChange(String alpha) {
     if (_changeTimer?.isActive ?? false) {
@@ -245,43 +220,12 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     });
   }
 
-  Result _createResult(Point city) {
-    Result result = Result();
-    result.cityId = city.code;
-    result.cityName = city.name;
-    return result;
-  }
-
   @override
-  Widget build(BuildContext context) =>
-      widget.keyboardDismissBehavior == ScrollViewKeyboardDismissBehavior.onDrag
-          ? NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                final focusScope = FocusScope.of(context);
-                if ((notification is OverscrollNotification ||
-                        notification is ScrollUpdateNotification) &&
-                    focusScope.hasFocus) {
-                  focusScope.unfocus();
-                }
-                return false;
-              },
-              child: _build(context),
-            )
-          : _build(context);
-
-  Widget _build(BuildContext context) {
-    return widget.layoutBuilder(
-      context,
-      cities: LayoutBuilder(
-        builder: (context, c) => Stack(
-          children: _buildChildren(context, c.maxHeight),
-        ),
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, c) => Stack(
+        children: _buildChildren(context, c.maxHeight),
       ),
-      queryResult: widget.query.trim().isNotEmpty
-          ? _buildQueryResult(
-              cities: queryCitiesBy(widget.query),
-            )
-          : null,
     );
   }
 
@@ -378,7 +322,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
             Container(
               alignment: Alignment.centerLeft,
               child: Center(
-                child: _buildCityItem(context, _cities[index]),
+                child: widget.buildCityItem(context, _cities[index]),
               ),
             )
           ],
@@ -440,50 +384,27 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     ));
     return children;
   }
-
-  Widget _buildCityItem(BuildContext context, Point city) {
-    // 这里使用code判断是否选择, 因为[widget.hotCities]和[widget.citiesData]有可能有相同code的城市
-    // 此时他们应该都是选中状态
-    bool selected =
-        widget.locationCode != null && widget.locationCode == city.code;
-    final theme = Theme.of(context);
-
-    return ListTileTheme(
-      selectedColor: widget.itemSelectFontColor ?? theme.primaryColor,
-      textColor: widget.itemFontColor ?? theme.accentColor,
-      child: ListTile(
-        selected: selected,
-        title: Text(city.name, style: TextStyle(fontSize: widget.itemFontSize)),
-        onTap: () {
-          widget.onSelected(_createResult(city));
-        },
-      ),
-    );
-  }
-
-  Widget _buildQueryResult({required List<Point> cities}) {
-    return ListView.builder(
-      itemCount: cities.length,
-      itemBuilder: (context, index) => _buildCityItem(context, cities[index]),
-    );
-  }
 }
 
 class CitiesSelectorPage extends StatefulWidget {
   const CitiesSelectorPage({
     Key? key,
-    required this.builder,
+    required this.buildCitiesSelector,
     this.title = '城市选择器',
     this.scaffoldBackgroundColor,
     this.appBarBuilder,
     this.useSearchAppBar = false,
+    this.provincesData,
+    this.citiesData,
   })  : assert(!(useSearchAppBar && appBarBuilder != null)),
         super(key: key);
-  final Widget Function(
+  final Map<String, String>? provincesData;
+  final Map<String, dynamic>? citiesData;
+
+  final CitiesSelector Function(
     BuildContext context,
-    String query,
-    CitiesSelectorLayoutBuilder layoutBuilder,
-  ) builder;
+    List<Point> cities,
+  ) buildCitiesSelector;
   final Color? scaffoldBackgroundColor;
   final String title;
   final AppBarBuilder? appBarBuilder;
@@ -494,6 +415,12 @@ class CitiesSelectorPage extends StatefulWidget {
 }
 
 class _CitiesSelectorPageState extends State<CitiesSelectorPage> {
+  late final cities = CitiesUtils.getAllCitiesByMeta(
+    widget.provincesData ?? provincesData,
+    widget.citiesData ?? citiesData,
+  );
+  late final _citiesSearcher = CitiesSearcher(cities);
+
   String _query = '';
   AppBar _buildAppBar() {
     if (widget.appBarBuilder != null) {
@@ -536,29 +463,46 @@ class _CitiesSelectorPageState extends State<CitiesSelectorPage> {
       resizeToAvoidBottomInset: !widget.useSearchAppBar,
       body: SafeArea(
         bottom: true,
-        child: widget.builder(
-          context,
-          _query,
-          _buildCitiesSelectorLayout,
-        ),
+        child: widget.useSearchAppBar
+            ? _buildSearchBody(context)
+            : widget.buildCitiesSelector(context, cities),
       ),
     );
   }
 
-  Widget _buildCitiesSelectorLayout(
-    BuildContext context, {
-    required Widget cities,
-    Widget? queryResult,
-  }) =>
-      Stack(
-        children: [
-          cities,
-          if (queryResult != null)
-            ColoredBox(
-              color: widget.scaffoldBackgroundColor ??
-                  Theme.of(context).scaffoldBackgroundColor,
-              child: queryResult,
-            ),
-        ],
+  Widget _buildSearchBody(BuildContext context) {
+    final citiesSelector = widget.buildCitiesSelector(context, cities);
+    Widget? queryResult;
+    if (_query.trim().isNotEmpty) {
+      final cities = _citiesSearcher.search(_query);
+      queryResult = ColoredBox(
+        color: widget.scaffoldBackgroundColor ??
+            Theme.of(context).scaffoldBackgroundColor,
+        child: ListView.builder(
+          itemCount: cities.length,
+          itemBuilder: (context, index) => citiesSelector.buildCityItem(
+            context,
+            cities[index],
+          ),
+        ),
       );
+    }
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        final focusScope = FocusScope.of(context);
+        if ((notification is OverscrollNotification ||
+                notification is ScrollUpdateNotification) &&
+            focusScope.hasFocus) {
+          focusScope.unfocus();
+        }
+        return false;
+      },
+      child: Stack(
+        children: [
+          citiesSelector,
+          if (queryResult != null) queryResult,
+        ],
+      ),
+    );
+  }
 }
