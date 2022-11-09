@@ -331,28 +331,35 @@ class _CitiesSelectorState extends State<CitiesSelector> {
               ? null
               : _cities[firstPosition.index].letter;
 
-          final tagPosition = positions.firstWhereOrNull((it) =>
-              it.itemLeadingEdge > 0 && _tagToIndexMap.containsValue(it.index));
-          final top = tagPosition != null
-              ? math.min(0.0,
-                  tagPosition.itemLeadingEdge * height - widget.topIndexHeight)
+          final firstFullyVisibleTagPosition = positions.firstWhereOrNull(
+              (it) =>
+                  it.itemLeadingEdge > 0 &&
+                  _tagToIndexMap.containsValue(it.index));
+          final top = firstFullyVisibleTagPosition != null
+              ? math.min(
+                  0.0,
+                  firstFullyVisibleTagPosition.itemLeadingEdge * height -
+                      widget.topIndexHeight)
               : 0.0;
 
           return Positioned(
             top: top,
             left: 0,
             right: 0,
-            child: Container(
-              height: widget.topIndexHeight,
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(left: 15.0),
-              color: widget.topIndexBgColor,
-              child: Text(
-                tagName ?? _tagList.first,
-                softWrap: true,
-                style: TextStyle(
-                  fontSize: widget.topIndexFontSize,
-                  color: widget.topIndexFontColor,
+            child: Opacity(
+              opacity: firstFullyVisibleTagPosition?.index == 0 ? 0 : 1,
+              child: Container(
+                height: widget.topIndexHeight,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: 15.0),
+                color: widget.topIndexBgColor,
+                child: Text(
+                  tagName ?? _tagList.first,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontSize: widget.topIndexFontSize,
+                    color: widget.topIndexFontColor,
+                  ),
                 ),
               ),
             ),
