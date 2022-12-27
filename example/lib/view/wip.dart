@@ -386,7 +386,7 @@ class WorkInProgressState extends State<WorkInProgress> {
             AttrItemContainer(
               title: '使用自定义数据',
               editor: _buildSwitch(
-                value: true,
+                value: userSelfMeta,
                 onChanged: (bool val) => setState(() {
                   userSelfMeta = val;
                 }),

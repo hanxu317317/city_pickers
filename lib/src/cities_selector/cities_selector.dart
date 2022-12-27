@@ -442,6 +442,7 @@ class _CitiesSelectorPageState extends State<CitiesSelectorPage> {
                 padding: EdgeInsetsDirectional.only(start: 16.0),
                 child: CupertinoSearchTextField(
                   prefixInsets: EdgeInsetsDirectional.only(start: 6),
+                  placeholder: '输入城市名或拼音查询',
                   onChanged: (value) {
                     setState(() {
                       _query = value;
