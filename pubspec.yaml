@@ -12,8 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  scrollable_positioned_list: ^0.3.5
-  collection: any
+  scrollable_positioned_list: 0.3.5
+  collection: 1.16.0
   lpinyin: ^2.0.3
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
