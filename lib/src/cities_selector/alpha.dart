@@ -48,10 +48,11 @@ const List<String> ALPHAS_INDEX = const [
 ];
 
 class Alpha extends StatefulWidget {
-//  static List<String> _alphas = ALPHAS_INDEX;
+  double get alphaItemSize => alphaFontSize + alphaPadding.vertical;
 
   /// 单个字母的字体大小
-  final double alphaItemSize;
+  final double alphaFontSize;
+  final EdgeInsetsGeometry alphaPadding;
   final List<String> alphas;
 
   /// 当选中的字母发生改变
@@ -77,7 +78,8 @@ class Alpha extends StatefulWidget {
       {
 
       /// 字母列表的高度大小与字体大小
-      this.alphaItemSize = 14,
+      this.alphaFontSize = 14,
+      this.alphaPadding = const EdgeInsets.symmetric(horizontal: 4.0),
 
       /// 可供选择的字母集
       this.alphas = ALPHAS_INDEX,
@@ -180,14 +182,19 @@ class AlphaState extends State<Alpha> {
   _buildAlpha() {
     List<Widget> result = [];
     for (var alpha in widget.alphas) {
-      result.add(new SizedBox(
+      result.add(new Container(
         key: Key(alpha),
         height: widget.alphaItemSize,
-        child: new Text(alpha,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: widget.alphaItemSize,
-                color: isTouched ? widget.fontActiveColor : widget.fontColor)),
+        padding: widget.alphaPadding,
+        child: new Text(
+          alpha,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: widget.alphaFontSize,
+            color: isTouched ? widget.fontActiveColor : widget.fontColor,
+            height: 1.0,
+          ),
+        ),
       ));
     }
     return Align(
@@ -195,7 +202,7 @@ class AlphaState extends State<Alpha> {
         child: Container(
           alignment: Alignment.center,
           color: isTouched ? widget.activeBgColor : widget.bgColor,
-          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+          padding: EdgeInsets.symmetric(horizontal: 4),
           child: Column(mainAxisSize: MainAxisSize.min, children: result),
         ));
   }

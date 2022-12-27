@@ -29,7 +29,7 @@ class WorkInProgressState extends State<WorkInProgress> {
   String title = '城市选择';
   Result result = Result();
   Color tagBgColor = const Color.fromRGBO(255, 255, 255, 1);
-  Color pageBgColor = const Color.fromRGBO(123, 123, 241, 1);
+  Color pageBgColor = Colors.white;
 
   Color tagBgActiveColor = const Color(0xffeeeeee);
   Color tagFontColor = const Color(0xff666666);
@@ -52,6 +52,7 @@ class WorkInProgressState extends State<WorkInProgress> {
   Color itemSelectBgColor = Colors.blueGrey;
 
   Color itemFontColor = Colors.black;
+  bool useSearchBar = false;
   AppBarBuilder appBarBuilder = (String title) {
     return AppBar(
       title: const Text('用户自定义AppBar'),
@@ -90,16 +91,15 @@ class WorkInProgressState extends State<WorkInProgress> {
     );
   }
 
-  Widget _buildSelfMetaButtons() {
+  Widget _buildSwitch({
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
     return Container(
         alignment: Alignment.centerRight,
         child: CupertinoSwitch(
-          value: userSelfMeta,
-          onChanged: (bool val) {
-            setState(() {
-              userSelfMeta = !userSelfMeta;
-            });
-          },
+          value: value,
+          onChanged: onChanged,
         ));
   }
 
@@ -182,7 +182,7 @@ class WorkInProgressState extends State<WorkInProgress> {
     Result? tempResult = await CityPickers.showCitiesSelector(
         context: context,
         title: title,
-        locationCode: '110100',
+        locationCode: result.cityId,
         scaffoldBackgroundColor: pageBgColor,
         provincesData:
             !userSelfMeta ? CityPickers.metaProvinces : provincesData,
@@ -192,7 +192,12 @@ class WorkInProgressState extends State<WorkInProgress> {
           HotCity(id: '1', name: '沈阳'),
           HotCity(id: '2', name: '天津'),
         ],
-        appBarBuilder: appBarBuilder,
+        tagBarTextPadding: const EdgeInsets.symmetric(
+          horizontal: 4.0,
+          vertical: 2.0,
+        ),
+        appBarBuilder: useSearchBar ? null : appBarBuilder,
+        useSearchAppBar: useSearchBar,
         sideBarStyle: BaseStyle(
             fontSize: tagBarFontSize,
             color: tagFontColor,
@@ -380,7 +385,21 @@ class WorkInProgressState extends State<WorkInProgress> {
             ),
             AttrItemContainer(
               title: '使用自定义数据',
-              editor: _buildSelfMetaButtons(),
+              editor: _buildSwitch(
+                value: true,
+                onChanged: (bool val) => setState(() {
+                  userSelfMeta = val;
+                }),
+              ),
+            ),
+            AttrItemContainer(
+              title: '使用搜索栏',
+              editor: _buildSwitch(
+                value: useSearchBar,
+                onChanged: (value) => setState(() {
+                  useSearchBar = value;
+                }),
+              ),
             ),
             AttrItemContainer(
                 title: '选择结果', editor: Text("${result.toString()}")),

@@ -7,58 +7,85 @@
 // tartget:  xxx
 //
 
-import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
+import 'package:lpinyin/lpinyin.dart';
 
 import '../../modal/base_citys.dart';
 import '../../modal/point.dart';
 
-// 城市列表偏移量结构
-class CityOffsetRange {
-  late double start;
-  late double end;
-  late String tag;
+class CitiesSearcher {
+  final List<Point> _cities;
+  CitiesSearcher(this._cities);
 
-  CityOffsetRange({required this.start, required this.end, required this.tag});
+  String _prevQuery = '';
+  late List<Point> _prevQueryResult = _cities;
 
-  CityOffsetRange.empty() {
-    this.start = -1;
-    this.end = -1;
-    this.tag = "";
+  List<Point> search(String text) {
+    final query = text.trim().toLowerCase();
+    if (query == _prevQuery) {
+      // 查询条件相同, 结果相同
+      return _prevQueryResult;
+    }
+
+    final cities = query.startsWith(_prevQuery)
+        // 查询条件范围变窄, 可以直接在上次的查询结果基础上过滤
+        ? _prevQueryResult
+        : _cities;
+
+    final result = <Point>[];
+    final queryPinyin = ChineseHelper.containsChinese(query)
+        ? null
+        : query.replaceAll(RegExp(r'\s'), '');
+
+    for (final city in cities) {
+      if (queryPinyin != null) {
+        final pinyin = city.pinyin;
+        if (pinyin != null) {
+          if (pinyin.short.startsWith(queryPinyin) ||
+              pinyin.full.startsWith(queryPinyin)) {
+            result.add(city);
+            continue;
+          }
+        }
+      }
+      if ((city.letter?.toLowerCase().startsWith(query) == true) ||
+          city.lowerCaseName.contains(query)) {
+        result.add(city);
+      }
+    }
+    return result;
   }
-
-  bool isEmpty() {
-    return start == -1 && end == -1 && tag == "";
-  }
-}
-
-class TagCount {
-  int count;
-  String letter;
-
-  TagCount({required this.count, required this.letter});
 }
 
 class CitiesUtils {
   /// 获取城市选择器所有的数据
   static List<Point> getAllCitiesByMeta(
-      Map<String, String> provinceMeta, Map<String, dynamic> citiesMeta) {
-    List<Point> trees = [];
+    Map<String, String> provinceMeta,
+    Map<String, dynamic> citiesMeta,
+  ) {
+    CityTree citiesTreeBuilder = new CityTree(
+      metaInfo: citiesMeta,
+      provincesInfo: provinceMeta,
+    );
+
+    final provinces = provinceMeta.keys
+        .map((provinceId) => citiesTreeBuilder.initTree(provinceId))
+        .toList();
+
     List<Point> cities = [];
-    CityTree citiesTreeBuilder =
-        new CityTree(metaInfo: citiesMeta, provincesInfo: provinceMeta);
-    provinceMeta.forEach((key, value) {
-      trees.add(citiesTreeBuilder.initTree(key));
-    });
-    trees.forEach((Point tree) {
-      cities.addAll(tree.child);
-    });
-    cities.sort((Point a, Point b) {
-      return a.letter!.codeUnitAt(0) - b.letter!.codeUnitAt(0);
-    });
-    cities.forEach((Point point) {
-      point.letter = point.letter!.toUpperCase();
-    });
-    return cities;
+    for (final province in provinces) {
+      for (final city in province.children) {
+        if (city.isClassificationNode) {
+          // city级的"分类节点", 下面是"省直辖县级行政区", 这里也把他们看作是一个city
+          cities.addAll(city.children);
+        } else {
+          cities.add(city);
+        }
+      }
+    }
+
+    return cities //
+      ..sortBy<num>((it) => it.letter!.codeUnitAt(0));
   }
 
   static List<String> getValidTagsByCityList(List<Point> citiesList) {
@@ -74,41 +101,9 @@ class CitiesUtils {
     });
     return validTags;
   }
-
-  static List<CityOffsetRange> getOffsetRangeByCitiesList(
-      {required List<Point> lists,
-      required double itemHeight,
-      required double tagHeight}) {
-    List<TagCount> categoriesList = [];
-    List<CityOffsetRange> result = [];
-
-    /// 先分类
-    String lastTag = '';
-    lists.forEach((Point item) {
-      if (item.letter != lastTag) {
-        categoriesList.add(TagCount(letter: item.letter!, count: 0));
-        lastTag = item.letter!;
-      }
-    });
-    lists.forEach((Point item) {
-      TagCount target = categoriesList.firstWhere((TagCount tagCount) {
-        return tagCount.letter == item.letter;
-      });
-      target.count += 1;
-    });
-    categoriesList.forEach((TagCount item) {
-//      print("item: ${item.letter}, ${item.count}");
-      double start = result.isNotEmpty ? result.last.end : 0;
-      result.add(CityOffsetRange(
-          start: start,
-          end: start + item.count * itemHeight + tagHeight,
-          tag: item.letter.toUpperCase()));
-    });
-    return result;
-  }
 }
 
-// 热闹城市对象
+/// 热闹城市对象
 class HotCity {
   final String name;
   final String id;

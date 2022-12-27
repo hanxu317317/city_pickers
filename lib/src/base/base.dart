@@ -37,6 +37,7 @@ class BaseView extends StatefulWidget {
   final Widget? confirmWidget;
 
   final double borderRadius;
+
   /// 是否开启全球化数据
   final bool? global;
 
@@ -125,18 +126,18 @@ class _BaseView extends State<BaseView> {
     }
     if (showType.contain(ShowType.c)) {
       cityController = new FixedExtentScrollController(
-          initialItem: targetProvince.child
+          initialItem: targetProvince.children
               .indexWhere((Point p) => p.code == targetCity!.code));
     }
     if (showType.contain(ShowType.a)) {
       areaController = new FixedExtentScrollController(
-          initialItem: targetCity!.child
+          initialItem: targetCity!.children
               .indexWhere((Point p) => p.code == targetArea!.code));
     }
     // 增加第4级(村/镇)选择
     if (showType.contain(ShowType.v)) {
       villageController = new FixedExtentScrollController(
-          initialItem: targetArea!.child
+          initialItem: targetArea!.children
               .indexWhere((Point p) => p.code == targetVillage!.code));
     }
   }
@@ -173,21 +174,21 @@ class _BaseView extends State<BaseView> {
       if (targetProvince.isNull) {
         targetProvince = cityTree.initTreeByCode(provinces.first.code!);
       }
-      targetProvince.child.forEach((Point _city) {
+      targetProvince.children.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;
           targetArea = _getTargetChildFirst(_city);
           // 增加第4级(村/镇)选择
           targetVillage = _getTargetChildFirst(targetArea!);
         }
-        _city.child.forEach((Point _area) {
+        _city.children.forEach((Point _area) {
           if (_area.code == _locationCode) {
             targetCity = _city;
             targetArea = _area;
             // 增加第4级(村/镇)选择
             targetVillage = _getTargetChildFirst(_area);
           }
-          _area.child.forEach((Point _village) {
+          _area.children.forEach((Point _village) {
             if (_village.code == _locationCode) {
               targetCity = _city;
               targetArea = _area;
@@ -199,8 +200,7 @@ class _BaseView extends State<BaseView> {
       });
     } else {
       /// 本来默认想定在北京, 但是由于有可能出现用户的省份数据为不包含北京, 所以采用第一个省份做为初始
-      targetProvince =
-          cityTree.initTreeByCode(widget.provincesData.keys.first);
+      targetProvince = cityTree.initTreeByCode(widget.provincesData.keys.first);
     }
     // 尝试试图匹配到下一个级别的第一个,
     if (targetCity == null) {
@@ -221,8 +221,8 @@ class _BaseView extends State<BaseView> {
     if (target == Point.nullPoint()) {
       return Point.nullPoint();
     }
-    if (target.child.isNotEmpty && target.child.isNotEmpty) {
-      return target.child.first;
+    if (target.children.isNotEmpty && target.children.isNotEmpty) {
+      return target.children.first;
     }
     return Point.nullPoint();
   }
@@ -230,7 +230,7 @@ class _BaseView extends State<BaseView> {
   // 通过选中的省份, 构建以省份为根节点的树型结构
   List<String> getCityItemList() {
     List<String> result = [];
-    result.addAll(targetProvince.child.toList().map((p) => p.name).toList());
+    result.addAll(targetProvince.children.toList().map((p) => p.name).toList());
     return result;
   }
 
@@ -238,7 +238,7 @@ class _BaseView extends State<BaseView> {
     List<String> result = [];
 
     if (targetCity != null) {
-      result.addAll(targetCity!.child.toList().map((p) => p.name).toList());
+      result.addAll(targetCity!.children.toList().map((p) => p.name).toList());
     }
     return result;
   }
@@ -248,7 +248,7 @@ class _BaseView extends State<BaseView> {
     List<String> result = [];
 
     if (targetArea != null) {
-      result.addAll(targetArea!.child.toList().map((p) => p.name).toList());
+      result.addAll(targetArea!.children.toList().map((p) => p.name).toList());
     }
     return result;
   }
@@ -260,8 +260,7 @@ class _BaseView extends State<BaseView> {
       _changeTimer!.cancel();
     }
     _changeTimer = new Timer(Duration(milliseconds: 100), () {
-      Point _provinceTree =
-          cityTree.initTree(_province.code.toString());
+      Point _provinceTree = cityTree.initTree(_province.code.toString());
       setState(() {
         targetProvince = _provinceTree;
         targetCity = _getTargetChildFirst(_provinceTree);
@@ -396,7 +395,7 @@ class _BaseView extends State<BaseView> {
         value: targetCity?.name,
         itemList: getCityItemList(),
         changed: (index) {
-          _onCityChange(targetProvince.child[index]);
+          _onCityChange(targetProvince.children[index]);
         },
       ));
     }
@@ -410,7 +409,7 @@ class _BaseView extends State<BaseView> {
         value: targetArea?.name,
         itemList: getAreaItemList(),
         changed: (index) {
-          _onAreaChange(targetCity!.child[index]);
+          _onAreaChange(targetCity!.children[index]);
         },
       ));
     }
@@ -425,7 +424,7 @@ class _BaseView extends State<BaseView> {
         value: targetVillage?.name,
         itemList: getVillageItemList(),
         changed: (index) {
-          _onVillageChange(targetArea!.child[index]);
+          _onVillageChange(targetArea!.children[index]);
         },
       ));
     }
@@ -434,9 +433,8 @@ class _BaseView extends State<BaseView> {
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(widget.borderRadius),
-            topRight: Radius.circular(widget.borderRadius)
-          ),
+              topLeft: Radius.circular(widget.borderRadius),
+              topRight: Radius.circular(widget.borderRadius)),
         ),
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -502,8 +500,6 @@ class _BaseView extends State<BaseView> {
     );
   }
 }
-
-
 
 class _WrapLayout extends SingleChildLayoutDelegate {
   _WrapLayout({

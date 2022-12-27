@@ -9,7 +9,12 @@
 
 import 'dart:async';
 
+import 'dart:math' as math;
+import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../meta/province.dart';
 import '../../modal/point.dart';
@@ -29,10 +34,16 @@ const defaultTopIndexBgColor = Color(0xfff3f4f5);
 const defaultScaffoldBackgroundColor = Colors.white;
 
 class CitiesSelector extends StatefulWidget {
+  static Result _createResult(Point city) {
+    Result result = Result();
+    result.cityId = city.code;
+    result.cityName = city.name;
+    return result;
+  }
+
   final String? locationCode;
-  final String title;
-  final Map<String, String>? provincesData;
-  final Map<String, dynamic>? citiesData;
+  final List<Point> cities;
+
   final List<HotCity>? hotCities;
 
   /// 定义右侧bar的激活与普通状态的颜色
@@ -46,10 +57,11 @@ class CitiesSelector extends StatefulWidget {
   /// 右侧Bar字体的大小
   final double tagBarFontSize;
 
-  /// 城市列表每一个Item的高度
-//  final double cityItemHeight;
-  /// 城市列表每一个Item的字体大小
-  final double cityItemFontSize;
+  /// 右侧Bar文字的Padding
+  final EdgeInsetsGeometry tagBarTextPadding;
+
+  /// 是否显示顶部的tag提示标签
+  final bool showTopIndex;
 
   /// 每一个类别的城市顶部的标题的高度
   final double topIndexHeight;
@@ -61,194 +73,127 @@ class CitiesSelector extends StatefulWidget {
   final Color topIndexFontColor;
   final Color topIndexBgColor;
 
+  /// 城市列表每一个Item的字体大小
+  final double itemFontSize;
+
   final Color? itemSelectFontColor;
-  final AppBarBuilder? appBarBuilder;
-//  暂时无用
-//  final Color itemSelectBgColor;
 
   final Color? itemFontColor;
 
-  final Color? scaffoldBackgroundColor;
+  final ValueSetter<Result> onSelected;
 
   CitiesSelector({
-    this.title = '城市选择器',
     this.locationCode,
-    this.citiesData,
+    required this.cities,
     this.hotCities,
-    this.provincesData,
     this.tagBarActiveColor = Colors.yellow,
     this.tagBarFontActiveColor = Colors.red,
     this.tagBarBgColor = Colors.cyanAccent,
     this.tagBarFontColor = Colors.white,
     this.tagBarFontSize = 14.0,
-    this.cityItemFontSize = 12.0,
-//    this.cityItemHeight = 100,
+    this.tagBarTextPadding = const EdgeInsets.symmetric(horizontal: 4.0),
+    this.showTopIndex = true,
     this.topIndexFontSize = 16,
     this.topIndexHeight = 40,
     this.topIndexFontColor = Colors.green,
     this.topIndexBgColor = Colors.blueGrey,
-//    this.itemSelectBgColor = Colors.white,
+    this.itemFontSize = 12.0,
     this.itemFontColor = Colors.black,
     this.itemSelectFontColor = Colors.red,
-    this.appBarBuilder,
-    this.scaffoldBackgroundColor,
+    required this.onSelected,
   });
+
+  Widget buildCityItem(BuildContext context, Point city) {
+    CitiesSelector widget = this;
+    // 这里使用code判断是否选择, 因为[widget.hotCities]和[widget.citiesData]有可能有相同code的城市
+    // 此时他们应该都是选中状态
+    bool selected =
+        widget.locationCode != null && widget.locationCode == city.code;
+    final theme = Theme.of(context);
+
+    return ListTileTheme(
+      selectedColor: widget.itemSelectFontColor ?? theme.primaryColor,
+      textColor: widget.itemFontColor ?? theme.accentColor,
+      child: ListTile(
+        selected: selected,
+        title: Text(city.name, style: TextStyle(fontSize: widget.itemFontSize)),
+        onTap: () {
+          widget.onSelected(_createResult(city));
+        },
+      ),
+    );
+  }
 
   @override
   _CitiesSelectorState createState() => _CitiesSelectorState();
 }
 
 class _CitiesSelectorState extends State<CitiesSelector> {
-  String? _tagName;
+  String? _touchedTagName;
   Timer? _changeTimer;
 
-  /// 进行计算 .获取的初始化的城市code码
-  Point? _initTargetCity;
+  int _initialScrollIndex = -1;
   bool _isTouchTagBar = false;
-
-  /// 是否显示顶部的tag提示标签
-  bool _showTopOffstage = true;
-
-  /// 顶部tag标签的动态高度
-  double _topOffstageTop = 0;
 
   /// 城市列表数组
   List<Point> _cities = [];
-  late ScrollController _scrollController;
+  late ItemScrollController _scrollController;
+  late ItemPositionsListener _positionsListener;
 
-  /// 用这个key 去标记一个item,用来在初始化后. 获取期高度
-  GlobalKey _key0 = new GlobalKey();
-
-  /// 计算每一个letter or tag的列表区间范围
-  /// 存放每个tag集的偏移start 与 end . 通过计算Alpha的位置, 判定滚动
-  List<CityOffsetRange> _offsetTagRangeList = [];
+  late Map<String, int> _tagToIndexMap;
 
   /// 有效的tag标签列表, 对应右侧标签
   late List<String> _tagList;
 
-  /// 每一个顶部标签的高度
-  late double topTagHeight;
-
-  /// 用户可定义的, 每一个选项的高度
-//  double itemHeight;
-
-  /// 用户可定义的, 选项中字体的大小
-  double? itemFontSize;
-
   @override
   void initState() {
-    // TODO: implement initState
-    print("hotCities::::: ${widget.hotCities}");
-    _cities = CitiesUtils.getAllCitiesByMeta(
-        widget.provincesData ?? provincesData, widget.citiesData ?? citiesData);
-    print("_cities::: $_cities");
-    _initTargetCity = getInitialCityCode();
-//    print("_cities>>> ${_cities.length}");
-//    print("locationCode ${widget.locationCode}");
+    super.initState();
+    _cities = [
+      if (widget.hotCities != null)
+        ...widget.hotCities!.map((e) => Point(
+              code: e.id,
+              letter: e.tag,
+              name: e.name,
+              children: [],
+            )),
+      ...widget.cities,
+    ];
+
+    _tagToIndexMap = _generateTagToIndexMap(_cities);
+    _initialScrollIndex = getInitialCityCodeIndex();
     _tagList = CitiesUtils.getValidTagsByCityList(_cities);
 
-    _scrollController = new ScrollController();
-
-    // 向tag 与 city 列表中加入 自定义数据
-    formatHotCities();
-    _scrollController.addListener(() {
-      _initOffsetRangList();
-//      可以用来强行关闭键盘
-//      FocusScope.of(context).requestFocus(FocusNode());
-      _dynamicChangeTopStagePosition(_scrollController.offset.toDouble());
-    });
-    super.initState();
-
-    topTagHeight = widget.topIndexHeight;
-//    itemHeight = widget.cityItemHeight;
-    itemFontSize = widget.cityItemFontSize;
+    _scrollController = new ItemScrollController();
+    _positionsListener = ItemPositionsListener.create();
   }
 
-  void formatHotCities() {
-    if (widget.hotCities != null) {
-      List<Point> hotPoints = [];
-      List<String> hotTags = [];
-      widget.hotCities!.forEach((HotCity hotCity) {
-        if (!hotTags.contains(hotCity.tag)) {
-          hotTags.add(hotCity.tag);
-        }
-        hotPoints.add(Point(
-            code: hotCity.id,
-            letter: hotCity.tag,
-            name: hotCity.name,
-            child: []));
-      });
-      _cities.insertAll(0, hotPoints);
-      _tagList.insertAll(0, hotTags);
-    }
+  @override
+  void dispose() {
+    _changeTimer?.cancel();
+    super.dispose();
   }
 
-  Point? getInitialCityCode() {
-    if (widget.locationCode == null) {
-      return null;
+  int getInitialCityCodeIndex() {
+    final code = widget.locationCode;
+    if (code == null) {
+      return -1;
     }
-    int code = int.parse(widget.locationCode!);
-    return _cities.firstWhere((Point point) {
+    return _cities.indexWhere((Point point) {
       return point.code == code;
-    }, orElse: () => Point.nullPoint());
+    });
   }
 
-  /// 只有当组件加载后. 才能获取_key0的高度,要保证该函数只会被执行一次
-  List<CityOffsetRange> _initOffsetRangList() {
-    if (_offsetTagRangeList.isEmpty) {
-      double itemContainerHeight =
-          _key0.currentContext?.findRenderObject()?.paintBounds.size.height ??
-              0;
-
-      double offstageHeight = topTagHeight;
-
-      _offsetTagRangeList = CitiesUtils.getOffsetRangeByCitiesList(
-          lists: _cities,
-          tagHeight: offstageHeight,
-          itemHeight: itemContainerHeight);
+  Map<String, int> _generateTagToIndexMap(List<Point> cities) {
+    final map = <String, int>{};
+    String? prevLetter;
+    for (var i = 0; i < cities.length; i++) {
+      var letter = cities[i].letter;
+      if (letter != prevLetter) {
+        map[letter ?? ''] = i;
+        prevLetter = letter;
+      }
     }
-    return _offsetTagRangeList;
-  }
-
-  /// 动态计算顶部topStage标题的位置
-  _dynamicChangeTopStagePosition(double scrollTopOffset) {
-    // 应该显示标签的视觉窗口中的对象
-    CityOffsetRange tempViewTarget =
-        _offsetTagRangeList.firstWhere((CityOffsetRange range) {
-      return scrollTopOffset > range.start && scrollTopOffset < range.end;
-    }, orElse: () => CityOffsetRange.empty());
-    if (tempViewTarget.isEmpty()) {
-      return;
-    }
-
-    // 跟随滚动, 因为滚动精度问题. 实际上很难到让_topOffstageTop=0;
-    if (scrollTopOffset + topTagHeight >= tempViewTarget.end) {
-      return this.setState(() {
-        _tagName = tempViewTarget.tag;
-        _topOffstageTop =
-            -(scrollTopOffset + topTagHeight - tempViewTarget.end);
-      });
-    }
-
-    // 修正topStage的位置, 分二种情况将期归0
-    // 第一种情况, 是当上方动态跟随. 精度达到预期时._topOffstageTop 被置0
-    // 第二种. 当则是补偿以上的运行
-    if (_topOffstageTop < -topTagHeight && _topOffstageTop != 0) {
-      this.setState(() {
-        _topOffstageTop = 0;
-      });
-    } else if (_topOffstageTop != 0) {
-//      print("补偿运算");
-      _offsetTagRangeList.forEach((CityOffsetRange item) {
-        if (scrollTopOffset > item.start && scrollTopOffset < item.end) {
-          this.setState(() {
-            _topOffstageTop = 0;
-            _tagName = item.tag;
-          });
-          return;
-        }
-      });
-    }
+    return map;
   }
 
   /// 当右侧的类型. 因为触摸而发生改变
@@ -256,14 +201,22 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     if (_changeTimer?.isActive ?? false) {
       _changeTimer!.cancel();
     }
+    HapticFeedback.selectionClick();
     _changeTimer = new Timer(Duration(milliseconds: 30), () {
-      CityOffsetRange cityOffsetRange = _offsetTagRangeList.firstWhere(
-          (CityOffsetRange range) => range.tag == alpha,
-          orElse: null);
-      if (cityOffsetRange != null) {
-        _scrollController.jumpTo(cityOffsetRange.start);
+      final index = _tagToIndexMap[alpha];
+      if (index != null) {
+        _scrollController.jumpTo(index: index);
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, c) => Stack(
+        children: _buildChildren(context, c.maxHeight),
+      ),
+    );
   }
 
   /// 生成中间的字母提示Modal
@@ -276,7 +229,7 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           width: 80.0,
           height: 80.0,
           child: Text(
-            _tagName ?? '',
+            _touchedTagName ?? _tagList.first,
             style: TextStyle(
               fontSize: 32.0,
               color: Colors.white,
@@ -294,7 +247,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
       bgColor: widget.tagBarBgColor,
       fontColor: widget.tagBarFontColor,
       fontActiveColor: widget.tagBarFontActiveColor,
-      alphaItemSize: widget.tagBarFontSize,
+      alphaFontSize: widget.tagBarFontSize,
+      alphaPadding: widget.tagBarTextPadding,
       onTouchStart: () {
         this.setState(() {
           _isTouchTagBar = true;
@@ -310,9 +264,8 @@ class _CitiesSelectorState extends State<CitiesSelector> {
           if (!_isTouchTagBar) {
             _isTouchTagBar = true;
           }
-          _tagName = alpha;
+          _touchedTagName = alpha;
         });
-        _initOffsetRangList();
         if (alpha != null) {
           _onTagChange(alpha);
         }
@@ -320,127 +273,233 @@ class _CitiesSelectorState extends State<CitiesSelector> {
     );
   }
 
-  Result _buildResult(Point city) {
-    Result result = Result();
-    result.cityId = city.code.toString();
-    result.cityName = city.name;
-//    print('result $result');
-    return result;
-  }
-
-  List<Widget> _buildChildren(BuildContext context) {
-//    print("_initTargetCity.code ${_initTargetCity}");
+  List<Widget> _buildChildren(BuildContext context, double height) {
     List<Widget> children = [];
-    ThemeData theme = Theme.of(context);
-    children.add(ListView.builder(
-        controller: _scrollController,
-        itemCount: _cities.length,
-        itemBuilder: (context, index) {
-          bool offstage = false;
-          bool selected = _initTargetCity != null &&
-              _initTargetCity!.code == _cities[index].code;
-          if (index != 0 &&
-              _cities[index - 1].letter == _cities[index].letter) {
-            offstage = true;
-          }
-          return Column(
-            children: <Widget>[
-              Offstage(
-                offstage: offstage,
-                child: Container(
-                  height: topTagHeight,
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 15.0),
-                  color: widget.topIndexBgColor,
-                  child: Text(
-                    _cities[index].letter ?? "",
-                    softWrap: true,
-                    style: TextStyle(
-                        fontSize: widget.topIndexFontSize,
-                        color: widget.topIndexFontColor),
-                  ),
-                ),
-              ),
-              Container(
+
+    bool hideTag(int index) =>
+        index != 0 && _cities[index - 1].letter == _cities[index].letter;
+
+    children.add(ScrollablePositionedList.builder(
+      initialScrollIndex: math.max(0, _initialScrollIndex),
+      initialAlignment: _initialScrollIndex > 0 &&
+              widget.showTopIndex &&
+              !_tagToIndexMap.containsValue(_initialScrollIndex)
+          // 不显示tag的item, 顶部会被常显的topTag挡住, 需要往下偏移
+          ? widget.topIndexHeight / height
+          : 0,
+      itemScrollController: _scrollController,
+      itemPositionsListener: _positionsListener,
+      itemCount: _cities.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: <Widget>[
+            Offstage(
+              offstage: hideTag(index),
+              child: Container(
+                height: widget.topIndexHeight,
                 alignment: Alignment.centerLeft,
-                key: index == 0 ? _key0 : null,
-                child: Center(
-                  child: ListTileTheme(
-                    selectedColor:
-                        widget.itemSelectFontColor ?? theme.primaryColor,
-                    textColor: widget.itemFontColor ?? theme.accentColor,
-                    child: ListTile(
-                      selected: selected,
-                      title: Text(_cities[index].name,
-                          style: TextStyle(fontSize: itemFontSize)),
-                      onTap: () {
-                        Navigator.pop(context, _buildResult(_cities[index]));
-                      },
-                    ),
-                  ),
+                padding: const EdgeInsets.only(left: 15.0),
+                color: widget.topIndexBgColor,
+                child: Text(
+                  _cities[index].letter ?? "",
+                  softWrap: true,
+                  style: TextStyle(
+                      fontSize: widget.topIndexFontSize,
+                      color: widget.topIndexFontColor),
                 ),
-              )
-            ],
-          );
-        }));
-    if (_showTopOffstage) {
-      children.add(Positioned(
-        top: _topOffstageTop,
-        left: 0,
-        right: 0,
-        child: Offstage(
-          offstage: false,
-          child: Container(
-            height: topTagHeight,
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.only(left: 15.0),
-            color: widget.topIndexBgColor,
-            child: Text(
-              _tagName ?? _tagList.first,
-              softWrap: true,
-              style: TextStyle(
-                fontSize: widget.topIndexFontSize,
-                color: widget.topIndexFontColor,
               ),
             ),
-          ),
-        ),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Center(
+                child: widget.buildCityItem(context, _cities[index]),
+              ),
+            )
+          ],
+        );
+      },
+    ));
+    if (widget.showTopIndex) {
+      children.add(ValueListenableBuilder<Iterable<ItemPosition>>(
+        valueListenable: _positionsListener.itemPositions,
+        builder: (context, value, child) {
+          // value不是有序的, 需要排序
+          final positions = value.sortedBy<num>((it) => it.index);
+
+          final firstPosition = positions.firstOrNull;
+          final tagName = firstPosition == null
+              ? null
+              : _cities[firstPosition.index].letter;
+
+          final firstFullyVisibleTagPosition = positions.firstWhereOrNull(
+              (it) =>
+                  it.itemLeadingEdge > 0 &&
+                  _tagToIndexMap.containsValue(it.index));
+          final top = firstFullyVisibleTagPosition != null
+              ? math.min(
+                  0.0,
+                  firstFullyVisibleTagPosition.itemLeadingEdge * height -
+                      widget.topIndexHeight)
+              : 0.0;
+
+          return Positioned(
+            top: top,
+            left: 0,
+            right: 0,
+            child: Opacity(
+              opacity: firstFullyVisibleTagPosition?.index == 0 ? 0 : 1,
+              child: Container(
+                height: widget.topIndexHeight,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: 15.0),
+                color: widget.topIndexBgColor,
+                child: Text(
+                  tagName ?? _tagList.first,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontSize: widget.topIndexFontSize,
+                    color: widget.topIndexFontColor,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ));
     }
-    if (_isTouchTagBar) {
-      children.add(_buildCenterModal());
-    }
+    children.add(Offstage(
+      offstage: !_isTouchTagBar,
+      child: _buildCenterModal(),
+    ));
 
     /// 加入字母
-    children.add(
-        Positioned(right: 0, top: 0, bottom: 0, child: _buildAlphaAndTags()));
+    children.add(Positioned(
+      right: 0,
+      top: 0,
+      bottom: 0,
+      child: _buildAlphaAndTags(),
+    ));
     return children;
   }
+}
 
+class CitiesSelectorPage extends StatefulWidget {
+  const CitiesSelectorPage({
+    Key? key,
+    required this.buildCitiesSelector,
+    this.title = '城市选择器',
+    this.scaffoldBackgroundColor,
+    this.appBarBuilder,
+    this.useSearchAppBar = false,
+    this.provincesData,
+    this.citiesData,
+  })  : assert(!(useSearchAppBar && appBarBuilder != null)),
+        super(key: key);
+  final Map<String, String>? provincesData;
+  final Map<String, dynamic>? citiesData;
+
+  final CitiesSelector Function(
+    BuildContext context,
+    List<Point> cities,
+  ) buildCitiesSelector;
+  final Color? scaffoldBackgroundColor;
+  final String title;
+  final AppBarBuilder? appBarBuilder;
+  final bool useSearchAppBar;
+
+  @override
+  State<CitiesSelectorPage> createState() => _CitiesSelectorPageState();
+}
+
+class _CitiesSelectorPageState extends State<CitiesSelectorPage> {
+  late final cities = CitiesUtils.getAllCitiesByMeta(
+    widget.provincesData ?? provincesData,
+    widget.citiesData ?? citiesData,
+  );
+  late final _citiesSearcher = CitiesSearcher(cities);
+
+  String _query = '';
   AppBar _buildAppBar() {
     if (widget.appBarBuilder != null) {
       return widget.appBarBuilder!(widget.title);
     }
     return AppBar(
-      title: Text(
-        widget.title,
-      ),
+      title: Text(widget.title),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: widget.scaffoldBackgroundColor,
-        appBar: _buildAppBar(),
-        body: SafeArea(
-          bottom: true,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                  flex: 1, child: Stack(children: _buildChildren(context))),
-            ],
+      backgroundColor: widget.scaffoldBackgroundColor,
+      appBar: widget.useSearchAppBar
+          ? AppBar(
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              titleSpacing: 0,
+              title: Padding(
+                padding: EdgeInsetsDirectional.only(start: 16.0),
+                child: CupertinoSearchTextField(
+                  prefixInsets: EdgeInsetsDirectional.only(start: 6),
+                  onChanged: (value) {
+                    setState(() {
+                      _query = value;
+                    });
+                  },
+                ),
+              ),
+              actions: [
+                CupertinoButton(
+                  child: Text('取消'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            )
+          : _buildAppBar(),
+      resizeToAvoidBottomInset: !widget.useSearchAppBar,
+      body: SafeArea(
+        bottom: true,
+        child: widget.useSearchAppBar
+            ? _buildSearchBody(context)
+            : widget.buildCitiesSelector(context, cities),
+      ),
+    );
+  }
+
+  Widget _buildSearchBody(BuildContext context) {
+    final citiesSelector = widget.buildCitiesSelector(context, cities);
+    Widget? queryResult;
+    if (_query.trim().isNotEmpty) {
+      final cities = _citiesSearcher.search(_query);
+      queryResult = ColoredBox(
+        color: widget.scaffoldBackgroundColor ??
+            Theme.of(context).scaffoldBackgroundColor,
+        child: ListView.builder(
+          itemCount: cities.length,
+          itemBuilder: (context, index) => citiesSelector.buildCityItem(
+            context,
+            cities[index],
           ),
-        ));
+        ),
+      );
+    }
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        final focusScope = FocusScope.of(context);
+        if ((notification is OverscrollNotification ||
+                notification is ScrollUpdateNotification) &&
+            focusScope.hasFocus) {
+          focusScope.unfocus();
+        }
+        return false;
+      },
+      child: Stack(
+        children: [
+          citiesSelector,
+          if (queryResult != null) queryResult,
+        ],
+      ),
+    );
   }
 }
