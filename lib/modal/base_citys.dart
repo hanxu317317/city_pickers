@@ -55,7 +55,8 @@ class CityTree {
 
     String name = this._provincesData[provinceId]!;
     String letter = PinyinHelper.getFirstWordPinyin(name).substring(0, 1);
-    var root = new Point(code: provinceId, letter: letter, children: [], name: name);
+    var root =
+        new Point(code: provinceId, letter: letter, children: [], name: name);
     tree = _buildTree(root, metaInfo[provinceId], metaInfo);
     _cache.set(_cacheKey, tree);
     return tree;
@@ -153,7 +154,10 @@ class Provinces {
     for (int i = 0; i < keys.length; i++) {
       String name = metaInfo[keys[i]]!;
       provList.add(Point(
-          code: keys[i], children: [], letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1), name: name));
+          code: keys[i],
+          children: [],
+          letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1),
+          name: name));
     }
     if (this.sort == true) {
       provList.sort((Point a, Point b) {
