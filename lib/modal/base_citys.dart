@@ -47,17 +47,16 @@ class CityTree {
   /// @param provinceId this is province id
   /// @return tree
   Point initTree(String provinceId) {
-    String _cacheKey = provinceId.toString();
+    String _cacheKey = provinceId;
 //    这里为了避免 https://github.com/hanxu317317/city_pickers/issues/68
 //    if (_cache.has(_cacheKey)) {
 //      return tree = _cache.get(_cacheKey);
 //    }
 
-    String name = this._provincesData[provinceId.toString()]!;
+    String name = this._provincesData[provinceId]!;
     String letter = PinyinHelper.getFirstWordPinyin(name).substring(0, 1);
-    var root =
-        new Point(code: provinceId, letter: letter, children: [], name: name);
-    tree = _buildTree(root, metaInfo[provinceId.toString()], metaInfo);
+    var root = new Point(code: provinceId, letter: letter, children: [], name: name);
+    tree = _buildTree(root, metaInfo[provinceId], metaInfo);
     _cache.set(_cacheKey, tree);
     return tree;
   }
@@ -154,10 +153,7 @@ class Provinces {
     for (int i = 0; i < keys.length; i++) {
       String name = metaInfo[keys[i]]!;
       provList.add(Point(
-          code: keys[i],
-          children: [],
-          letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1),
-          name: name));
+          code: keys[i], children: [], letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1), name: name));
     }
     if (this.sort == true) {
       provList.sort((Point a, Point b) {
