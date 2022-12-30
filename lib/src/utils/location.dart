@@ -38,10 +38,10 @@ class Location {
     CityTree cityTree =
         new CityTree(metaInfo: citiesData, provincesInfo: provincesData);
 
-    int locationCode;
+    String locationCode;
     Result locationInfo = new Result();
     try {
-      locationCode = int.parse(_locationCode);
+      locationCode = _locationCode;
     } catch (e) {
       print(ArgumentError(
           "The Argument locationCode must be valid like: '100000' but get '$_locationCode' "));
@@ -55,13 +55,13 @@ class Location {
     locationInfo.provinceName = provincePoint!.name;
     locationInfo.provinceId = provincePoint!.code.toString();
 
-    provincePoint!.child.forEach((Point _city) {
+    provincePoint!.children.forEach((Point _city) {
       if (_city.code == locationCode) {
         cityPoint = _city;
       }
 
       /// 正常不应该在一个循环中, 如此操作, 但是考虑到地区码的唯一性, 可以在一次双层循环中完成操作. 避免第二层的循环查找
-      _city.child.forEach((Point _area) {
+      _city.children.forEach((Point _area) {
         if (_area.code == locationCode) {
           cityPoint = _city;
           areaPoint = _area;

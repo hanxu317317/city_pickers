@@ -15,17 +15,19 @@ import '../src/location_selector.dart';
 import '../src/picker.dart';
 import '../meta/province.dart';
 
-var emptyResult = new Result();
+var emptyResult = Result();
 
 class ShowFullPageCityPicker extends StatefulWidget {
+  const ShowFullPageCityPicker({Key? key}) : super(key: key);
+
   @override
-  _ShowFullPageCityPickerState createState() => _ShowFullPageCityPickerState();
+  State<ShowFullPageCityPicker> createState() => _ShowFullPageCityPickerState();
 }
 
 class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
   PickerItem showTypeAttr = PickerItem(name: '省+市+县', value: ShowType.pca);
-  Result resultAttr = new Result();
-  Result result = new Result();
+  Result resultAttr = Result();
+  Result result = Result();
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
   bool customerMeta = false;
@@ -35,7 +37,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
     return Picker(
       target: showTypeAttr != null && showTypeAttr.name != null
           ? Text(showTypeAttr.name)
-          : Text("显示几级联动"),
+          : const Text("显示几级联动"),
       onConfirm: (PickerItem item) {
         setState(() {
           showTypeAttr = item;
@@ -64,7 +66,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
             initResult: resultAttr,
             onConfirm: (Result result) {
               if (result.provinceId != null) {
-                this.setState(() {
+                setState(() {
                   resultAttr = result;
                 });
               }
@@ -129,7 +131,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
         child: CupertinoSwitch(
           value: customerMeta,
           onChanged: (bool val) {
-            this.setState(() {
+            setState(() {
               customerMeta = !customerMeta;
             });
           },
@@ -140,7 +142,7 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("省市县三级全屏联动"),
+        title: const Text("省市县三级全屏联动"),
       ),
       body: Column(
         children: <Widget>[
@@ -150,13 +152,12 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
           AttrItemContainer(title: '是否采用自定义数据', editor: _buildCustomerMeta()),
           AttrItemContainer(
               title: '选择结果', editor: Text("${result.toString()}")),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () async {
               print("locationCode $resultAttr");
               Result? tempResult = await CityPickers.showFullPageCityPicker(
                   context: context,
                   theme: themeAttr?.value,
-
                   locationCode: resultAttr.areaId ??
                       resultAttr.cityId ??
                       resultAttr.provinceId ??
@@ -167,11 +168,11 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
               if (tempResult == null) {
                 return;
               }
-              this.setState(() {
+              setState(() {
                 result = tempResult;
               });
             },
-            child: Text("展示city picker"),
+            child: const Text("展示city picker"),
           )
         ],
       ),

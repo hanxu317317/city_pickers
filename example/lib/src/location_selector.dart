@@ -23,11 +23,13 @@ class LocationSelector extends StatelessWidget {
   /// initResult type[Result]
   final Result? initResult;
 
-  LocationSelector(
-      {this.showType = ShowType.pca,
+  const LocationSelector(
+      {Key? key,
+      this.showType = ShowType.pca,
       this.initResult,
       required this.target,
-      required this.onConfirm});
+      required this.onConfirm})
+      : super(key: key);
 
   show(BuildContext context) async {
     Result? result = await CityPickers.showCityPicker(
@@ -53,7 +55,7 @@ class LocationSelector extends StatelessWidget {
       child: Container(
         color: Colors.black12,
         alignment: Alignment.center,
-        margin: EdgeInsets.all(3.0),
+        margin: const EdgeInsets.all(3.0),
         child: target,
       ),
     );

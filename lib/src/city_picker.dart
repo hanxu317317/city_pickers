@@ -151,6 +151,9 @@ class CityPickers {
     BaseStyle? cityItemStyle,
     BaseStyle? topStickStyle,
     Color? scaffoldBackgroundColor,
+    bool useSearchAppBar = false,
+    EdgeInsetsGeometry tagBarTextPadding =
+        const EdgeInsets.symmetric(horizontal: 4.0),
   }) {
     BaseStyle _sideBarStyle = BaseStyle(
       fontSize: 14,
@@ -188,10 +191,16 @@ class CityPickers {
         transitionDuration: const Duration(milliseconds: 250),
         pageBuilder: (context, _, __) => new Theme(
           data: theme ?? Theme.of(context),
-          child: CitiesSelector(
-              title: title,
-              provincesData: provincesData,
-              citiesData: citiesData,
+          child: CitiesSelectorPage(
+            title: title,
+            appBarBuilder: appBarBuilder,
+            scaffoldBackgroundColor:
+                scaffoldBackgroundColor ?? defaultScaffoldBackgroundColor,
+            useSearchAppBar: useSearchAppBar,
+            provincesData: provincesData,
+            citiesData: citiesData,
+            buildCitiesSelector: (context, cities) => CitiesSelector(
+              cities: cities,
               hotCities: hotCities,
               locationCode: locationCode,
               tagBarActiveColor: _sideBarStyle.backgroundActiveColor!,
@@ -199,16 +208,17 @@ class CityPickers {
               tagBarBgColor: _sideBarStyle.backgroundColor!,
               tagBarFontColor: _sideBarStyle.color,
               tagBarFontSize: _sideBarStyle.fontSize,
+              tagBarTextPadding: tagBarTextPadding,
               topIndexFontSize: _topStickStyle.fontSize,
               topIndexHeight: _topStickStyle.height!,
               topIndexFontColor: _topStickStyle.color,
               topIndexBgColor: _topStickStyle.backgroundColor!,
               itemFontColor: _cityItemStyle.color,
-              cityItemFontSize: _cityItemStyle.fontSize,
-              scaffoldBackgroundColor:
-                  scaffoldBackgroundColor ?? defaultScaffoldBackgroundColor,
+              itemFontSize: _cityItemStyle.fontSize,
               itemSelectFontColor: _cityItemStyle.activeColor,
-              appBarBuilder: appBarBuilder),
+              onSelected: (value) => Navigator.pop(context, value),
+            ),
+          ),
         ),
         transitionsBuilder:
             (_, Animation<double> animation, __, Widget child) =>

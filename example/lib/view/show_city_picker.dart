@@ -15,17 +15,19 @@ import '../src/attr_item_container.dart';
 import '../src/location_selector.dart';
 import '../src/picker.dart';
 
-var emptyResult = new Result();
+var emptyResult = Result();
 
 class ShowCityPicker extends StatefulWidget {
+  const ShowCityPicker({Key? key}) : super(key: key);
+
   @override
-  _ShowCityPickerState createState() => _ShowCityPickerState();
+  State<ShowCityPicker> createState() => _ShowCityPickerState();
 }
 
 class _ShowCityPickerState extends State<ShowCityPicker> {
   PickerItem showTypeAttr = PickerItem(name: '省+市+县+乡', value: ShowType.pcav);
-  Result resultAttr = new Result();
-  Result result = new Result();
+  Result resultAttr = Result();
+  Result result = Result();
   double barrierOpacityAttr = 0.5;
   bool barrierDismissibleAttr = false;
   bool customerMeta = true;
@@ -41,7 +43,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
     return Picker(
       target: showTypeAttr != null && showTypeAttr.name != null
           ? Text(showTypeAttr.name)
-          : Text("显示几级联动"),
+          : const Text("显示几级联动"),
       onConfirm: (PickerItem item) {
         setState(() {
           showTypeAttr = item;
@@ -71,7 +73,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             initResult: resultAttr,
             onConfirm: (Result result) {
               if (result.provinceId != null) {
-                this.setState(() {
+                setState(() {
                   resultAttr = result;
                 });
               }
@@ -136,7 +138,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         child: CupertinoSwitch(
           value: barrierDismissibleAttr,
           onChanged: (bool val) {
-            this.setState(() {
+            setState(() {
               barrierDismissibleAttr = !barrierDismissibleAttr;
             });
           },
@@ -156,9 +158,9 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             divisions: 100,
             activeColor: Colors.blue,
             //进度中活动部分的颜色
-            onChanged: (double) {
+            onChanged: (value) {
               setState(() {
-                barrierOpacityAttr = double.toDouble();
+                barrierOpacityAttr = value.toDouble();
               });
             },
           ),
@@ -181,9 +183,9 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             divisions: 60,
             activeColor: Colors.blue,
             //进度中活动部分的颜色
-            onChanged: (double) {
+            onChanged: (value) {
               setState(() {
-                customerItemExtent = double.toDouble();
+                customerItemExtent = value.toDouble();
               });
             },
           ),
@@ -206,9 +208,9 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             divisions: 60,
             activeColor: Colors.blue,
             //进度中活动部分的颜色
-            onChanged: (double) {
+            onChanged: (value) {
               setState(() {
-                borderRadius = double.toDouble();
+                borderRadius = value.toDouble();
               });
             },
           ),
@@ -224,7 +226,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         child: CupertinoSwitch(
           value: customerMeta,
           onChanged: (bool val) {
-            this.setState(() {
+            setState(() {
               customerMeta = !customerMeta;
             });
           },
@@ -237,7 +239,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         child: CupertinoSwitch(
           value: customerButtons,
           onChanged: (bool val) {
-            this.setState(() {
+            setState(() {
               customerButtons = !customerButtons;
             });
           },
@@ -250,7 +252,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         child: CupertinoSwitch(
           value: customerItemBuilder,
           onChanged: (bool val) {
-            this.setState(() {
+            setState(() {
               customerItemBuilder = !customerItemBuilder;
             });
           },
@@ -263,7 +265,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         child: CupertinoSwitch(
           value: isSort,
           onChanged: (bool val) {
-            this.setState(() {
+            setState(() {
               isSort = !isSort;
             });
           },
@@ -290,7 +292,8 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
     if (customerItemBuilder) {
       return (item, list, index) {
         return Center(
-            child: Text(item, maxLines: 1, style: TextStyle(fontSize: 55)));
+            child:
+                Text(item, maxLines: 1, style: const TextStyle(fontSize: 55)));
       };
     } else {
       return null;
@@ -301,7 +304,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ios风格城市选择器"),
+        title: const Text("ios风格城市选择器"),
       ),
       body: SingleChildScrollView(
         // 防止边界超出
@@ -322,7 +325,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             AttrItemContainer(title: '主题选择', editor: _buildTheme()),
             AttrItemContainer(
                 title: '选择结果', editor: Text("${result.toString()}")),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () async {
                 print("locationCode $resultAttr");
                 Result? tempResult = await CityPickers.showCityPicker(
@@ -337,24 +340,24 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
                     borderRadius: borderRadius,
                     showType: showTypeAttr.value,
                     isSort: isSort,
-
                     barrierOpacity: barrierOpacityAttr,
                     barrierDismissible: barrierDismissibleAttr,
                     citiesData: customerMeta == true ? citiesDataNm : null,
                     provincesData:
                         customerMeta == true ? provincesDataNm : null,
                     itemExtent: customerItemExtent,
-                    cancelWidget: customerButtons ? Text('cancle') : null,
-                    confirmWidget: customerButtons ? Text('confirm') : null,
-                    itemBuilder: this.getItemBuilder());
+                    cancelWidget: customerButtons ? const Text('cancle') : null,
+                    confirmWidget:
+                        customerButtons ? const Text('confirm') : null,
+                    itemBuilder: getItemBuilder());
                 if (tempResult == null) {
                   return;
                 }
-                this.setState(() {
+                setState(() {
                   result = tempResult;
                 });
               },
-              child: Text("展示city picker"),
+              child: const Text("展示city picker"),
             )
           ],
         ),

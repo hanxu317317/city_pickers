@@ -112,10 +112,10 @@ class _FullPageState extends State<FullPage> {
   }
 
   void _initLocation(String? locationCode) {
-    int _locationCode;
+    String _locationCode;
     if (locationCode != null) {
       try {
-        _locationCode = int.parse(locationCode);
+        _locationCode = locationCode;
       } catch (e) {
         print(ArgumentError(
             "The Argument locationCode must be valid like: '100000' but get '$locationCode' "));
@@ -126,12 +126,12 @@ class _FullPageState extends State<FullPage> {
       if (targetProvince.isNull) {
         targetProvince = cityTree.initTreeByCode(provinces.first.code!);
       }
-      targetProvince.child.forEach((Point _city) {
+      targetProvince.children.forEach((Point _city) {
         if (_city.code == _locationCode) {
           targetCity = _city;
           targetArea = _getTargetChildFirst(_city) ?? null;
         }
-        _city.child.forEach((Point _area) {
+        _city.children.forEach((Point _area) {
           if (_area.code == _locationCode) {
             targetCity = _city;
             targetArea = _area;
@@ -139,8 +139,7 @@ class _FullPageState extends State<FullPage> {
         });
       });
     } else {
-      targetProvince =
-          cityTree.initTreeByCode(int.parse(widget.provincesData.keys.first));
+      targetProvince = cityTree.initTreeByCode(widget.provincesData.keys.first);
     }
 
     if (targetCity == null) {
@@ -192,8 +191,8 @@ class _FullPageState extends State<FullPage> {
     if (target == null) {
       return null;
     }
-    if (target.child != null && target.child.isNotEmpty) {
-      return target.child.first;
+    if (target.children != null && target.children.isNotEmpty) {
+      return target.children.first;
     }
     return null;
   }
@@ -225,8 +224,8 @@ class _FullPageState extends State<FullPage> {
     });
   }
 
-  int _getSelectedId() {
-    int? selectId;
+  String _getSelectedId() {
+    String? selectId;
     switch (pageStatus) {
       case Status.Province:
         selectId = targetProvince.code;
@@ -240,7 +239,7 @@ class _FullPageState extends State<FullPage> {
       case Status.Over:
         break;
     }
-    return selectId ?? 0;
+    return selectId ?? '0';
   }
 
   /// 所有选项的点击事件入口
@@ -253,7 +252,7 @@ class _FullPageState extends State<FullPage> {
       case Status.Province:
         _onProvinceSelect(targetPoint);
         nextStatus = Status.City;
-        nextItemList = targetProvince.child;
+        nextItemList = targetProvince.children;
         if (!widget.showType.contain(ShowType.c)) {
           nextStatus = Status.Over;
         }
@@ -266,7 +265,7 @@ class _FullPageState extends State<FullPage> {
       case Status.City:
         _onCitySelect(targetPoint);
         nextStatus = Status.Area;
-        nextItemList = targetCity?.child;
+        nextItemList = targetCity?.children;
         if (!widget.showType.contain(ShowType.a)) {
           nextStatus = Status.Over;
         }
@@ -343,7 +342,7 @@ class _FullPageState extends State<FullPage> {
 class ListWidget extends StatelessWidget {
   final List<Point> itemList;
   final ScrollController controller;
-  final int selectedId;
+  final String selectedId;
   final ValueChanged<Point> onSelect;
 
   ListWidget(
@@ -360,7 +359,6 @@ class ListWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         Point item = itemList[index];
         return Container(
-
           decoration: BoxDecoration(
               // color: theme.backgroundColor,
               border: Border(

@@ -46,18 +46,18 @@ class CityTree {
   /// build tree by int provinceId,
   /// @param provinceId this is province id
   /// @return tree
-  initTree(int provinceId) {
-    String _cacheKey = provinceId.toString();
+  Point initTree(String provinceId) {
+    String _cacheKey = provinceId;
 //    这里为了避免 https://github.com/hanxu317317/city_pickers/issues/68
 //    if (_cache.has(_cacheKey)) {
 //      return tree = _cache.get(_cacheKey);
 //    }
 
-    String name = this._provincesData[provinceId.toString()]!;
+    String name = this._provincesData[provinceId]!;
     String letter = PinyinHelper.getFirstWordPinyin(name).substring(0, 1);
     var root =
-        new Point(code: provinceId, letter: letter, child: [], name: name);
-    tree = _buildTree(root, metaInfo[provinceId.toString()], metaInfo);
+        new Point(code: provinceId, letter: letter, children: [], name: name);
+    tree = _buildTree(root, metaInfo[provinceId], metaInfo);
     _cache.set(_cacheKey, tree);
     return tree;
   }
@@ -65,7 +65,7 @@ class CityTree {
   /// this is a private function, used the return to get a correct tree contain cities and areas
   /// @param code one of province city or area id;
   /// @return provinceId return id which province's child contain code
-  int? _getProvinceByCode(int code) {
+  String? _getProvinceByCode(String code) {
     String _code = code.toString();
     List<String> keys = metaInfo.keys.toList();
     for (int i = 0; i < keys.length; i++) {
@@ -74,9 +74,9 @@ class CityTree {
       if (child.containsKey(_code)) {
         // 当前元素的父key在省份内
         if (this._provincesData.containsKey(key)) {
-          return int.parse(key);
+          return key;
         }
-        return _getProvinceByCode(int.parse(key));
+        return _getProvinceByCode(key);
       }
     }
     return null;
@@ -85,12 +85,12 @@ class CityTree {
   /// build tree by any code provinceId or cityCode or areaCode
   /// @param code build a tree
   /// @return Point a province with its cities and areas tree
-  Point initTreeByCode(int code) {
+  Point initTreeByCode(String code) {
     String _code = code.toString();
     if (this._provincesData[_code] != null) {
       return initTree(code);
     }
-    int? provinceId = _getProvinceByCode(code);
+    String? provinceId = _getProvinceByCode(code);
     if (provinceId != null) {
       return initTree(provinceId);
     }
@@ -110,10 +110,11 @@ class CityTree {
         String key = keys[i];
         Map value = citys[key];
         Point _point = new Point(
-          code: int.parse(key),
+          code: key,
           letter: value['alpha'],
-          child: [],
+          children: [],
           name: value['name'],
+          isClassificationNode: value['isClassificationNode'] ?? false,
         );
 
         // for avoid the data  error that such as
@@ -153,7 +154,8 @@ class Provinces {
     for (int i = 0; i < keys.length; i++) {
       String name = metaInfo[keys[i]]!;
       provList.add(Point(
-          code: int.parse(keys[i]),
+          code: keys[i],
+          children: [],
           letter: PinyinHelper.getFirstWordPinyin(name).substring(0, 1),
           name: name));
     }

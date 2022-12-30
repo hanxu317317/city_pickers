@@ -12,17 +12,17 @@ import 'package:flutter/material.dart';
 class ItemContainer extends StatefulWidget {
   final List itemList;
 
-  ItemContainer({required this.itemList});
+  const ItemContainer({Key? key, required this.itemList}) : super(key: key);
 
   @override
-  _ItemContainerState createState() => _ItemContainerState();
+  State<ItemContainer> createState() => _ItemContainerState();
 }
 
 class _ItemContainerState extends State<ItemContainer> {
   _buildWidgetContainer() {
     List lists = widget.itemList;
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, //每行3个
           mainAxisSpacing: 10.0, //主轴(竖直)方向间距
           crossAxisSpacing: 0.0, //纵轴(水平)方向间距
@@ -35,7 +35,7 @@ class _ItemContainerState extends State<ItemContainer> {
             Navigator.pushNamed(context, lists[index]['routerName']);
           },
           child: Container(
-            decoration: new BoxDecoration(
+            decoration: BoxDecoration(
                 border: (index + 1) % 3 != 0
                     ? Border(
                         right: BorderSide(
@@ -46,7 +46,7 @@ class _ItemContainerState extends State<ItemContainer> {
               children: <Widget>[
                 Icon(lists[index]['icon'],
                     color: Theme.of(context).primaryColor),
-                SizedBox(
+                const SizedBox(
                   height: 8.0,
                 ),
                 Text(lists[index]['name']),
@@ -112,7 +112,7 @@ class _ItemContainerState extends State<ItemContainer> {
                   ),
                   height: 46.0,
                   width: 46.0,
-                  child: Icon(
+                  child: const Icon(
                     Icons.streetview,
                     color: Colors.white,
                     size: 30.0,

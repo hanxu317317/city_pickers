@@ -24,15 +24,20 @@ class Picker extends StatefulWidget {
   final Widget target;
   final ValueChanged<PickerItem> onConfirm;
 
-  Picker({required this.onConfirm, required this.target, required this.items});
+  const Picker(
+      {Key? key,
+      required this.onConfirm,
+      required this.target,
+      required this.items})
+      : super(key: key);
 
   @override
-  _PickerState createState() => _PickerState();
+  State<Picker> createState() => _PickerState();
 }
 
 class _PickerState extends State<Picker> {
   FixedExtentScrollController scrollController =
-      new FixedExtentScrollController(initialItem: 0);
+      FixedExtentScrollController(initialItem: 0);
   late PickerItem result;
 
   @override
@@ -43,7 +48,7 @@ class _PickerState extends State<Picker> {
   }
 
   onChange(int index) {
-    this.setState(() {
+    setState(() {
       result = widget.items[index];
     });
   }
@@ -70,7 +75,7 @@ class _PickerState extends State<Picker> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return Container(
         color: Colors.white,
         padding: const EdgeInsets.all(6.0),
         alignment: Alignment.center,
@@ -88,31 +93,31 @@ class _PickerState extends State<Picker> {
                         color: CupertinoColors.black,
                         fontSize: 22.0,
                       ),
-                      child: new Column(
+                      child: Column(
                         children: <Widget>[
-                          new Row(
+                          Row(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              FlatButton(
+                              TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: new Text(
+                                child: Text(
                                   'cancle',
-                                  style: new TextStyle(
+                                  style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                               ),
-                              FlatButton(
+                              TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop(result);
                                 },
-                                child: new Text(
+                                child: Text(
                                   'confirm',
-                                  style: new TextStyle(
+                                  style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                   ),
                                 ),

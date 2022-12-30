@@ -1,3 +1,4 @@
+/// 中国省份信息
 const Map<String, String> provincesData = {
   "110000": "北京市",
   "120000": "天津市",
@@ -35,6 +36,7 @@ const Map<String, String> provincesData = {
   "820000": "澳门特别行政区"
 };
 
+/// 中国城市信息
 const Map<String, dynamic> citiesData = {
   "110000": {
     "110100": {"name": "北京城区", "alpha": "b"}
@@ -1965,7 +1967,7 @@ const Map<String, dynamic> citiesData = {
     "411500": {"name": "信阳市", "alpha": "x"},
     "411600": {"name": "周口市", "alpha": "z"},
     "411700": {"name": "驻马店市", "alpha": "z"},
-    "419000": {"name": "省直辖县级行政区划", "alpha": "s"}
+    "419000": {"name": "省直辖县级行政区划", "alpha": "s", "isClassificationNode": true}
   },
   "410100": {
     "410102": {"name": "中原区", "alpha": "z"},
@@ -2199,7 +2201,7 @@ const Map<String, dynamic> citiesData = {
     "421200": {"name": "咸宁市", "alpha": "x"},
     "421300": {"name": "随州市", "alpha": "s"},
     "422800": {"name": "恩施土家族苗族自治州", "alpha": "e"},
-    "429000": {"name": "省直辖县级行政区划", "alpha": "s"}
+    "429000": {"name": "省直辖县级行政区划", "alpha": "s", "isClassificationNode": true}
   },
   "420100": {
     "420102": {"name": "江岸区", "alpha": "j"},
@@ -2923,7 +2925,7 @@ const Map<String, dynamic> citiesData = {
     "460200": {"name": "三亚市", "alpha": "s"},
     "460300": {"name": "三沙市", "alpha": "s"},
     "460400": {"name": "儋州市", "alpha": "d"},
-    "469000": {"name": "省直辖县级行政区划", "alpha": "s"}
+    "469000": {"name": "省直辖县级行政区划", "alpha": "s", "isClassificationNode": true}
   },
   "460100": {
     "460105": {"name": "秀英区", "alpha": "x"},
@@ -4074,7 +4076,7 @@ const Map<String, dynamic> citiesData = {
     "654000": {"name": "伊犁哈萨克自治州", "alpha": "y"},
     "654200": {"name": "塔城地区", "alpha": "t"},
     "654300": {"name": "阿勒泰地区", "alpha": "a"},
-    "659000": {"name": "自治区直辖县级行政区划", "alpha": "z"}
+    "659000": {"name": "自治区直辖县级行政区划", "alpha": "z", "isClassificationNode": true}
   },
   "650100": {
     "650102": {"name": "天山区", "alpha": "t"},
