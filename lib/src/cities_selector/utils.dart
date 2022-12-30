@@ -83,9 +83,16 @@ class CitiesUtils {
         }
       }
     }
-
-    return cities //
-      ..sortBy<num>((it) => it.letter!.codeUnitAt(0));
+    // 归并排序, 结果稳定
+    mergeSort<Point>(
+      cities,
+      compare: (p0, p1) {
+        final c0 = p0.letter!.codeUnitAt(0);
+        final c1 = p1.letter!.codeUnitAt(0);
+        return c0.compareTo(c1);
+      },
+    );
+    return cities;
   }
 
   static List<String> getValidTagsByCityList(List<Point> citiesList) {

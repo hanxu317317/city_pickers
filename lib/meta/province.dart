@@ -4076,7 +4076,7 @@ const Map<String, dynamic> citiesData = {
     "654000": {"name": "伊犁哈萨克自治州", "alpha": "y"},
     "654200": {"name": "塔城地区", "alpha": "t"},
     "654300": {"name": "阿勒泰地区", "alpha": "a"},
-    "659000": {"name": "自治区直辖县级行政区划", "alpha": "z"}
+    "659000": {"name": "自治区直辖县级行政区划", "alpha": "z", "isClassificationNode": true}
   },
   "650100": {
     "650102": {"name": "天山区", "alpha": "t"},
