@@ -117,6 +117,8 @@ Future<Result?> getResult () async {
 |cityItemStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 城市选项样式|
 |topStickStyle|[BaseStyle](https://github.com/hanxu317317/city_pickers/blob/develop/lib/src/cities_selector/cities_style.dart)|初始默认样式| 顶部索引吸顶样式|
 |scaffoldBackgroundColor|Colors|Colors.white| 页面背景色|
+|useSearchAppBar|bool|false|当AppBarBuilder=null的时候, 控制是否开启搜索框 |
+|AppBarBuilder|Function|null|用户自定义AppBar|
 
 
 ### utils 说明
