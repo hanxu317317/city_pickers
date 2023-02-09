@@ -4076,7 +4076,11 @@ const Map<String, dynamic> citiesData = {
     "654000": {"name": "伊犁哈萨克自治州", "alpha": "y"},
     "654200": {"name": "塔城地区", "alpha": "t"},
     "654300": {"name": "阿勒泰地区", "alpha": "a"},
-    "659000": {"name": "自治区直辖县级行政区划", "alpha": "z", "isClassificationNode": true}
+    "659000": {
+      "name": "自治区直辖县级行政区划",
+      "alpha": "z",
+      "isClassificationNode": true
+    }
   },
   "650100": {
     "650102": {"name": "天山区", "alpha": "t"},
@@ -4135,8 +4139,8 @@ const Map<String, dynamic> citiesData = {
   },
   "652900": {
     "652901": {"name": "阿克苏市", "alpha": "a"},
+    "652902": {"name": "库车市", "alpha": "k"},
     "652922": {"name": "温宿县", "alpha": "w"},
-    "652923": {"name": "库车县", "alpha": "k"},
     "652924": {"name": "沙雅县", "alpha": "s"},
     "652925": {"name": "新和县", "alpha": "x"},
     "652926": {"name": "拜城县", "alpha": "b"},
@@ -4210,10 +4214,18 @@ const Map<String, dynamic> citiesData = {
     "659002": {"name": "阿拉尔市", "alpha": "a"},
     "659003": {"name": "图木舒克市", "alpha": "t"},
     "659004": {"name": "五家渠市", "alpha": "w"},
-    "659006": {"name": "铁门关市", "alpha": "t"}
+    "659005": {"name": "北屯市", "alpha": "w"},
+    "659006": {"name": "铁门关市", "alpha": "w"},
+    "659007": {"name": "双河市", "alpha": "w"},
+    "659008": {"name": "可克达拉市", "alpha": "w"},
+    "659009": {"name": "昆玉市", "alpha": "w"},
+    "6590010": {"name": "胡杨河市", "alpha": "t"}
   },
   "710000": {
     "710100": {"name": "台湾", "alpha": "t"}
+  },
+  "810000": {
+    "810100": {"name": "香港城区", "alpha": "x"}
   },
   "810100": {
     "810101": {"name": "中西区", "alpha": "z"},
