@@ -67,6 +67,12 @@ Result result = await CityPickers.showCityPicker(
 
 
 
+# contributors
+
+<a href="https://github.com/hanxu317317/city_pickers/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=hanxu317317/city_pickers" />
+</a>
+
 # Date Statement
 
  The data information come from [National Bureau of Statistics](https://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)

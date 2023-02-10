@@ -149,8 +149,6 @@ print('result>>> ${cityPickerUtils.getAreaResultByCode('100100)}');
 
 # 贡献者
 
-感谢以下同学的 PR 内容.
-
 <a href="https://github.com/hanxu317317/city_pickers/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=hanxu317317/city_pickers" />
 </a>
