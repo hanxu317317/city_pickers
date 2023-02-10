@@ -147,15 +147,19 @@ print('result>>> ${cityPickerUtils.getAreaResultByCode('100100)}');
  [National Bureau of Statistics](https://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
 
 
-# 声明
-本项目Example部份代码与样式, 参考借鉴[Flutter Go](https://github.com/alibaba/flutter-go/), **flutter go** 是flutter 开发者帮助 APP，包含 flutter 常用 140+ 组件的demo 演示与中文文档
-
-
 # 贡献者
+
+感谢以下同学的 PR 内容.
 
 <a href="https://github.com/hanxu317317/city_pickers/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=hanxu317317/city_pickers" />
 </a>
+
+
+# 声明
+本项目Example部份代码与样式, 参考借鉴[Flutter Go](https://github.com/alibaba/flutter-go/), **flutter go** 是flutter 开发者帮助 APP，包含 flutter 常用 140+ 组件的demo 演示与中文文档
+
+
 ### To Do List
 
 - [x] 城市选择器, 借鉴点评
