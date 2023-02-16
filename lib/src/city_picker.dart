@@ -114,7 +114,6 @@ class CityPickers {
     return Navigator.push(
       context,
       new PageRouteBuilder(
-        settings: RouteSettings(name: 'fullPageCityPicker'),
         transitionDuration: const Duration(milliseconds: 250),
         pageBuilder: (context, _, __) => new Theme(
           data: theme ?? Theme.of(context),
@@ -187,7 +186,6 @@ class CityPickers {
     return Navigator.push(
       context,
       new PageRouteBuilder(
-        settings: RouteSettings(name: 'CitiesPicker'),
         transitionDuration: const Duration(milliseconds: 250),
         pageBuilder: (context, _, __) => new Theme(
           data: theme ?? Theme.of(context),
