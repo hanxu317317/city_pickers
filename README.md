@@ -139,13 +139,9 @@ print('result>>> ${cityPickerUtils.getAreaResultByCode('100100)}');
 // 输出为: result>>>> {"provinceName":"北京市","provinceId":"110000","cityName":"东城区","cityId":"110101"}
 ```
 
-
-
-
 # 数据来源
 
- [National Bureau of Statistics](https://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
-
+- [国家统计局](http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
 
 # 贡献者
 
@@ -153,16 +149,12 @@ print('result>>> ${cityPickerUtils.getAreaResultByCode('100100)}');
   <img src="https://contrib.rocks/image?repo=hanxu317317/city_pickers" />
 </a>
 
-
 # 声明
-本项目Example部份代码与样式, 参考借鉴[Flutter Go](https://github.com/alibaba/flutter-go/), **flutter go** 是flutter 开发者帮助 APP，包含 flutter 常用 140+ 组件的demo 演示与中文文档
 
+本项目Example部份代码与样式, 参考借鉴[Flutter Go](https://github.com/alibaba/flutter-go/), **flutter go** 是flutter 开发者帮助 APP，包含 flutter 常用 140+ 组件的demo 演示与中文文档
 
 ### To Do List
 
 - [x] 城市选择器, 借鉴点评
 - [x] 支持拼音等模糊搜索
 - [ ] 加入单元测试
-
-
-
