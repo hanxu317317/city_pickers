@@ -75,9 +75,8 @@ Result result = await CityPickers.showCityPicker(
 
 # Date Statement
 
- The data information come from [National Bureau of Statistics](https://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
-
-
+The data information comes from [National Bureau of Statistics](http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2018/index.html)
 
 # Statement
+
 This project's example code and style, reference with[Flutter Go](https://github.com/alibaba/flutter-go/), **flutter go** help developers get started quickly Flutter
