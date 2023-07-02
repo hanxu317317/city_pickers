@@ -54,7 +54,9 @@ class _Demo extends State<UtilGetLocationInfo> {
             ),
             Text("地址信息为: ${result.toString()}"),
             ElevatedButton(
-                child: Text('touch me 解析 $code '), onPressed: buttonHandle)
+              onPressed: buttonHandle,
+              child: Text('touch me 解析 $code '),
+            )
           ],
         ));
   }

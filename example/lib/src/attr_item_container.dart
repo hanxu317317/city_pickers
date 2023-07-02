@@ -33,7 +33,7 @@ class _AttrItemContainerState extends State<AttrItemContainer> {
                     width: 1, color: Theme.of(context).dividerColor))),
         child: Row(
           children: <Widget>[
-            Text("${widget.title}"),
+            Text(widget.title),
             Expanded(
                 child: Padding(
                     padding: const EdgeInsets.only(left: 30),
