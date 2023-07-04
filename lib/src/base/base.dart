@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:city_pickers/modal/base_citys.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../modal/point.dart';
@@ -272,6 +271,10 @@ class _BaseView extends State<BaseView> {
           targetVillage = Point.nullPoint();
         }
         _resetController();
+
+        if (widget.showType.contain(ShowType.c)) {
+          cityController.jumpToItem(0);
+        }
       });
     });
   }
@@ -294,6 +297,10 @@ class _BaseView extends State<BaseView> {
       });
     });
     _resetController();
+
+    if (widget.showType.contain(ShowType.a)) {
+      areaController.jumpToItem(0);
+    }
   }
 
   _onAreaChange(Point _targetArea) {
@@ -307,6 +314,10 @@ class _BaseView extends State<BaseView> {
         targetVillage = _getTargetChildFirst(targetArea!);
       });
     });
+
+    if (widget.showType.contain(ShowType.v)) {
+      villageController.jumpToItem(0);
+    }
   }
 
   // 增加第4级(村/镇)选择
