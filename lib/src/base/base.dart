@@ -220,7 +220,7 @@ class _BaseView extends State<BaseView> {
     if (target == Point.nullPoint()) {
       return Point.nullPoint();
     }
-    if (target.children.isNotEmpty && target.children.isNotEmpty) {
+    if (target.children.isNotEmpty) {
       return target.children.first;
     }
     return Point.nullPoint();
@@ -275,6 +275,14 @@ class _BaseView extends State<BaseView> {
         if (widget.showType.contain(ShowType.c)) {
           cityController.jumpToItem(0);
         }
+
+        if (widget.showType.contain(ShowType.a)) {
+          areaController.jumpToItem(0);
+        }
+
+        if (widget.showType.contain(ShowType.v)) {
+          villageController.jumpToItem(0);
+        }
       });
     });
   }
@@ -295,12 +303,17 @@ class _BaseView extends State<BaseView> {
           targetVillage = Point.nullPoint();
         }
       });
-    });
-    _resetController();
 
-    if (widget.showType.contain(ShowType.a)) {
-      areaController.jumpToItem(0);
-    }
+      if (widget.showType.contain(ShowType.a)) {
+        areaController.jumpToItem(0);
+      }
+
+      if (widget.showType.contain(ShowType.v)) {
+        villageController.jumpToItem(0);
+      }
+    });
+
+    _resetController();
   }
 
   _onAreaChange(Point _targetArea) {
@@ -313,11 +326,11 @@ class _BaseView extends State<BaseView> {
         targetArea = _targetArea;
         targetVillage = _getTargetChildFirst(targetArea!);
       });
-    });
 
-    if (widget.showType.contain(ShowType.v)) {
-      villageController.jumpToItem(0);
-    }
+      if (widget.showType.contain(ShowType.v)) {
+        villageController.jumpToItem(0);
+      }
+    });
   }
 
   // 增加第4级(村/镇)选择
