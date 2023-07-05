@@ -347,33 +347,21 @@ class _BaseView extends State<BaseView> {
     Result result = Result();
     ShowType showType = widget.showType;
     if (showType.contain(ShowType.p)) {
-      result.provinceId = targetProvince.code.toString();
+      result.provinceId = targetProvince.code;
       result.provinceName = targetProvince.name;
     }
     if (showType.contain(ShowType.c)) {
-      result.provinceId = targetProvince.code.toString();
-      result.provinceName = targetProvince.name;
-      result.cityId = targetCity?.code.toString();
+      result.cityId = targetCity?.code;
       result.cityName = targetCity?.name;
     }
     if (showType.contain(ShowType.a)) {
-      result.provinceId = targetProvince.code.toString();
-      result.provinceName = targetProvince.name;
-      result.cityId = targetCity?.code.toString();
-      result.cityName = targetCity?.name;
-      result.areaId = targetArea?.code.toString();
+      result.areaId = targetArea?.code;
       result.areaName = targetArea?.name;
     }
 
     // 增加第4级(村/镇)选择
     if (showType.contain(ShowType.v)) {
-      result.provinceId = targetProvince.code.toString();
-      result.provinceName = targetProvince.name;
-      result.cityId = targetCity!.code.toString();
-      result.cityName = targetCity?.name;
-      result.areaId = targetArea?.code.toString();
-      result.areaName = targetArea?.name;
-      result.villageId = targetVillage?.code.toString();
+      result.villageId = targetVillage?.code;
       result.villageName = targetVillage?.name;
     }
     // 台湾异常数据. 需要过滤
