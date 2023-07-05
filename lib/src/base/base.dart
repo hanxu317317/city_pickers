@@ -252,6 +252,21 @@ class _BaseView extends State<BaseView> {
     return result;
   }
 
+  void _jumpToItemWithType(ShowType type) {
+    switch (type) {
+      case ShowType.c:
+        cityController.jumpToItem(0);
+        break;
+      case ShowType.a:
+        areaController.jumpToItem(0);
+        break;
+      case ShowType.v:
+        villageController.jumpToItem(0);
+        break;
+      default:
+    }
+  }
+
   // province change handle
   // 加入延时处理, 减少构建树的消耗
   _onProvinceChange(Point _province) {
@@ -271,18 +286,9 @@ class _BaseView extends State<BaseView> {
           targetVillage = Point.nullPoint();
         }
         _resetController();
-
-        if (widget.showType.contain(ShowType.c)) {
-          cityController.jumpToItem(0);
-        }
-
-        if (widget.showType.contain(ShowType.a)) {
-          areaController.jumpToItem(0);
-        }
-
-        if (widget.showType.contain(ShowType.v)) {
-          villageController.jumpToItem(0);
-        }
+        _jumpToItemWithType(ShowType.c);
+        _jumpToItemWithType(ShowType.a);
+        _jumpToItemWithType(ShowType.v);
       });
     });
   }
@@ -303,14 +309,8 @@ class _BaseView extends State<BaseView> {
           targetVillage = Point.nullPoint();
         }
       });
-
-      if (widget.showType.contain(ShowType.a)) {
-        areaController.jumpToItem(0);
-      }
-
-      if (widget.showType.contain(ShowType.v)) {
-        villageController.jumpToItem(0);
-      }
+      _jumpToItemWithType(ShowType.a);
+      _jumpToItemWithType(ShowType.v);
     });
 
     _resetController();
@@ -326,10 +326,7 @@ class _BaseView extends State<BaseView> {
         targetArea = _targetArea;
         targetVillage = _getTargetChildFirst(targetArea!);
       });
-
-      if (widget.showType.contain(ShowType.v)) {
-        villageController.jumpToItem(0);
-      }
+      _jumpToItemWithType(ShowType.v);
     });
   }
 
