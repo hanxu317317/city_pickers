@@ -14,6 +14,7 @@ import 'package:city_pickers/modal/point.dart';
 import 'package:city_pickers/modal/result.dart';
 import 'package:city_pickers/src/show_types.dart';
 import 'package:city_pickers/src/util.dart';
+import 'package:city_pickers/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class FullPage extends StatefulWidget {
@@ -153,48 +154,27 @@ class _FullPageState extends State<FullPage> {
   Result _buildResult() {
     Result result = Result();
     ShowType showType = widget.showType;
-    try {
-      if (showType.contain(ShowType.p)) {
-        result.provinceId = targetProvince.code.toString();
-        result.provinceName = targetProvince.name;
-      }
-      if (showType.contain(ShowType.c)) {
-        result.provinceId = targetProvince.code.toString();
-        result.provinceName = targetProvince.name;
-        result.cityId = targetCity?.code.toString();
-        result.cityName = targetCity?.name;
-      }
-      if (showType.contain(ShowType.a)) {
-        result.provinceId = targetProvince.code.toString();
-        result.provinceName = targetProvince.name;
-        result.cityId = targetCity?.code.toString();
-        result.cityName = targetCity?.name;
-        result.areaId = targetArea?.code.toString();
-        result.areaName = targetArea?.name;
-      }
-    } catch (e) {
-      print('Exception details:\n _buildResult error \n $e');
-      // 此处兼容, 部分城市下无地区信息的情况
+    if (showType.contain(ShowType.p)) {
+      result.provinceId = targetProvince.code;
+      result.provinceName = targetProvince.name;
     }
-
-    // 台湾异常数据. 需要过滤
-    // if (result.provinceId == "710000") {
-    //   result.cityId = null;
-    //   result.cityName = null;
-    //   result.areaId = null;
-    //   result.areaName = null;
-    // }
+    if (showType.contain(ShowType.c)) {
+      result.cityId = targetCity?.code;
+      result.cityName = targetCity?.name;
+    }
+    if (showType.contain(ShowType.a)) {
+      result.areaId = targetArea?.code;
+      result.areaName = targetArea?.name;
+    }
+    if (kVerbose) print('_buildResult: $result');
     return result;
   }
 
   Point? _getTargetChildFirst(Point target) {
-    if (target == null) {
+    if (target.children.isEmpty) {
       return null;
     }
-    if (target.children != null && target.children.isNotEmpty) {
-      return target.children.first;
-    }
-    return null;
+    return target.children.first;
   }
 
   popHome() {
