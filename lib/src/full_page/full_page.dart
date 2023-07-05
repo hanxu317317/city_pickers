@@ -321,7 +321,7 @@ class _FullPageState extends State<FullPage> {
     return WillPopScope(
       onWillPop: back,
       child: Scaffold(
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colorScheme.background,
         appBar: AppBar(
           title: _buildHead(),
         ),

@@ -41,7 +41,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
 
   Widget _buildShowTypes() {
     return Picker(
-      target: showTypeAttr != null && showTypeAttr.name != null
+      target: showTypeAttr.name != null
           ? Text(showTypeAttr.name)
           : const Text("显示几级联动"),
       onConfirm: (PickerItem item) {
@@ -67,7 +67,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target: Text("${resultAttr.provinceName ?? '省'}",
+            target: Text(resultAttr.provinceName ?? '省',
                 maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.p,
             initResult: resultAttr,
@@ -83,7 +83,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target: Text("${resultAttr.cityName ?? '市'}",
+            target: Text(resultAttr.cityName ?? '市',
                 maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.c,
             initResult: resultAttr,
@@ -99,7 +99,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target: Text("${resultAttr.areaName ?? '区'}",
+            target: Text(resultAttr.areaName ?? '区',
                 maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.a,
             initResult: resultAttr,
@@ -115,7 +115,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
         Expanded(
           flex: 1,
           child: LocationSelector(
-            target: Text("${resultAttr.villageName ?? '乡'}",
+            target: Text(resultAttr.villageName ?? '乡',
                 maxLines: 1, overflow: TextOverflow.ellipsis),
             showType: ShowType.a,
             initResult: resultAttr,
@@ -165,7 +165,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             },
           ),
         ),
-        Text("${barrierOpacityAttr.toStringAsFixed(2)}")
+        Text(barrierOpacityAttr.toStringAsFixed(2))
       ],
     );
   }
@@ -190,7 +190,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             },
           ),
         ),
-        Text("${customerItemExtent.toStringAsFixed(2)}")
+        Text(customerItemExtent.toStringAsFixed(2))
       ],
     );
   }
@@ -215,7 +215,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             },
           ),
         ),
-        Text("${borderRadius.toStringAsFixed(2)}")
+        Text(borderRadius.toStringAsFixed(2))
       ],
     );
   }
@@ -323,8 +323,7 @@ class _ShowCityPickerState extends State<ShowCityPicker> {
             AttrItemContainer(title: '自定义item渲染', editor: _buildCustomerItem()),
             AttrItemContainer(title: '数据是否排序', editor: _buildSortItem()),
             AttrItemContainer(title: '主题选择', editor: _buildTheme()),
-            AttrItemContainer(
-                title: '选择结果', editor: Text("${result.toString()}")),
+            AttrItemContainer(title: '选择结果', editor: Text(result.toString())),
             ElevatedButton(
               onPressed: () async {
                 print("locationCode $resultAttr");

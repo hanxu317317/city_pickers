@@ -63,7 +63,7 @@ class _PickerState extends State<Picker> {
         itemBuilder: (context, index) {
           return Center(
             child: Text(
-              '${widget.items[index].name}',
+              widget.items[index].name,
               maxLines: 1,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.center,
@@ -124,7 +124,7 @@ class _PickerState extends State<Picker> {
                               ),
                             ],
                           ),
-                          Container(
+                          SizedBox(
                             height: _pickerHeight - 100,
                             child: buildPicker(),
                           )

@@ -402,7 +402,7 @@ class WorkInProgressState extends State<WorkInProgress> {
               ),
             ),
             AttrItemContainer(
-                title: '选择结果', editor: Text("${result.toString()}")),
+                title: '选择结果', editor: Text(result.toString())),
             ElevatedButton(
               child: const Text('呼出'),
               onPressed: () {
