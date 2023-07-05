@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:city_pickers/modal/base_citys.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../modal/point.dart';
@@ -9,6 +10,9 @@ import '../mod/inherit_process.dart';
 import '../show_types.dart';
 import '../util.dart';
 import './pickers.dart';
+
+/// 控制是否显示调试用的输出
+const _isVerbose = true && kDebugMode;
 
 class BaseView extends StatefulWidget {
   final double? progress;
@@ -273,6 +277,7 @@ class _BaseView extends State<BaseView> {
   // province change handle
   // 加入延时处理, 减少构建树的消耗
   _onProvinceChange(Point _province) {
+    if (_isVerbose) print('_onProvinceChange: $_province');
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
@@ -295,7 +300,7 @@ class _BaseView extends State<BaseView> {
   }
 
   _onCityChange(Point _targetCity) {
-    print('_onCityChange');
+    if (_isVerbose) print('_onCityChange: $_targetCity');
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
@@ -317,6 +322,7 @@ class _BaseView extends State<BaseView> {
   }
 
   _onAreaChange(Point _targetArea) {
+    if (_isVerbose) print('_onAreaChange: $_targetArea');
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
@@ -332,6 +338,7 @@ class _BaseView extends State<BaseView> {
 
   // 增加第4级(村/镇)选择
   _onVillageChange(Point _targetVillage) {
+    if (_isVerbose) print('_onVillageChange: $_targetVillage');
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
@@ -364,6 +371,7 @@ class _BaseView extends State<BaseView> {
       result.villageId = targetVillage?.code;
       result.villageName = targetVillage?.name;
     }
+    if (_isVerbose) print('_buildResult: $result');
     // 台湾异常数据. 需要过滤
     // if (result.provinceId == "710000") {
     //   result.cityId = null;
@@ -387,8 +395,8 @@ class _BaseView extends State<BaseView> {
         itemBuilder: widget.itemBuilder,
         itemExtent: widget.itemExtent,
         value: targetProvince.name,
-        itemList: provinces.toList().map((v) => v.name).toList(),
-        changed: (index) {
+        itemList: provinces.map((v) => v.name).toList(),
+        onSelectedItemChanged: (index) {
           _onProvinceChange(provinces[index]);
         },
       ));
@@ -403,7 +411,7 @@ class _BaseView extends State<BaseView> {
         itemExtent: widget.itemExtent,
         value: targetCity?.name,
         itemList: getCityItemList(),
-        changed: (index) {
+        onSelectedItemChanged: (index) {
           _onCityChange(targetProvince.children[index]);
         },
       ));
@@ -417,7 +425,7 @@ class _BaseView extends State<BaseView> {
         itemExtent: widget.itemExtent,
         value: targetArea?.name,
         itemList: getAreaItemList(),
-        changed: (index) {
+        onSelectedItemChanged: (index) {
           _onAreaChange(targetCity!.children[index]);
         },
       ));
@@ -432,7 +440,7 @@ class _BaseView extends State<BaseView> {
         itemExtent: widget.itemExtent,
         value: targetVillage?.name,
         itemList: getVillageItemList(),
-        changed: (index) {
+        onSelectedItemChanged: (index) {
           _onVillageChange(targetArea!.children[index]);
         },
       ));
