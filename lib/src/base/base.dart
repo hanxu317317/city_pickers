@@ -252,18 +252,21 @@ class _BaseView extends State<BaseView> {
     return result;
   }
 
-  void _jumpToItemWithType(ShowType type) {
-    switch (type) {
-      case ShowType.c:
+  void _jumpToFirstByHighestMod(Mods highestMod) {
+    switch (highestMod) {
+      case Mods.Province:
+        break;
+      case Mods.City:
         cityController.jumpToItem(0);
-        break;
-      case ShowType.a:
+        continue next1;
+      next1:
+      case Mods.Area:
         areaController.jumpToItem(0);
-        break;
-      case ShowType.v:
+        continue next2;
+      next2:
+      case Mods.Village:
         villageController.jumpToItem(0);
         break;
-      default:
     }
   }
 
@@ -286,10 +289,8 @@ class _BaseView extends State<BaseView> {
           targetVillage = Point.nullPoint();
         }
         _resetController();
-        _jumpToItemWithType(ShowType.c);
-        _jumpToItemWithType(ShowType.a);
-        _jumpToItemWithType(ShowType.v);
       });
+      _jumpToFirstByHighestMod(Mods.City);
     });
   }
 
@@ -309,8 +310,7 @@ class _BaseView extends State<BaseView> {
           targetVillage = Point.nullPoint();
         }
       });
-      _jumpToItemWithType(ShowType.a);
-      _jumpToItemWithType(ShowType.v);
+      _jumpToFirstByHighestMod(Mods.Area);
     });
 
     _resetController();
@@ -326,7 +326,7 @@ class _BaseView extends State<BaseView> {
         targetArea = _targetArea;
         targetVillage = _getTargetChildFirst(targetArea!);
       });
-      _jumpToItemWithType(ShowType.v);
+      _jumpToFirstByHighestMod(Mods.Village);
     });
   }
 
