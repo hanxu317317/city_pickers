@@ -8,21 +8,22 @@ class ScrollPicker extends StatelessWidget {
   final String? value;
   final bool isShow;
   final FixedExtentScrollController? controller;
-  final ValueChanged<int> changed;
+  final ValueChanged<int> onSelectedItemChanged;
   final ItemWidgetBuilder? itemBuilder;
 
   // ios选择框的高度. 配合 itemBuilder中的字体使用.
   final double? itemExtent;
   // Constructor. {} here denote that they are optional values i.e you can use as: new MyCard()
-  ScrollPicker(
-      {this.key,
-        this.controller,
-        this.isShow = false,
-        required this.changed,
-        this.itemList,
-        this.itemExtent,
-        this.itemBuilder,
-        this.value});
+  ScrollPicker({
+    this.key,
+    this.controller,
+    this.isShow = false,
+    required this.onSelectedItemChanged,
+    this.itemList,
+    this.itemExtent,
+    this.itemBuilder,
+    this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +45,7 @@ class ScrollPicker extends StatelessWidget {
               itemExtent: this.itemExtent ?? 40.0,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               scrollController: this.controller,
-              onSelectedItemChanged: (index) {
-                this.changed(index);
-              },
+              onSelectedItemChanged: onSelectedItemChanged,
               itemBuilder: (context, index) {
                 if (this.itemBuilder != null) {
                   return this.itemBuilder!(

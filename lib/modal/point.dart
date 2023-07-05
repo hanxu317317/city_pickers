@@ -4,6 +4,7 @@ import 'package:lpinyin/lpinyin.dart';
 class Point {
   static final _pinyinPlaceholder = new Pinyin._([], '', '');
 
+  // TODO: 2023/7/5 ipcjs 考虑将code改成非空, 移除所有`code.toString()`代码, 移除`Point.nullPoint()`
   final String? code;
   final List<Point> children;
   final int? depth;
