@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:city_pickers/modal/base_citys.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../modal/point.dart';

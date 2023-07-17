@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'dart:core';
 import 'package:city_pickers/src/base/base.dart';
 import 'package:city_pickers/src/cities_selector/cities_selector.dart';
 import 'package:city_pickers/src/cities_selector/utils.dart';
 import 'package:city_pickers/src/full_page/full_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:city_pickers/src/utils/index.dart';
 
