@@ -173,15 +173,14 @@ const Map<String, dynamic> citiesData = {
     "130481": {"name": "武安市", "alpha": "w"}
   },
   "130500": {
-    "130502": {"name": "桥东区", "alpha": "q"},
-    "130503": {"name": "桥西区", "alpha": "q"},
-    "130521": {"name": "邢台县", "alpha": "x"},
+    "130502": {"name": "襄都区", "alpha": "x"},
+    "130503": {"name": "信都区", "alpha": "x"},
+    "130505": {"name": "任泽区", "alpha": "r"},
+    "130506": {"name": "南和区", "alpha": "n"},
     "130522": {"name": "临城县", "alpha": "l"},
     "130523": {"name": "内丘县", "alpha": "n"},
     "130524": {"name": "柏乡县", "alpha": "b"},
     "130525": {"name": "隆尧县", "alpha": "l"},
-    "130526": {"name": "任县", "alpha": "r"},
-    "130527": {"name": "南和县", "alpha": "n"},
     "130528": {"name": "宁晋县", "alpha": "n"},
     "130529": {"name": "巨鹿县", "alpha": "j"},
     "130530": {"name": "新河县", "alpha": "x"},
@@ -364,8 +363,7 @@ const Map<String, dynamic> citiesData = {
     "140428": {"name": "长子县", "alpha": "c"},
     "140429": {"name": "武乡县", "alpha": "w"},
     "140430": {"name": "沁县", "alpha": "q"},
-    "140431": {"name": "沁源县", "alpha": "q"},
-    "140471": {"name": "山西长治高新技术产业园区", "alpha": "s"}
+    "140431": {"name": "沁源县", "alpha": "q"}
   },
   "140500": {
     "140502": {"name": "城区", "alpha": "c"},
@@ -601,13 +599,13 @@ const Map<String, dynamic> citiesData = {
     "152529": {"name": "正镶白旗", "alpha": "z"},
     "152530": {"name": "正蓝旗", "alpha": "z"},
     "152531": {"name": "多伦县", "alpha": "d"},
-    "152571": {"name": "乌拉盖管委会", "alpha": "w"}
+    "152571": {"name": "乌拉盖管理区管委会", "alpha": "w"}
   },
   "152900": {
     "152921": {"name": "阿拉善左旗", "alpha": "a"},
     "152922": {"name": "阿拉善右旗", "alpha": "a"},
     "152923": {"name": "额济纳旗", "alpha": "e"},
-    "152971": {"name": "内蒙古阿拉善经济开发区", "alpha": "n"}
+    "152971": {"name": "内蒙古阿拉善高新技术产业开发区", "alpha": "n"}
   },
   "210000": {
     "210100": {"name": "沈阳市", "alpha": "s"},
@@ -779,7 +777,7 @@ const Map<String, dynamic> citiesData = {
     "220174": {"name": "长春汽车经济技术开发区", "alpha": "c"},
     "220182": {"name": "榆树市", "alpha": "y"},
     "220183": {"name": "德惠市", "alpha": "d"},
-    "220184": {"name": "公主岭市", "alpha": "g"},
+    "220184": {"name": "公主岭市", "alpha": "g"}
   },
   "220200": {
     "220202": {"name": "昌邑区", "alpha": "c"},
@@ -957,7 +955,7 @@ const Map<String, dynamic> citiesData = {
     "230725": {"name": "大箐山县", "alpha": "d"},
     "230726": {"name": "南岔县", "alpha": "n"},
     "230751": {"name": "金林区", "alpha": "j"},
-    "230781": {"name": "铁力市", "alpha": "t"},
+    "230781": {"name": "铁力市", "alpha": "t"}
   },
   "230800": {
     "230803": {"name": "向阳区", "alpha": "x"},
@@ -983,7 +981,6 @@ const Map<String, dynamic> citiesData = {
     "231004": {"name": "爱民区", "alpha": "a"},
     "231005": {"name": "西安区", "alpha": "x"},
     "231025": {"name": "林口县", "alpha": "l"},
-    "231071": {"name": "牡丹江经济技术开发区", "alpha": "m"},
     "231081": {"name": "绥芬河市", "alpha": "s"},
     "231083": {"name": "海林市", "alpha": "h"},
     "231084": {"name": "宁安市", "alpha": "n"},
@@ -1104,7 +1101,7 @@ const Map<String, dynamic> citiesData = {
     "320507": {"name": "相城区", "alpha": "x"},
     "320508": {"name": "姑苏区", "alpha": "g"},
     "320509": {"name": "吴江区", "alpha": "w"},
-    "320571": {"name": "苏州工业园区", "alpha": "s"},
+    "320576": {"name": "苏州工业园区", "alpha": "s"},
     "320581": {"name": "常熟市", "alpha": "c"},
     "320582": {"name": "张家港市", "alpha": "z"},
     "320583": {"name": "昆山市", "alpha": "k"},
@@ -1127,8 +1124,7 @@ const Map<String, dynamic> citiesData = {
     "320722": {"name": "东海县", "alpha": "d"},
     "320723": {"name": "灌云县", "alpha": "g"},
     "320724": {"name": "灌南县", "alpha": "g"},
-    "320771": {"name": "连云港经济技术开发区", "alpha": "l"},
-    "320772": {"name": "连云港高新技术产业开发区", "alpha": "l"}
+    "320771": {"name": "连云港经济技术开发区", "alpha": "l"}
   },
   "320800": {
     "320803": {"name": "淮安区", "alpha": "h"},
@@ -1174,7 +1170,6 @@ const Map<String, dynamic> citiesData = {
     "321202": {"name": "海陵区", "alpha": "h"},
     "321203": {"name": "高港区", "alpha": "g"},
     "321204": {"name": "姜堰区", "alpha": "j"},
-    "321271": {"name": "泰州医药高新技术产业开发区", "alpha": "t"},
     "321281": {"name": "兴化市", "alpha": "x"},
     "321282": {"name": "靖江市", "alpha": "j"},
     "321283": {"name": "泰兴市", "alpha": "t"}
@@ -1339,9 +1334,9 @@ const Map<String, dynamic> citiesData = {
     "340122": {"name": "肥东县", "alpha": "f"},
     "340123": {"name": "肥西县", "alpha": "f"},
     "340124": {"name": "庐江县", "alpha": "l"},
-    "340171": {"name": "合肥高新技术产业开发区", "alpha": "h"},
-    "340172": {"name": "合肥经济技术开发区", "alpha": "h"},
-    "340173": {"name": "合肥新站高新技术产业开发区", "alpha": "h"},
+    "340176": {"name": "合肥高新技术产业开发区", "alpha": "h"},
+    "340177": {"name": "合肥经济技术开发区", "alpha": "h"},
+    "340178": {"name": "合肥新站高新技术产业开发区", "alpha": "h"},
     "340181": {"name": "巢湖市", "alpha": "c"}
   },
   "340200": {
@@ -1424,7 +1419,7 @@ const Map<String, dynamic> citiesData = {
     "341124": {"name": "全椒县", "alpha": "q"},
     "341125": {"name": "定远县", "alpha": "d"},
     "341126": {"name": "凤阳县", "alpha": "f"},
-    "341171": {"name": "苏滁现代产业园", "alpha": "s"},
+    "341171": {"name": "中新苏滁高新技术产业开发区", "alpha": "z"},
     "341172": {"name": "滁州经济技术开发区", "alpha": "c"},
     "341181": {"name": "天长市", "alpha": "t"},
     "341182": {"name": "明光市", "alpha": "m"}
@@ -1559,7 +1554,7 @@ const Map<String, dynamic> citiesData = {
     "350626": {"name": "东山县", "alpha": "d"},
     "350627": {"name": "南靖县", "alpha": "n"},
     "350628": {"name": "平和县", "alpha": "p"},
-    "350629": {"name": "华安县", "alpha": "h"},
+    "350629": {"name": "华安县", "alpha": "h"}
   },
   "350700": {
     "350702": {"name": "延平区", "alpha": "y"},
@@ -1717,7 +1712,7 @@ const Map<String, dynamic> citiesData = {
   "361100": {
     "361102": {"name": "信州区", "alpha": "x"},
     "361103": {"name": "广丰区", "alpha": "g"},
-    "361121": {"name": "上饶县", "alpha": "s"},
+    "361104": {"name": "广信区", "alpha": "g"},
     "361123": {"name": "玉山县", "alpha": "y"},
     "361124": {"name": "铅山县", "alpha": "q"},
     "361125": {"name": "横峰县", "alpha": "h"},
@@ -1759,7 +1754,7 @@ const Map<String, dynamic> citiesData = {
     "370117": {"name": "钢城区", "alpha": "g"},
     "370124": {"name": "平阴县", "alpha": "p"},
     "370126": {"name": "商河县", "alpha": "s"},
-    "370171": {"name": "济南高新技术产业开发区", "alpha": "j"}
+    "370176": {"name": "济南高新技术产业开发区", "alpha": "j"}
   },
   "370200": {
     "370202": {"name": "市南区", "alpha": "s"},
@@ -1769,7 +1764,6 @@ const Map<String, dynamic> citiesData = {
     "370213": {"name": "李沧区", "alpha": "l"},
     "370214": {"name": "城阳区", "alpha": "c"},
     "370215": {"name": "即墨区", "alpha": "j"},
-    "370271": {"name": "青岛高新技术产业开发区", "alpha": "q"},
     "370281": {"name": "胶州市", "alpha": "j"},
     "370283": {"name": "平度市", "alpha": "p"},
     "370285": {"name": "莱西市", "alpha": "l"}
@@ -1808,7 +1802,7 @@ const Map<String, dynamic> citiesData = {
     "370613": {"name": "莱山区", "alpha": "l"},
     "370614": {"name": "蓬莱区", "alpha": "p"},
     "370671": {"name": "烟台高新技术产业开发区", "alpha": "y"},
-    "370672": {"name": "烟台经济技术开发区", "alpha": "y"},
+    "370676": {"name": "烟台经济技术开发区", "alpha": "y"},
     "370681": {"name": "龙口市", "alpha": "l"},
     "370682": {"name": "莱阳市", "alpha": "l"},
     "370683": {"name": "莱州市", "alpha": "l"},
@@ -1900,7 +1894,7 @@ const Map<String, dynamic> citiesData = {
   },
   "371500": {
     "371502": {"name": "东昌府区", "alpha": "d"},
-    "371523": {"name": "茌平区", "alpha": "c"},
+    "371503": {"name": "茌平区", "alpha": "c"},
     "371521": {"name": "阳谷县", "alpha": "y"},
     "371522": {"name": "莘县", "alpha": "s"},
     "371524": {"name": "东阿县", "alpha": "d"},
@@ -2148,7 +2142,7 @@ const Map<String, dynamic> citiesData = {
     "411625": {"name": "郸城县", "alpha": "d"},
     "411627": {"name": "太康县", "alpha": "t"},
     "411628": {"name": "鹿邑县", "alpha": "l"},
-    "411671": {"name": "河南周口经济开发区", "alpha": "h"},
+    "411671": {"name": "周口临港开发区", "alpha": "z"},
     "411681": {"name": "项城市", "alpha": "x"}
   },
   "411700": {
@@ -2375,9 +2369,8 @@ const Map<String, dynamic> citiesData = {
     "430423": {"name": "衡山县", "alpha": "h"},
     "430424": {"name": "衡东县", "alpha": "h"},
     "430426": {"name": "祁东县", "alpha": "q"},
-    "430471": {"name": "衡阳综合保税区", "alpha": "h"},
-    "430472": {"name": "湖南衡阳高新技术产业园区", "alpha": "h"},
     "430473": {"name": "湖南衡阳松木经济开发区", "alpha": "h"},
+    "430476": {"name": "湖南衡阳高新技术产业园区", "alpha": "h"},
     "430481": {"name": "耒阳市", "alpha": "l"},
     "430482": {"name": "常宁市", "alpha": "c"}
   },
@@ -2493,7 +2486,7 @@ const Map<String, dynamic> citiesData = {
     "433125": {"name": "保靖县", "alpha": "b"},
     "433126": {"name": "古丈县", "alpha": "g"},
     "433127": {"name": "永顺县", "alpha": "y"},
-    "433130": {"name": "龙山县", "alpha": "l"},
+    "433130": {"name": "龙山县", "alpha": "l"}
   },
   "440000": {
     "440100": {"name": "广州市", "alpha": "g"},
@@ -2692,7 +2685,7 @@ const Map<String, dynamic> citiesData = {
     "441900127": {"name": "望牛墩镇", "alpha": "w"},
     "441900128": {"name": "中堂镇", "alpha": "z"},
     "441900129": {"name": "高埗镇", "alpha": "g"},
-    "441900401": {"name": "松山湖管委会", "alpha": "s"},
+    "441900401": {"name": "松山湖", "alpha": "s"},
     "441900402": {"name": "东莞港", "alpha": "d"},
     "441900403": {"name": "东莞生态园", "alpha": "d"},
     "441900404": {"name": "东莞滨海湾新区", "alpha": "d"}
@@ -2700,7 +2693,7 @@ const Map<String, dynamic> citiesData = {
   "442000": {
     "442000001": {"name": "石岐街道", "alpha": "s"},
     "442000002": {"name": "东区街道", "alpha": "d"},
-    "442000003": {"name": "中山港街道", "alpha": "h"},
+    "442000003": {"name": "中山港街道", "alpha": "z"},
     "442000004": {"name": "西区街道", "alpha": "x"},
     "442000005": {"name": "南区街道", "alpha": "n"},
     "442000006": {"name": "五桂山街道", "alpha": "w"},
@@ -3038,10 +3031,10 @@ const Map<String, dynamic> citiesData = {
     "510115": {"name": "温江区", "alpha": "w"},
     "510116": {"name": "双流区", "alpha": "s"},
     "510117": {"name": "郫都区", "alpha": "p"},
+    "510118": {"name": "新津区", "alpha": "x"},
     "510121": {"name": "金堂县", "alpha": "j"},
     "510129": {"name": "大邑县", "alpha": "d"},
     "510131": {"name": "蒲江县", "alpha": "p"},
-    "510132": {"name": "新津县", "alpha": "x"},
     "510181": {"name": "都江堰市", "alpha": "d"},
     "510182": {"name": "彭州市", "alpha": "p"},
     "510183": {"name": "邛崃市", "alpha": "q"},
@@ -3104,8 +3097,8 @@ const Map<String, dynamic> citiesData = {
     "510903": {"name": "船山区", "alpha": "c"},
     "510904": {"name": "安居区", "alpha": "a"},
     "510921": {"name": "蓬溪县", "alpha": "p"},
-    "510922": {"name": "射洪县", "alpha": "s"},
-    "510923": {"name": "大英县", "alpha": "d"}
+    "510923": {"name": "大英县", "alpha": "d"},
+    "510981": {"name": "射洪市", "alpha": "s"}
   },
   "511000": {
     "511002": {"name": "市中区", "alpha": "s"},
@@ -3190,7 +3183,7 @@ const Map<String, dynamic> citiesData = {
     "511903": {"name": "恩阳区", "alpha": "e"},
     "511921": {"name": "通江县", "alpha": "t"},
     "511922": {"name": "南江县", "alpha": "n"},
-    "511923": {"name": "平昌县", "alpha": "p"},
+    "511923": {"name": "平昌县", "alpha": "p"}
   },
   "512000": {
     "512002": {"name": "雁江区", "alpha": "y"},
@@ -3234,10 +3227,10 @@ const Map<String, dynamic> citiesData = {
   },
   "513400": {
     "513401": {"name": "西昌市", "alpha": "x"},
+    "513402": {"name": "会理市", "alpha": "h"},
     "513422": {"name": "木里藏族自治县", "alpha": "m"},
     "513423": {"name": "盐源县", "alpha": "y"},
     "513424": {"name": "德昌县", "alpha": "d"},
-    "513425": {"name": "会理县", "alpha": "h"},
     "513426": {"name": "会东县", "alpha": "h"},
     "513427": {"name": "宁南县", "alpha": "n"},
     "513428": {"name": "普格县", "alpha": "p"},
@@ -3312,7 +3305,7 @@ const Map<String, dynamic> citiesData = {
     "520525": {"name": "纳雍县", "alpha": "n"},
     "520526": {"name": "威宁彝族回族苗族自治县", "alpha": "w"},
     "520527": {"name": "赫章县", "alpha": "h"},
-    "520581": {"name": "黔西市", "alpha": "q"},
+    "520581": {"name": "黔西市", "alpha": "q"}
   },
   "520600": {
     "520602": {"name": "碧江区", "alpha": "b"},
@@ -3606,11 +3599,11 @@ const Map<String, dynamic> citiesData = {
   "540400": {
     "540402": {"name": "巴宜区", "alpha": "b"},
     "540421": {"name": "工布江达县", "alpha": "g"},
-    "540422": {"name": "米林县", "alpha": "m"},
     "540423": {"name": "墨脱县", "alpha": "m"},
     "540424": {"name": "波密县", "alpha": "b"},
     "540425": {"name": "察隅县", "alpha": "c"},
-    "540426": {"name": "朗县", "alpha": "l"}
+    "540426": {"name": "朗县", "alpha": "l"},
+    "540481": {"name": "米林市", "alpha": "m"}
   },
   "540500": {
     "540502": {"name": "乃东区", "alpha": "n"},
@@ -3623,8 +3616,8 @@ const Map<String, dynamic> citiesData = {
     "540527": {"name": "洛扎县", "alpha": "l"},
     "540528": {"name": "加查县", "alpha": "j"},
     "540529": {"name": "隆子县", "alpha": "l"},
-    "540530": {"name": "错那县", "alpha": "c"},
-    "540531": {"name": "浪卡子县", "alpha": "l"}
+    "540531": {"name": "浪卡子县", "alpha": "l"},
+    "540581": {"name": "错那市", "alpha": "c"}
   },
   "540600": {
     "540602": {"name": "色尼区", "alpha": "s"},
@@ -3815,12 +3808,7 @@ const Map<String, dynamic> citiesData = {
     "620171": {"name": "兰州新区", "alpha": "l"}
   },
   "620200": {
-    "620201100": {"name": "新城镇", "alpha": "x"},
-    "620201101": {"name": "峪泉镇", "alpha": "y"},
-    "620201102": {"name": "文殊镇", "alpha": "w"},
-    "620201401": {"name": "雄关区", "alpha": "x"},
-    "620201402": {"name": "镜铁区", "alpha": "j"},
-    "620201403": {"name": "长城区", "alpha": "c"}
+    "620201": {"name": "市辖区", "alpha": "s", "isClassificationNode": true}
   },
   "620300": {
     "620302": {"name": "金川区", "alpha": "j"},
@@ -4105,8 +4093,7 @@ const Map<String, dynamic> citiesData = {
     "652826": {"name": "焉耆回族自治县", "alpha": "y"},
     "652827": {"name": "和静县", "alpha": "h"},
     "652828": {"name": "和硕县", "alpha": "h"},
-    "652829": {"name": "博湖县", "alpha": "b"},
-    "652871": {"name": "库尔勒经济技术开发区", "alpha": "k"}
+    "652829": {"name": "博湖县", "alpha": "b"}
   },
   "652900": {
     "652901": {"name": "阿克苏市", "alpha": "a"},
@@ -4190,7 +4177,9 @@ const Map<String, dynamic> citiesData = {
     "659007": {"name": "双河市", "alpha": "s"},
     "659008": {"name": "可克达拉市", "alpha": "k"},
     "659009": {"name": "昆玉市", "alpha": "k"},
-    "659010": {"name": "胡杨河市", "alpha": "h"}
+    "659010": {"name": "胡杨河市", "alpha": "h"},
+    "659011": {"name": "新星市", "alpha": "x"},
+    "659012": {"name": "白杨市", "alpha": "b"}
   },
   "710000": {
     "710100": {"name": "台湾", "alpha": "t"}
