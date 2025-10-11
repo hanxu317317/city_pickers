@@ -37,7 +37,7 @@ class ScrollPicker extends StatelessWidget {
     return new Expanded(
       child: new Container(
           color: Theme.of(context).scaffoldBackgroundColor,
-          padding: const EdgeInsets.all(6.0),
+          padding: const EdgeInsets.all(0.0),
           alignment: Alignment.center,
           child: CupertinoPicker.builder(
               magnification: 1.0,

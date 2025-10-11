@@ -9,6 +9,7 @@ import '../mod/inherit_process.dart';
 import '../show_types.dart';
 import '../util.dart';
 import './pickers.dart';
+import './tab.dart';
 
 class BaseView extends StatefulWidget {
   final double? progress;
@@ -38,7 +39,7 @@ class BaseView extends StatefulWidget {
   final double borderRadius;
 
   /// 是否开启全球化数据
-  final bool? global;
+  final bool? enableGlobal;
 
   BaseView({
     this.progress,
@@ -53,7 +54,7 @@ class BaseView extends StatefulWidget {
     this.confirmWidget,
     this.isSort = false,
     this.borderRadius = 0,
-    this.global = false,
+    this.enableGlobal = false,
   }) : assert(!(itemBuilder != null && itemExtent == null),
             "\ritemExtent could't be null if itemBuilder exits");
 
@@ -63,7 +64,7 @@ class BaseView extends StatefulWidget {
 class _BaseView extends State<BaseView> {
   Timer? _changeTimer;
   bool _resetControllerOnce = false;
-
+  bool _oversea = false;
   FixedExtentScrollController provinceController =
       new FixedExtentScrollController();
   FixedExtentScrollController cityController =
@@ -276,7 +277,6 @@ class _BaseView extends State<BaseView> {
   }
 
   _onCityChange(Point _targetCity) {
-    print('_onCityChange');
     if (_changeTimer != null && _changeTimer!.isActive) {
       _changeTimer!.cancel();
     }
@@ -324,6 +324,7 @@ class _BaseView extends State<BaseView> {
   Result _buildResult() {
     Result result = Result();
     ShowType showType = widget.showType;
+
     if (showType.contain(ShowType.p)) {
       result.provinceId = targetProvince.code.toString();
       result.provinceName = targetProvince.name;
@@ -354,15 +355,6 @@ class _BaseView extends State<BaseView> {
       result.villageId = targetVillage?.code.toString();
       result.villageName = targetVillage?.name;
     }
-    // 台湾异常数据. 需要过滤
-    // if (result.provinceId == "710000") {
-    //   result.cityId = null;
-    //   result.cityName = null;
-    //   result.areaId = null;
-    //   result.areaName = null;
-    //   result.villageId = null;
-    //   result.villageName = null;
-    // }
 
     return result;
   }
@@ -415,7 +407,7 @@ class _BaseView extends State<BaseView> {
     if (widget.showType.contain(ShowType.v)) {
       pickerRows.add(new ScrollPicker(
         // 增加第4级(村/镇)选择
-        // key: Key('villages'),
+        key: Key('villages'),
         isShow: widget.showType.contain(ShowType.v),
         controller: villageController,
         itemBuilder: widget.itemBuilder,
@@ -438,6 +430,7 @@ class _BaseView extends State<BaseView> {
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
+
           children: <Widget>[
             new Row(
               children: <Widget>[
@@ -470,8 +463,23 @@ class _BaseView extends State<BaseView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
+            CountryTabPicker(
+                config: [{"name": "中国"}, {"name": "海外"}],
+                index: _oversea == true ? 1 : 0,
+                changed: (int index) {
+                  setState(() {
+                    if (index == 1) {
+                      _oversea = true;
+                    }
+                    if (index == 0) {
+                      _oversea = false;
+                    }
+                  });
+                },
+            ),
             Expanded(
               child: new Row(
+                // children: pickerRows,
                 children: pickerRows,
               ),
             )
